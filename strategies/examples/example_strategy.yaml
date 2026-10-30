@@ -1,0 +1,6 @@
+id: example
+version: 0.1.0
+entry_point: strategies.examples.example_strategy:ExampleStrategy
+required_data: []
+parameters: {}
+execution_modes: [backtest]

@@ -1,0 +1,4 @@
+# Core system sirf Python stdlib use karta hai.
+pytest>=7
+# API chalane ke liye (optional): fastapi, uvicorn; API tests ke liye: httpx
+# Parquet (optional): pyarrow

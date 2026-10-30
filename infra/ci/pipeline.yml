@@ -1,0 +1,4 @@
+# Primary CI: .github/workflows/ci.yml
+steps:
+  - pip install pytest
+  - python -m pytest -q

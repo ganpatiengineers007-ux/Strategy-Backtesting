@@ -1,0 +1,4 @@
+# NOTE: abhi code me wired nahi (planned). Asli load: backtest.yaml, costs.yaml, risk.yaml.
+oos_split: 0.7
+walk_forward_windows: 4
+min_trades: 30

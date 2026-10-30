@@ -1,0 +1,12 @@
+name,sharpe,total_return_%,max_dd_%,hit_rate_%,trades,turnover,id,secs
+S01 OBI + Delta Divergence (US),281.23,57.7,1.0,67.0,479,957.0,S01,0.0
+S02 Cross-Sectional StatArb (China),1.0,20.28,2.82,0.0,2440,2046.5,S02,0.0
+S03a Cross-Venue Latency Arb (Singapore),1136.37,483.87,0.06,96.5,4220,8439.0,S03a,0.0
+S03b Liquidity Sweep Reversal (Singapore),27.25,19.81,0.34,82.0,111,222.0,S03b,0.0
+S04 Microstructure Absorption (Russia),137.43,14.59,1.27,53.2,190,366.0,S04,0.2
+S05 ML Spoofing Detection (Japan),79.04,1.52,0.11,62.5,40,80.0,S05,0.9
+S06 Volume Profile POC (Australia),27.77,2.11,1.76,66.7,24,48.0,S06,0.0
+S07 Multi-Feature Reversal AI (4-phase),-32.99,-1.31,1.54,28.6,7,14.0,S07,0.1
+S08 Fair Value Gap / Imbalance,17.4,54.04,2.21,47.1,1119,2237.0,S08,0.1
+S09 Iceberg Detection,223.12,17.1,0.61,59.8,87,174.0,S09,0.0
+S10 Session-Open Ignition,21.98,36.0,1.06,48.3,118,236.0,S10,0.0

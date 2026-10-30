@@ -1,0 +1,1 @@
+../../external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s07_reversal_ai.py

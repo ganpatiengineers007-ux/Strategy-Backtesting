@@ -1,0 +1,2 @@
+# NOTE: abhi code me wired nahi (planned). Asli load: backtest.yaml, costs.yaml, risk.yaml.
+formats: [json, csv, html]

@@ -1,0 +1,3 @@
+.card{border:1px solid #8884;border-radius:8px;padding:12px}
+.badge{padding:2px 8px;border-radius:10px;font-size:12px}
+.badge.pass{background:#16a34a;color:#fff}.badge.fail{background:#dc2626;color:#fff}.badge.blocked{background:#f59e0b}

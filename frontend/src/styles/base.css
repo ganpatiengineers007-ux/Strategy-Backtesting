@@ -1,0 +1,3 @@
+:root{--bg:#fff;--fg:#111;--accent:#2563eb}
+@media (prefers-color-scheme:dark){:root{--bg:#111;--fg:#eee}}
+body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg)}

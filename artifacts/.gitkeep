@@ -1,0 +1,5 @@
+# FILE: artifacts/.gitkeep
+# PURPOSE: Artifacts folder (content git me nahi)
+# DEPENDS_ON: none
+# TEST: see tests/
+

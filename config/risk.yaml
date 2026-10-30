@@ -1,0 +1,3 @@
+max_position_pct: 100.0
+max_drawdown_pct: 30.0
+on_violation: halt

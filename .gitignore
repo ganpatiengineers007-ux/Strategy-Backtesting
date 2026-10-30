@@ -8,3 +8,11 @@ target/
 build/
 dist/
 .pytest_cache/
+
+.env
+.env.*
+!.env.example
+*.tgz
+archive/
+*.log
+.DS_Store

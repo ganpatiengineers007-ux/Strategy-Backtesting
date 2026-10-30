@@ -1,0 +1,1366 @@
+{
+  "notes": [
+    "gts_quant_lab.zip: extracted -> external/gts_quant_lab",
+    "quant_stat_arb_framework.zip: extracted -> external/quant_stat_arb_framework"
+  ],
+  "files": [
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/__init__.py",
+      "lines": 2,
+      "sha256": "01ba4719c80b",
+      "syntax_ok": true,
+      "imports": [],
+      "third_party": [],
+      "missing": [],
+      "classes": {},
+      "functions": [],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/backtest.py",
+      "lines": 72,
+      "sha256": "ed10dd638579",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "Result": [
+          "summary"
+        ]
+      },
+      "functions": [
+        "_metrics",
+        "run_backtest",
+        "run_panel_backtest"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/ml.py",
+      "lines": 73,
+      "sha256": "f4877ede109a",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "MLP": [
+          "__init__",
+          "_fwd",
+          "fit",
+          "_adam",
+          "predict_proba"
+        ]
+      },
+      "functions": [
+        "walk_forward_probs"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/risk.py",
+      "lines": 45,
+      "sha256": "bf8f7cffd23c",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "KillSwitch": [
+          "__init__",
+          "new_day",
+          "update",
+          "reset"
+        ]
+      },
+      "functions": [
+        "vol_scale",
+        "kelly_fraction",
+        "apply_kill_switch"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/__init__.py",
+      "lines": 12,
+      "sha256": "89e4ed371343",
+      "syntax_ok": true,
+      "imports": [],
+      "third_party": [],
+      "missing": [],
+      "classes": {},
+      "functions": [],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/base.py",
+      "lines": 13,
+      "sha256": "879116f9bdc2",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "abc",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "Strategy": [
+          "positions"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "Strategy",
+          "bases": [
+            "ABC"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s01_obi_delta.py",
+      "lines": 47,
+      "sha256": "addc7a3e1b27",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "OBIDeltaConfig": [],
+        "OBIDeltaStrategy": [
+          "__init__",
+          "features",
+          "positions"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "OBIDeltaStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s02_stat_arb.py",
+      "lines": 85,
+      "sha256": "43e5bb6345b2",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy",
+        "warnings"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "StatArbConfig": [],
+        "CrossSectionalStatArb": [
+          "__init__",
+          "positions",
+          "_positions"
+        ],
+        "KalmanPair": [
+          "__init__",
+          "run",
+          "half_life",
+          "positions"
+        ]
+      },
+      "functions": [
+        "_cs_z"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "CrossSectionalStatArb",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s03_latency_arb.py",
+      "lines": 80,
+      "sha256": "aa851d3dfa12",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "LatencyArbConfig": [],
+        "LatencyArbStrategy": [
+          "__init__",
+          "positions"
+        ],
+        "SweepConfig": [],
+        "LiquiditySweepStrategy": [
+          "__init__",
+          "positions"
+        ]
+      },
+      "functions": [
+        "estimate_lead_lag"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "LatencyArbStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        },
+        {
+          "class": "LiquiditySweepStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s04_microstructure.py",
+      "lines": 79,
+      "sha256": "673b67689c36",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "MicroConfig": [],
+        "MicrostructureStrategy": [
+          "__init__",
+          "score",
+          "positions"
+        ]
+      },
+      "functions": [
+        "vpin",
+        "kyle_lambda"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "MicrostructureStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s05_spoof_ml.py",
+      "lines": 77,
+      "sha256": "9e1e88520306",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "SpoofConfig": [],
+        "SpoofMLStrategy": [
+          "__init__",
+          "fit",
+          "probs",
+          "positions"
+        ]
+      },
+      "functions": [
+        "spoof_features"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "SpoofMLStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s06_volume_profile.py",
+      "lines": 98,
+      "sha256": "242cfba7eb44",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "VPConfig": [],
+        "VolumeProfileStrategy": [
+          "__init__",
+          "positions"
+        ]
+      },
+      "functions": [
+        "build_profile"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "VolumeProfileStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s07_reversal_ai.py",
+      "lines": 89,
+      "sha256": "e2b9367b2c91",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "ReversalConfig": [],
+        "ReversalAIStrategy": [
+          "__init__",
+          "probs",
+          "phases",
+          "positions"
+        ]
+      },
+      "functions": [
+        "reversal_features"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "ReversalAIStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s08_fvg.py",
+      "lines": 64,
+      "sha256": "df6d58757612",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "FVGConfig": [],
+        "FVGStrategy": [
+          "__init__",
+          "positions"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "FVGStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s09_iceberg.py",
+      "lines": 47,
+      "sha256": "8f55d40e9626",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "IcebergConfig": [],
+        "IcebergStrategy": [
+          "__init__",
+          "refill_flags",
+          "score",
+          "positions"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "IcebergStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s10_session_ignition.py",
+      "lines": 53,
+      "sha256": "59ef1eca9b02",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "SessionConfig": [],
+        "SessionIgnitionStrategy": [
+          "__init__",
+          "positions"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "SessionIgnitionStrategy",
+          "bases": [
+            "Strategy"
+          ],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/synth.py",
+      "lines": 136,
+      "sha256": "fc2244ab6d73",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "datetime",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {},
+      "functions": [
+        "make_book",
+        "make_two_venues",
+        "make_panel",
+        "make_session_bars"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/types.py",
+      "lines": 70,
+      "sha256": "971cd128952d",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {
+        "BookSeries": [
+          "n",
+          "levels",
+          "mid",
+          "spread"
+        ],
+        "Bars": [
+          "n"
+        ]
+      },
+      "functions": [
+        "book_to_bars"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/quantlab/utils.py",
+      "lines": 112,
+      "sha256": "c2be02cda0d2",
+      "syntax_ok": true,
+      "imports": [
+        "__future__",
+        "numpy"
+      ],
+      "third_party": [
+        "numpy"
+      ],
+      "missing": [
+        "numpy"
+      ],
+      "classes": {},
+      "functions": [
+        "ema",
+        "_pad",
+        "rsum",
+        "rmean",
+        "rstd",
+        "rmax",
+        "rmin",
+        "zscore",
+        "shift",
+        "rmean2",
+        "rstd2",
+        "to_position"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/run_all.py",
+      "lines": 45,
+      "sha256": "4e01314b580e",
+      "syntax_ok": true,
+      "imports": [
+        "csv",
+        "json",
+        "numpy",
+        "os",
+        "quantlab",
+        "sys",
+        "time"
+      ],
+      "third_party": [
+        "numpy",
+        "quantlab"
+      ],
+      "missing": [
+        "numpy",
+        "quantlab"
+      ],
+      "classes": {},
+      "functions": [
+        "main"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": true,
+      "import_time_calls": 1
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/gts_quant_lab/gts_quant_lab/tests/test_all.py",
+      "lines": 129,
+      "sha256": "a67153b1c4ba",
+      "syntax_ok": true,
+      "imports": [
+        "numpy",
+        "os",
+        "quantlab",
+        "sys"
+      ],
+      "third_party": [
+        "numpy",
+        "quantlab"
+      ],
+      "missing": [
+        "numpy",
+        "quantlab"
+      ],
+      "classes": {},
+      "functions": [
+        "_cut",
+        "_cut_bars",
+        "_valid",
+        "test_tick_strategies_valid_and_causal",
+        "test_bar_strategies_valid_and_causal",
+        "test_ml_strategies",
+        "test_stat_arb_and_kalman",
+        "test_latency_arb_lead_lag",
+        "test_volume_profile_math",
+        "test_microstructure_helpers",
+        "test_backtest_engine_no_lookahead_and_costs",
+        "test_risk_and_mlp"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": true,
+      "import_time_calls": 1
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/examples/run_backtest.py",
+      "lines": 36,
+      "sha256": "b86145511909",
+      "syntax_ok": true,
+      "imports": [
+        "logging",
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "third_party": [
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "missing": [
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "classes": {},
+      "functions": [
+        "synthetic_bars"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": true,
+      "import_time_calls": 1
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/__init__.py",
+      "lines": 7,
+      "sha256": "7b911fa1f67e",
+      "syntax_ok": true,
+      "imports": [],
+      "third_party": [],
+      "missing": [],
+      "classes": {},
+      "functions": [],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/backtest.py",
+      "lines": 77,
+      "sha256": "f12e4983bdae",
+      "syntax_ok": true,
+      "imports": [
+        "dataclasses",
+        "pandas"
+      ],
+      "third_party": [
+        "pandas"
+      ],
+      "missing": [
+        "pandas"
+      ],
+      "classes": {
+        "BacktestResult": []
+      },
+      "functions": [
+        "run_backtest"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/config.py",
+      "lines": 44,
+      "sha256": "78bfb0a5c219",
+      "syntax_ok": true,
+      "imports": [
+        "dataclasses"
+      ],
+      "third_party": [],
+      "missing": [],
+      "classes": {
+        "StrategyConfig": [
+          "__post_init__"
+        ],
+        "RiskConfig": [
+          "__post_init__"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "StrategyConfig",
+          "bases": [],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/data.py",
+      "lines": 17,
+      "sha256": "35d1580462b7",
+      "syntax_ok": true,
+      "imports": [
+        "logging",
+        "pandas"
+      ],
+      "third_party": [
+        "pandas"
+      ],
+      "missing": [
+        "pandas"
+      ],
+      "classes": {},
+      "functions": [
+        "load_csv"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/execution.py",
+      "lines": 29,
+      "sha256": "83209df472ae",
+      "syntax_ok": true,
+      "imports": [
+        "dataclasses",
+        "logging"
+      ],
+      "third_party": [],
+      "missing": [],
+      "classes": {
+        "ExecutionResult": [],
+        "DryRunExecutor": [
+          "__init__",
+          "submit"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/indicators.py",
+      "lines": 54,
+      "sha256": "05b04fdd35eb",
+      "syntax_ok": true,
+      "imports": [
+        "numpy",
+        "pandas"
+      ],
+      "third_party": [
+        "numpy",
+        "pandas"
+      ],
+      "missing": [
+        "numpy",
+        "pandas"
+      ],
+      "classes": {},
+      "functions": [
+        "validate_ohlcv",
+        "rolling_zscore",
+        "true_range",
+        "atr",
+        "book_imbalance",
+        "oi_change_pct"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/microstructure.py",
+      "lines": 26,
+      "sha256": "18a83a3d211d",
+      "syntax_ok": true,
+      "imports": [
+        "pandas"
+      ],
+      "third_party": [
+        "pandas"
+      ],
+      "missing": [
+        "pandas"
+      ],
+      "classes": {},
+      "functions": [
+        "microstructure_allows"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/models.py",
+      "lines": 38,
+      "sha256": "43d34f7bc9f5",
+      "syntax_ok": true,
+      "imports": [
+        "dataclasses",
+        "enum",
+        "typing"
+      ],
+      "third_party": [],
+      "missing": [],
+      "classes": {
+        "Side": [],
+        "Signal": [],
+        "OrderIntent": [],
+        "Position": []
+      },
+      "functions": [],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/risk.py",
+      "lines": 35,
+      "sha256": "250262c8df1f",
+      "syntax_ok": true,
+      "imports": [
+        "math"
+      ],
+      "third_party": [],
+      "missing": [],
+      "classes": {
+        "RiskManager": [
+          "__init__",
+          "create_order_intent"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/src/quantstrat/strategy.py",
+      "lines": 66,
+      "sha256": "4f05c73c061b",
+      "syntax_ok": true,
+      "imports": [
+        "logging",
+        "pandas"
+      ],
+      "third_party": [
+        "pandas"
+      ],
+      "missing": [
+        "pandas"
+      ],
+      "classes": {
+        "MeanReversionStrategy": [
+          "__init__",
+          "prepare",
+          "generate_signals"
+        ]
+      },
+      "functions": [],
+      "strategy_candidates": [
+        {
+          "class": "MeanReversionStrategy",
+          "bases": [],
+          "methods": [
+            "generate_signals"
+          ]
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/tests/test_indicators.py",
+      "lines": 25,
+      "sha256": "9085f65b9b37",
+      "syntax_ok": true,
+      "imports": [
+        "numpy",
+        "pandas",
+        "pytest",
+        "quantstrat"
+      ],
+      "third_party": [
+        "numpy",
+        "pandas",
+        "pytest",
+        "quantstrat"
+      ],
+      "missing": [
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "classes": {},
+      "functions": [
+        "sample",
+        "test_zscore_uses_full_window",
+        "test_atr_positive_after_warmup",
+        "test_validate_rejects_missing_column"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/tests/test_risk_execution.py",
+      "lines": 24,
+      "sha256": "848bf33b5551",
+      "syntax_ok": true,
+      "imports": [
+        "pandas",
+        "pytest",
+        "quantstrat"
+      ],
+      "third_party": [
+        "pandas",
+        "pytest",
+        "quantstrat"
+      ],
+      "missing": [
+        "pandas",
+        "quantstrat"
+      ],
+      "classes": {},
+      "functions": [
+        "test_risk_sizing_and_dry_run",
+        "test_live_mode_is_blocked"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/external/quant_stat_arb_framework/tests/test_strategy.py",
+      "lines": 24,
+      "sha256": "465bb7d6df4f",
+      "syntax_ok": true,
+      "imports": [
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "third_party": [
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "missing": [
+        "numpy",
+        "pandas",
+        "quantstrat"
+      ],
+      "classes": {},
+      "functions": [
+        "test_strategy_returns_valid_signal_objects"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": false,
+      "import_time_calls": 0
+    },
+    {
+      "file": "/root/Strategy-Backtesting/backtest_lab-1.py",
+      "lines": 377,
+      "sha256": "bdac4e0544a1",
+      "syntax_ok": true,
+      "imports": [
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas"
+      ],
+      "third_party": [
+        "matplotlib",
+        "numpy",
+        "pandas"
+      ],
+      "missing": [
+        "matplotlib",
+        "numpy",
+        "pandas"
+      ],
+      "classes": {},
+      "functions": [
+        "metrics",
+        "load_daily_csv",
+        "load_tick_csv",
+        "save_equity_chart",
+        "synthetic_pair",
+        "pairs_backtest",
+        "synthetic_universe",
+        "reversal_turnover_backtest",
+        "execution_sim",
+        "synthetic_ticks",
+        "detect_iceberg",
+        "merge_zones",
+        "iceberg_forward_test",
+        "market_making_sim",
+        "main"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": true,
+      "import_time_calls": 2
+    },
+    {
+      "file": "/root/Strategy-Backtesting/backtest_lab.py",
+      "lines": 377,
+      "sha256": "bdac4e0544a1",
+      "syntax_ok": true,
+      "imports": [
+        "matplotlib",
+        "numpy",
+        "os",
+        "pandas"
+      ],
+      "third_party": [
+        "matplotlib",
+        "numpy",
+        "pandas"
+      ],
+      "missing": [
+        "matplotlib",
+        "numpy",
+        "pandas"
+      ],
+      "classes": {},
+      "functions": [
+        "metrics",
+        "load_daily_csv",
+        "load_tick_csv",
+        "save_equity_chart",
+        "synthetic_pair",
+        "pairs_backtest",
+        "synthetic_universe",
+        "reversal_turnover_backtest",
+        "execution_sim",
+        "synthetic_ticks",
+        "detect_iceberg",
+        "merge_zones",
+        "iceberg_forward_test",
+        "market_making_sim",
+        "main"
+      ],
+      "strategy_candidates": [],
+      "risky": [],
+      "secrets": [],
+      "network": [],
+      "has_main": true,
+      "import_time_calls": 2
+    },
+    {
+      "file": "/root/Strategy-Backtesting/sweep_strategy.py",
+      "lines": 538,
+      "sha256": "bed469d06646",
+      "syntax_ok": true,
+      "imports": [
+        "collections",
+        "csv",
+        "datetime",
+        "dhanhq",
+        "logging",
+        "os",
+        "pandas",
+        "sys",
+        "threading",
+        "time",
+        "zoneinfo"
+      ],
+      "third_party": [
+        "dhanhq",
+        "pandas"
+      ],
+      "missing": [
+        "dhanhq",
+        "pandas"
+      ],
+      "classes": {
+        "CandleBuilder": [
+          "__init__",
+          "add",
+          "pop_closed"
+        ],
+        "DepthReader": [
+          "__init__",
+          "update",
+          "imbalance"
+        ],
+        "SweepStrategy": [
+          "__init__",
+          "build_levels",
+          "_order",
+          "_enter",
+          "_exit",
+          "on_tick",
+          "_confirmed",
+          "_vol_rate_spike",
+          "_manage",
+          "on_candle",
+          "square_off",
+          "day_summary"
+        ]
+      },
+      "functions": [
+        "now_ist",
+        "fmt",
+        "compute_atr",
+        "classic_pivots",
+        "round_levels",
+        "journal_trade",
+        "parse_tick",
+        "depth_worker",
+        "main"
+      ],
+      "strategy_candidates": [
+        {
+          "class": "SweepStrategy",
+          "bases": [],
+          "methods": []
+        }
+      ],
+      "risky": [],
+      "secrets": [],
+      "network": [
+        "dhanhq"
+      ],
+      "has_main": true,
+      "import_time_calls": 0
+    }
+  ],
+  "lab_tests": null
+}

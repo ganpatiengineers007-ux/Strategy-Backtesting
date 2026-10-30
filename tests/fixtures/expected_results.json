@@ -1,0 +1,7 @@
+{
+  "days": 20,
+  "seed": 42,
+  "strategy": "three_pm_momentum",
+  "n_trades": 10,
+  "total_pnl": -10324.498
+}

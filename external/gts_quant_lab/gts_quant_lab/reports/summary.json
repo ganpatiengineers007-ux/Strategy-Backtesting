@@ -1,0 +1,123 @@
+[
+  {
+    "name": "S01 OBI + Delta Divergence (US)",
+    "sharpe": 281.23,
+    "total_return_%": 57.7,
+    "max_dd_%": 1.0,
+    "hit_rate_%": 67.0,
+    "trades": 479,
+    "turnover": 957.0,
+    "id": "S01",
+    "secs": 0.0
+  },
+  {
+    "name": "S02 Cross-Sectional StatArb (China)",
+    "sharpe": 1.0,
+    "total_return_%": 20.28,
+    "max_dd_%": 2.82,
+    "hit_rate_%": 0.0,
+    "trades": 2440,
+    "turnover": 2046.5,
+    "id": "S02",
+    "secs": 0.0
+  },
+  {
+    "name": "S03a Cross-Venue Latency Arb (Singapore)",
+    "sharpe": 1136.37,
+    "total_return_%": 483.87,
+    "max_dd_%": 0.06,
+    "hit_rate_%": 96.5,
+    "trades": 4220,
+    "turnover": 8439.0,
+    "id": "S03a",
+    "secs": 0.0
+  },
+  {
+    "name": "S03b Liquidity Sweep Reversal (Singapore)",
+    "sharpe": 27.25,
+    "total_return_%": 19.81,
+    "max_dd_%": 0.34,
+    "hit_rate_%": 82.0,
+    "trades": 111,
+    "turnover": 222.0,
+    "id": "S03b",
+    "secs": 0.0
+  },
+  {
+    "name": "S04 Microstructure Absorption (Russia)",
+    "sharpe": 137.43,
+    "total_return_%": 14.59,
+    "max_dd_%": 1.27,
+    "hit_rate_%": 53.2,
+    "trades": 190,
+    "turnover": 366.0,
+    "id": "S04",
+    "secs": 0.2
+  },
+  {
+    "name": "S05 ML Spoofing Detection (Japan)",
+    "sharpe": 79.04,
+    "total_return_%": 1.52,
+    "max_dd_%": 0.11,
+    "hit_rate_%": 62.5,
+    "trades": 40,
+    "turnover": 80.0,
+    "id": "S05",
+    "secs": 0.9
+  },
+  {
+    "name": "S06 Volume Profile POC (Australia)",
+    "sharpe": 27.77,
+    "total_return_%": 2.11,
+    "max_dd_%": 1.76,
+    "hit_rate_%": 66.7,
+    "trades": 24,
+    "turnover": 48.0,
+    "id": "S06",
+    "secs": 0.0
+  },
+  {
+    "name": "S07 Multi-Feature Reversal AI (4-phase)",
+    "sharpe": -32.99,
+    "total_return_%": -1.31,
+    "max_dd_%": 1.54,
+    "hit_rate_%": 28.6,
+    "trades": 7,
+    "turnover": 14.0,
+    "id": "S07",
+    "secs": 0.1
+  },
+  {
+    "name": "S08 Fair Value Gap / Imbalance",
+    "sharpe": 17.4,
+    "total_return_%": 54.04,
+    "max_dd_%": 2.21,
+    "hit_rate_%": 47.1,
+    "trades": 1119,
+    "turnover": 2237.0,
+    "id": "S08",
+    "secs": 0.1
+  },
+  {
+    "name": "S09 Iceberg Detection",
+    "sharpe": 223.12,
+    "total_return_%": 17.1,
+    "max_dd_%": 0.61,
+    "hit_rate_%": 59.8,
+    "trades": 87,
+    "turnover": 174.0,
+    "id": "S09",
+    "secs": 0.0
+  },
+  {
+    "name": "S10 Session-Open Ignition",
+    "sharpe": 21.98,
+    "total_return_%": 36.0,
+    "max_dd_%": 1.06,
+    "hit_rate_%": 48.3,
+    "trades": 118,
+    "turnover": 236.0,
+    "id": "S10",
+    "secs": 0.0
+  }
+]

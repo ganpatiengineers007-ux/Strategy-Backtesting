@@ -1,0 +1,5 @@
+# FILE: output/.gitkeep
+# PURPOSE: Output folder (content git me nahi)
+# DEPENDS_ON: none
+# TEST: see tests/
+
