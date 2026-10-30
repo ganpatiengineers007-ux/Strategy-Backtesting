@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data",
+  "type": "object",
+  "properties": {
+    "dataset_id": {
+      "type": "string"
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "timeframe": {
+      "type": "string"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "end_time": {
+      "type": "string"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "content_hash": {
+      "type": "string"
+    },
+    "quality_status": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "dataset_id",
+    "symbol",
+    "timeframe",
+    "start_time",
+    "end_time",
+    "timezone",
+    "source",
+    "schema_version",
+    "content_hash",
+    "quality_status"
+  ]
+}

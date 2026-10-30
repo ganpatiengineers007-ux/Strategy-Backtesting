@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "run",
+  "type": "object",
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "strategy_id": {
+      "type": "string"
+    },
+    "strategy_version": {
+      "type": "string"
+    },
+    "source_hash": {
+      "type": "string"
+    },
+    "dataset_id": {
+      "type": "string"
+    },
+    "dataset_hash": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "config": {
+      "type": "object"
+    },
+    "engine_version": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "strategy_id",
+    "strategy_version",
+    "source_hash",
+    "dataset_id",
+    "dataset_hash",
+    "status",
+    "parameters",
+    "config",
+    "engine_version",
+    "created_at"
+  ]
+}

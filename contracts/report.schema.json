@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "report",
+  "type": "object",
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "object"
+    },
+    "generated_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "status",
+    "metrics",
+    "validation",
+    "generated_at"
+  ]
+}

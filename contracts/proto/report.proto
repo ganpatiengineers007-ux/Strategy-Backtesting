@@ -1,0 +1,7 @@
+// FILE: contracts/proto/report.proto
+// PURPOSE: Report messages
+// DEPENDS_ON: none
+// TEST: see tests/
+
+syntax = "proto3";
+package svl;

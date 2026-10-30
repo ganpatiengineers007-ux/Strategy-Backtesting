@@ -1,0 +1,7 @@
+// FILE: contracts/proto/market_data.proto
+// PURPOSE: Market data messages
+// DEPENDS_ON: none
+// TEST: see tests/
+
+syntax = "proto3";
+package svl;

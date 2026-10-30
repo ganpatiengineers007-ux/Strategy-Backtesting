@@ -1,0 +1,1484 @@
+{
+  "README.md": {
+    "phase": 0,
+    "purpose": "Project overview aur quick start",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "pyproject.toml": {
+    "phase": 0,
+    "purpose": "Python build, lint, type-check, pytest config",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  ".gitignore": {
+    "phase": 0,
+    "purpose": "Ignore rules",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "Makefile": {
+    "phase": 0,
+    "purpose": "make validate / make test shortcuts",
+    "depends_on": [
+      "scripts/validate_repo.sh"
+    ],
+    "test": "see tests/"
+  },
+  "scripts/validate_repo.sh": {
+    "phase": 0,
+    "purpose": "Format, lint, type check, build, test ek jagah",
+    "depends_on": [
+      "pyproject.toml"
+    ],
+    "test": "see tests/"
+  },
+  "docs/architecture/ADR-0001-language-ownership.md": {
+    "phase": 0,
+    "purpose": "Kaun-sa module kis bhasha me (Python/Go/C++/Rust)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/architecture/wiring-map.md": {
+    "phase": 0,
+    "purpose": "Is blueprint ki copy",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/architecture/build-order.md": {
+    "phase": 0,
+    "purpose": "Build & Dependency Map",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/strategy.schema.json": {
+    "phase": 1,
+    "purpose": "Strategy manifest contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/data.schema.json": {
+    "phase": 1,
+    "purpose": "Dataset metadata contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/signal.schema.json": {
+    "phase": 1,
+    "purpose": "Signal contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/trade.schema.json": {
+    "phase": 1,
+    "purpose": "Trade record contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/report.schema.json": {
+    "phase": 1,
+    "purpose": "Report contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/run.schema.json": {
+    "phase": 1,
+    "purpose": "Backtest run contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/openapi.yaml": {
+    "phase": 1,
+    "purpose": "Frontend-Backend HTTP contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/common.proto": {
+    "phase": 1,
+    "purpose": "Shared types",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/market_data.proto": {
+    "phase": 1,
+    "purpose": "Market data messages",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/strategy.proto": {
+    "phase": 1,
+    "purpose": "Strategy messages",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/signal.proto": {
+    "phase": 1,
+    "purpose": "Signal messages",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/backtest.proto": {
+    "phase": 1,
+    "purpose": "Backtest messages",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/metrics.proto": {
+    "phase": 1,
+    "purpose": "Metrics messages",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/proto/report.proto": {
+    "phase": 1,
+    "purpose": "Report messages",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "data/models.py": {
+    "phase": 2,
+    "purpose": "Dataset aur bar/tick data models",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_models.py"
+  },
+  "data/timestamps.py": {
+    "phase": 2,
+    "purpose": "Timezone aur timestamp normalisation",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_timestamps.py"
+  },
+  "data/normalizer.py": {
+    "phase": 2,
+    "purpose": "Source data ko common schema me lana",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_normalizer.py"
+  },
+  "data/validators.py": {
+    "phase": 2,
+    "purpose": "Schema, gap, duplicate, OHLC checks",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_validators.py"
+  },
+  "data/corporate_actions.py": {
+    "phase": 2,
+    "purpose": "Split/dividend adjustments",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_corporate_actions.py"
+  },
+  "data/survivorship.py": {
+    "phase": 2,
+    "purpose": "Survivorship bias checks",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_survivorship.py"
+  },
+  "data/quality_report.py": {
+    "phase": 2,
+    "purpose": "Quality status (PASS/WARN/BLOCKED)",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_quality_report.py"
+  },
+  "data/storage.py": {
+    "phase": 2,
+    "purpose": "Parquet + repository storage",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_storage.py"
+  },
+  "data/loaders.py": {
+    "phase": 2,
+    "purpose": "Entry point: source chuno, load, normalize, validate",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/test_loaders.py"
+  },
+  "data/sources/csv_source.py": {
+    "phase": 2,
+    "purpose": "CSV reader",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/sources/test_csv_source.py"
+  },
+  "data/sources/parquet_source.py": {
+    "phase": 2,
+    "purpose": "Parquet reader",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/sources/test_parquet_source.py"
+  },
+  "data/sources/broker_source.py": {
+    "phase": 2,
+    "purpose": "Broker API reader",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "tests/unit/data/sources/test_broker_source.py"
+  },
+  "strategies/base.py": {
+    "phase": 3,
+    "purpose": "Strategy abstract interface",
+    "depends_on": [
+      "contracts/strategy.schema.json",
+      "contracts/signal.schema.json"
+    ],
+    "test": "tests/unit/strategies/test_base.py"
+  },
+  "strategies/context.py": {
+    "phase": 3,
+    "purpose": "Strategy ko milne wala market context",
+    "depends_on": [
+      "contracts/strategy.schema.json",
+      "contracts/signal.schema.json"
+    ],
+    "test": "tests/unit/strategies/test_context.py"
+  },
+  "strategies/models.py": {
+    "phase": 3,
+    "purpose": "Signal/Decision models",
+    "depends_on": [
+      "contracts/strategy.schema.json",
+      "contracts/signal.schema.json"
+    ],
+    "test": "tests/unit/strategies/test_models.py"
+  },
+  "strategies/validation.py": {
+    "phase": 3,
+    "purpose": "Manifest + data requirement check",
+    "depends_on": [
+      "contracts/strategy.schema.json",
+      "contracts/signal.schema.json"
+    ],
+    "test": "tests/unit/strategies/test_validation.py"
+  },
+  "registry/registry.py": {
+    "phase": 3,
+    "purpose": "Strategy registry entry point",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_registry.py"
+  },
+  "registry/metadata.py": {
+    "phase": 3,
+    "purpose": "Strategy metadata",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_metadata.py"
+  },
+  "registry/versioning.py": {
+    "phase": 3,
+    "purpose": "Version + source hash",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_versioning.py"
+  },
+  "registry/compatibility.py": {
+    "phase": 3,
+    "purpose": "Engine/contract compatibility",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_compatibility.py"
+  },
+  "registry/permissions.py": {
+    "phase": 3,
+    "purpose": "Kaun kya chala sakta hai",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_permissions.py"
+  },
+  "registry/lifecycle.py": {
+    "phase": 3,
+    "purpose": "DRAFT->VALIDATED->APPROVED states",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_lifecycle.py"
+  },
+  "registry/storage.py": {
+    "phase": 3,
+    "purpose": "Registry persistence",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/registry/test_storage.py"
+  },
+  "strategies/gamma_blast/manifest.yaml": {
+    "phase": 3,
+    "purpose": "GammaBlast ID, version, params, data needs",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "strategies/gamma_blast/strategy.py": {
+    "phase": 3,
+    "purpose": "GammaBlastStrategy",
+    "depends_on": [
+      "strategies/base.py",
+      "strategies/gamma_blast/manifest.yaml"
+    ],
+    "test": "tests/unit/strategies/gamma_blast/test_strategy.py"
+  },
+  "strategies/three_pm_momentum/manifest.yaml": {
+    "phase": 3,
+    "purpose": "ThreePMMomentum manifest",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "strategies/three_pm_momentum/strategy.py": {
+    "phase": 3,
+    "purpose": "ThreePMMomentumStrategy",
+    "depends_on": [
+      "strategies/base.py",
+      "strategies/three_pm_momentum/manifest.yaml"
+    ],
+    "test": "tests/unit/strategies/three_pm_momentum/test_strategy.py"
+  },
+  "risk/limits.py": {
+    "phase": 4,
+    "purpose": "Position/loss limits",
+    "depends_on": [],
+    "test": "tests/unit/risk/test_limits.py"
+  },
+  "risk/exposure.py": {
+    "phase": 4,
+    "purpose": "Exposure calc",
+    "depends_on": [],
+    "test": "tests/unit/risk/test_exposure.py"
+  },
+  "risk/drawdown.py": {
+    "phase": 4,
+    "purpose": "Drawdown tracking",
+    "depends_on": [],
+    "test": "tests/unit/risk/test_drawdown.py"
+  },
+  "risk/kill_switch.py": {
+    "phase": 4,
+    "purpose": "Emergency stop",
+    "depends_on": [],
+    "test": "tests/unit/risk/test_kill_switch.py"
+  },
+  "risk/manager.py": {
+    "phase": 4,
+    "purpose": "Risk entry point (engine ke liye interface)",
+    "depends_on": [],
+    "test": "tests/unit/risk/test_manager.py"
+  },
+  "backtest/clock.py": {
+    "phase": 4,
+    "purpose": "Simulated time",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_clock.py"
+  },
+  "backtest/event_queue.py": {
+    "phase": 4,
+    "purpose": "Market event queue",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_event_queue.py"
+  },
+  "backtest/orders.py": {
+    "phase": 4,
+    "purpose": "Order models",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_orders.py"
+  },
+  "backtest/slippage.py": {
+    "phase": 4,
+    "purpose": "Slippage models",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_slippage.py"
+  },
+  "backtest/fees.py": {
+    "phase": 4,
+    "purpose": "Fee models",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_fees.py"
+  },
+  "backtest/fills.py": {
+    "phase": 4,
+    "purpose": "Fill rules (SL+Target same candle = conservative)",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_fills.py"
+  },
+  "backtest/execution.py": {
+    "phase": 4,
+    "purpose": "Slippage+fees+fills combine",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_execution.py"
+  },
+  "backtest/position_sizing.py": {
+    "phase": 4,
+    "purpose": "Size calc",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_position_sizing.py"
+  },
+  "backtest/stop_manager.py": {
+    "phase": 4,
+    "purpose": "Stop/target handling",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_stop_manager.py"
+  },
+  "backtest/portfolio.py": {
+    "phase": 4,
+    "purpose": "Positions/cash",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_portfolio.py"
+  },
+  "backtest/accounting.py": {
+    "phase": 4,
+    "purpose": "Equity, PnL",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_accounting.py"
+  },
+  "backtest/results.py": {
+    "phase": 4,
+    "purpose": "Trades+equity output",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_results.py"
+  },
+  "backtest/engine.py": {
+    "phase": 4,
+    "purpose": "Backtest entry point",
+    "depends_on": [
+      "strategies/base.py",
+      "data/loaders.py",
+      "risk/manager.py"
+    ],
+    "test": "tests/unit/backtest/test_engine.py"
+  },
+  "validation/leakage_checks.py": {
+    "phase": 5,
+    "purpose": "Look-ahead leakage",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_leakage_checks.py"
+  },
+  "validation/out_of_sample.py": {
+    "phase": 5,
+    "purpose": "OOS test",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_out_of_sample.py"
+  },
+  "validation/walk_forward.py": {
+    "phase": 5,
+    "purpose": "Walk-forward",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_walk_forward.py"
+  },
+  "validation/cross_validation.py": {
+    "phase": 5,
+    "purpose": "Time-series CV",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_cross_validation.py"
+  },
+  "validation/overfitting.py": {
+    "phase": 5,
+    "purpose": "Overfit detection",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_overfitting.py"
+  },
+  "validation/robustness.py": {
+    "phase": 5,
+    "purpose": "Param sensitivity",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_robustness.py"
+  },
+  "validation/regime_analysis.py": {
+    "phase": 5,
+    "purpose": "Regime-wise performance",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_regime_analysis.py"
+  },
+  "validation/statistical_confidence.py": {
+    "phase": 5,
+    "purpose": "Significance tests",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_statistical_confidence.py"
+  },
+  "validation/pipeline.py": {
+    "phase": 5,
+    "purpose": "Saare checks ka order, PASS/FAIL/UNAVAILABLE",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/validation/test_pipeline.py"
+  },
+  "metrics/accuracy.py": {
+    "phase": 5,
+    "purpose": "Win rate etc.",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_accuracy.py"
+  },
+  "metrics/expectancy.py": {
+    "phase": 5,
+    "purpose": "Expectancy",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_expectancy.py"
+  },
+  "metrics/trade_metrics.py": {
+    "phase": 5,
+    "purpose": "Trade stats",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_trade_metrics.py"
+  },
+  "metrics/risk_metrics.py": {
+    "phase": 5,
+    "purpose": "Sharpe, DD",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_risk_metrics.py"
+  },
+  "metrics/return_metrics.py": {
+    "phase": 5,
+    "purpose": "Returns",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_return_metrics.py"
+  },
+  "metrics/benchmarks.py": {
+    "phase": 5,
+    "purpose": "Benchmark compare",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_benchmarks.py"
+  },
+  "metrics/confidence_intervals.py": {
+    "phase": 5,
+    "purpose": "Bootstrap CI",
+    "depends_on": [
+      "backtest/results.py"
+    ],
+    "test": "tests/unit/metrics/test_confidence_intervals.py"
+  },
+  "optimization/parameter_search.py": {
+    "phase": 5,
+    "purpose": "Param search",
+    "depends_on": [
+      "validation/pipeline.py"
+    ],
+    "test": "tests/unit/optimization/test_parameter_search.py"
+  },
+  "optimization/constraints.py": {
+    "phase": 5,
+    "purpose": "Search constraints",
+    "depends_on": [
+      "validation/pipeline.py"
+    ],
+    "test": "tests/unit/optimization/test_constraints.py"
+  },
+  "optimization/experiment_tracking.py": {
+    "phase": 5,
+    "purpose": "Experiment log",
+    "depends_on": [
+      "validation/pipeline.py"
+    ],
+    "test": "tests/unit/optimization/test_experiment_tracking.py"
+  },
+  "persistence/database.py": {
+    "phase": 6,
+    "purpose": "PostgreSQL connection",
+    "depends_on": [],
+    "test": "tests/unit/persistence/test_database.py"
+  },
+  "persistence/models.py": {
+    "phase": 6,
+    "purpose": "ORM models",
+    "depends_on": [],
+    "test": "tests/unit/persistence/test_models.py"
+  },
+  "persistence/repositories.py": {
+    "phase": 6,
+    "purpose": "Data access",
+    "depends_on": [],
+    "test": "tests/unit/persistence/test_repositories.py"
+  },
+  "persistence/audit.py": {
+    "phase": 6,
+    "purpose": "Audit log",
+    "depends_on": [],
+    "test": "tests/unit/persistence/test_audit.py"
+  },
+  "reporting/html_report.py": {
+    "phase": 6,
+    "purpose": "HTML report",
+    "depends_on": [
+      "metrics/return_metrics.py",
+      "contracts/report.schema.json"
+    ],
+    "test": "tests/unit/reporting/test_html_report.py"
+  },
+  "reporting/json_report.py": {
+    "phase": 6,
+    "purpose": "JSON report",
+    "depends_on": [
+      "metrics/return_metrics.py",
+      "contracts/report.schema.json"
+    ],
+    "test": "tests/unit/reporting/test_json_report.py"
+  },
+  "reporting/csv_export.py": {
+    "phase": 6,
+    "purpose": "CSV export",
+    "depends_on": [
+      "metrics/return_metrics.py",
+      "contracts/report.schema.json"
+    ],
+    "test": "tests/unit/reporting/test_csv_export.py"
+  },
+  "reporting/charts.py": {
+    "phase": 6,
+    "purpose": "Chart images/data",
+    "depends_on": [
+      "metrics/return_metrics.py",
+      "contracts/report.schema.json"
+    ],
+    "test": "tests/unit/reporting/test_charts.py"
+  },
+  "reporting/generator.py": {
+    "phase": 6,
+    "purpose": "Reporting entry point",
+    "depends_on": [
+      "metrics/return_metrics.py",
+      "contracts/report.schema.json"
+    ],
+    "test": "tests/unit/reporting/test_generator.py"
+  },
+  "reporting/templates/report.html": {
+    "phase": 6,
+    "purpose": "Report HTML template",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "backend/app.py": {
+    "phase": 7,
+    "purpose": "Backend entry point",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "tests/unit/backend/test_app.py"
+  },
+  "backend/middleware/request_id.py": {
+    "phase": 7,
+    "purpose": "Request ID",
+    "depends_on": [],
+    "test": "tests/unit/backend/middleware/test_request_id.py"
+  },
+  "backend/middleware/error_handler.py": {
+    "phase": 7,
+    "purpose": "Common errors",
+    "depends_on": [],
+    "test": "tests/unit/backend/middleware/test_error_handler.py"
+  },
+  "backend/middleware/authentication.py": {
+    "phase": 7,
+    "purpose": "Auth",
+    "depends_on": [],
+    "test": "tests/unit/backend/middleware/test_authentication.py"
+  },
+  "backend/api/health.py": {
+    "phase": 7,
+    "purpose": "/health",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_health.py"
+  },
+  "backend/api/strategies.py": {
+    "phase": 7,
+    "purpose": "/strategies",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_strategies.py"
+  },
+  "backend/api/datasets.py": {
+    "phase": 7,
+    "purpose": "/datasets",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_datasets.py"
+  },
+  "backend/api/backtests.py": {
+    "phase": 7,
+    "purpose": "/backtests",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_backtests.py"
+  },
+  "backend/api/validation.py": {
+    "phase": 7,
+    "purpose": "/validations",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_validation.py"
+  },
+  "backend/api/comparisons.py": {
+    "phase": 7,
+    "purpose": "/comparisons",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_comparisons.py"
+  },
+  "backend/api/reports.py": {
+    "phase": 7,
+    "purpose": "/reports",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_reports.py"
+  },
+  "backend/services/strategy_service.py": {
+    "phase": 7,
+    "purpose": "Registry se",
+    "depends_on": [
+      "registry/registry.py",
+      "data/loaders.py"
+    ],
+    "test": "tests/unit/backend/services/test_strategy_service.py"
+  },
+  "backend/services/dataset_service.py": {
+    "phase": 7,
+    "purpose": "Data engine se",
+    "depends_on": [
+      "registry/registry.py",
+      "data/loaders.py"
+    ],
+    "test": "tests/unit/backend/services/test_dataset_service.py"
+  },
+  "backend/services/backtest_service.py": {
+    "phase": 7,
+    "purpose": "Engine + job queue",
+    "depends_on": [
+      "registry/registry.py",
+      "data/loaders.py"
+    ],
+    "test": "tests/unit/backend/services/test_backtest_service.py"
+  },
+  "backend/services/validation_service.py": {
+    "phase": 7,
+    "purpose": "Validation pipeline",
+    "depends_on": [
+      "registry/registry.py",
+      "data/loaders.py"
+    ],
+    "test": "tests/unit/backend/services/test_validation_service.py"
+  },
+  "backend/services/report_service.py": {
+    "phase": 7,
+    "purpose": "Reporting generator",
+    "depends_on": [
+      "registry/registry.py",
+      "data/loaders.py"
+    ],
+    "test": "tests/unit/backend/services/test_report_service.py"
+  },
+  "backend/schemas/backtest.py": {
+    "phase": 7,
+    "purpose": "Request/response models",
+    "depends_on": [],
+    "test": "tests/unit/backend/schemas/test_backtest.py"
+  },
+  "backend/schemas/strategy.py": {
+    "phase": 7,
+    "purpose": "Strategy schemas",
+    "depends_on": [],
+    "test": "tests/unit/backend/schemas/test_strategy.py"
+  },
+  "backend/schemas/report.py": {
+    "phase": 7,
+    "purpose": "Report schemas",
+    "depends_on": [],
+    "test": "tests/unit/backend/schemas/test_report.py"
+  },
+  "backend/jobs/queue.py": {
+    "phase": 7,
+    "purpose": "Job queue",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "tests/unit/backend/jobs/test_queue.py"
+  },
+  "backend/jobs/worker.py": {
+    "phase": 7,
+    "purpose": "Worker",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "tests/unit/backend/jobs/test_worker.py"
+  },
+  "backend/jobs/job_status.py": {
+    "phase": 7,
+    "purpose": "QUEUED/RUNNING/SUCCEEDED/FAILED",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "tests/unit/backend/jobs/test_job_status.py"
+  },
+  "cli/main.py": {
+    "phase": 7,
+    "purpose": "CLI entry",
+    "depends_on": [],
+    "test": "tests/unit/cli/test_main.py"
+  },
+  "cli/commands.py": {
+    "phase": 7,
+    "purpose": "Commands",
+    "depends_on": [],
+    "test": "tests/unit/cli/test_commands.py"
+  },
+  "frontend/index.html": {
+    "phase": 8,
+    "purpose": "Web page entry",
+    "depends_on": [
+      "frontend/src/main.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/package.json": {
+    "phase": 8,
+    "purpose": "Frontend deps",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/tsconfig.json": {
+    "phase": 8,
+    "purpose": "TS config",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/main.ts": {
+    "phase": 8,
+    "purpose": "Frontend start",
+    "depends_on": [
+      "frontend/src/pages/dashboard.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/app.ts": {
+    "phase": 8,
+    "purpose": "Routing aur page assembly",
+    "depends_on": [
+      "frontend/src/pages/dashboard.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/types/strategy.ts": {
+    "phase": 8,
+    "purpose": "Strategy types",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/types/backtest.ts": {
+    "phase": 8,
+    "purpose": "Backtest types",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/types/metrics.ts": {
+    "phase": 8,
+    "purpose": "Metrics types",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/types/report.ts": {
+    "phase": 8,
+    "purpose": "Report types",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/client.ts": {
+    "phase": 8,
+    "purpose": "HTTP client",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/strategies.ts": {
+    "phase": 8,
+    "purpose": "/strategies",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/backtests.ts": {
+    "phase": 8,
+    "purpose": "/backtests",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/reports.ts": {
+    "phase": 8,
+    "purpose": "/reports",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/health.ts": {
+    "phase": 8,
+    "purpose": "/health",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/validation.ts": {
+    "phase": 8,
+    "purpose": "/validations",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/datasets.ts": {
+    "phase": 8,
+    "purpose": "/datasets",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/comparisons.ts": {
+    "phase": 8,
+    "purpose": "/comparisons",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/api/audit.ts": {
+    "phase": 8,
+    "purpose": "Audit",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/components/navigation.ts": {
+    "phase": 8,
+    "purpose": "Nav",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/data-table.ts": {
+    "phase": 8,
+    "purpose": "Tables",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/metric-card.ts": {
+    "phase": 8,
+    "purpose": "Metric card",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/chart-panel.ts": {
+    "phase": 8,
+    "purpose": "Charts",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/status-badge.ts": {
+    "phase": 8,
+    "purpose": "Status",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/error-panel.ts": {
+    "phase": 8,
+    "purpose": "Errors",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/charts/equity-curve.ts": {
+    "phase": 8,
+    "purpose": "Equity",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/charts/drawdown-chart.ts": {
+    "phase": 8,
+    "purpose": "Drawdown",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/charts/monthly-returns.ts": {
+    "phase": 8,
+    "purpose": "Monthly",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/components/charts/trade-distribution.ts": {
+    "phase": 8,
+    "purpose": "Trades",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/dashboard.ts": {
+    "phase": 8,
+    "purpose": "Dashboard",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/strategy-registry.ts": {
+    "phase": 8,
+    "purpose": "Registry",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/strategy-detail.ts": {
+    "phase": 8,
+    "purpose": "Detail",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/create-strategy.ts": {
+    "phase": 8,
+    "purpose": "Create",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/backtest-runs.ts": {
+    "phase": 8,
+    "purpose": "Runs",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/backtest-detail.ts": {
+    "phase": 8,
+    "purpose": "Run detail",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/validation-results.ts": {
+    "phase": 8,
+    "purpose": "Validation",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/comparison.ts": {
+    "phase": 8,
+    "purpose": "Compare",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/reports.ts": {
+    "phase": 8,
+    "purpose": "Reports",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/datasets.ts": {
+    "phase": 8,
+    "purpose": "Datasets",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/system-health.ts": {
+    "phase": 8,
+    "purpose": "Health",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/pages/audit-log.ts": {
+    "phase": 8,
+    "purpose": "Audit",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "engines/go/go.mod": {
+    "phase": 9,
+    "purpose": "Go module",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/go/cmd/validator/main.go": {
+    "phase": 9,
+    "purpose": "Go service entry",
+    "depends_on": [
+      "engines/go/internal/validation/validation.go"
+    ],
+    "test": "see tests/"
+  },
+  "engines/go/internal/contracts/contracts.go": {
+    "phase": 9,
+    "purpose": "Contract types",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/go/internal/validation/validation.go": {
+    "phase": 9,
+    "purpose": "Validation logic",
+    "depends_on": [
+      "engines/go/internal/contracts/contracts.go"
+    ],
+    "test": "see tests/"
+  },
+  "engines/go/internal/jobs/jobs.go": {
+    "phase": 9,
+    "purpose": "Jobs",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/go/internal/observability/observability.go": {
+    "phase": 9,
+    "purpose": "Logging/metrics",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/cpp/include/svl/rolling_stats.hpp": {
+    "phase": 9,
+    "purpose": "C++ public interface",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/cpp/src/rolling_stats.cpp": {
+    "phase": 9,
+    "purpose": "Rolling stats",
+    "depends_on": [
+      "engines/cpp/include/svl/rolling_stats.hpp"
+    ],
+    "test": "see tests/"
+  },
+  "engines/cpp/CMakeLists.txt": {
+    "phase": 9,
+    "purpose": "C++ build",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/rust/Cargo.toml": {
+    "phase": 9,
+    "purpose": "Rust crate",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/rust/src/lib.rs": {
+    "phase": 9,
+    "purpose": "Rust library interface",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "tests/contract/test_signal_contract.py": {
+    "phase": 10,
+    "purpose": "signal.schema <-> models/orders/types",
+    "depends_on": [
+      "contracts/signal.schema.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_openapi_contract.py": {
+    "phase": 10,
+    "purpose": "openapi <-> backend schemas",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_end_to_end_backtest.py": {
+    "phase": 10,
+    "purpose": "Data -> engine -> validation -> report",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_blocked_missing_data.py": {
+    "phase": 10,
+    "purpose": "Missing option chain => BLOCKED",
+    "depends_on": [
+      "data/validators.py"
+    ],
+    "test": "see tests/"
+  },
+  "config/risk_policy.json": {
+    "phase": 11,
+    "purpose": "Risk limits + on_violation policy",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/execution_defaults.json": {
+    "phase": 11,
+    "purpose": "Capital, slippage, fees, ambiguous-candle rule",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "contracts/schema_check.py": {
+    "phase": 11,
+    "purpose": "Chhota JSON-schema checker (required + types) contract tests ke liye",
+    "depends_on": [],
+    "test": "tests/unit/contracts/test_schema_check.py"
+  },
+  "backend/dependencies.py": {
+    "phase": 11,
+    "purpose": "Shared registry/repository providers",
+    "depends_on": [
+      "registry/registry.py",
+      "persistence/repositories.py"
+    ],
+    "test": "tests/unit/backend/test_dependencies.py"
+  },
+  "backend/api/audit.py": {
+    "phase": 11,
+    "purpose": "Audit log read API",
+    "depends_on": [
+      "persistence/audit.py"
+    ],
+    "test": "tests/unit/backend/api/test_audit.py"
+  },
+  "backend/adapters/go_adapter.py": {
+    "phase": 11,
+    "purpose": "Python -> Go validator service client",
+    "depends_on": [
+      "contracts/openapi.yaml"
+    ],
+    "test": "tests/unit/backend/adapters/test_go_adapter.py"
+  },
+  "engines/reference/rolling_stats.py": {
+    "phase": 11,
+    "purpose": "Python reference rolling mean (native parity ka standard)",
+    "depends_on": [],
+    "test": "tests/unit/engines/reference/test_rolling_stats.py"
+  },
+  "engines/bindings/native.py": {
+    "phase": 11,
+    "purpose": "Native (C++/Rust) ya Python fallback ka single interface",
+    "depends_on": [
+      "engines/reference/rolling_stats.py"
+    ],
+    "test": "tests/unit/engines/bindings/test_native.py"
+  },
+  "engines/go/internal/validation/validation_test.go": {
+    "phase": 11,
+    "purpose": "Go unit test",
+    "depends_on": [
+      "engines/go/internal/validation/validation.go"
+    ],
+    "test": "see tests/"
+  },
+  "engines/cpp/tests/test_rolling_stats.cpp": {
+    "phase": 11,
+    "purpose": "C++ test (Python reference se parity values)",
+    "depends_on": [
+      "engines/cpp/src/rolling_stats.cpp"
+    ],
+    "test": "see tests/"
+  },
+  "engines/rust/tests/rolling_test.rs": {
+    "phase": 11,
+    "purpose": "Rust test (same parity values)",
+    "depends_on": [
+      "engines/rust/src/lib.rs"
+    ],
+    "test": "see tests/"
+  },
+  "tests/_helpers.py": {
+    "phase": 11,
+    "purpose": "Test helpers: bars, dataset, dummy strategy",
+    "depends_on": [
+      "data/models.py",
+      "strategies/base.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_strategy_contract.py": {
+    "phase": 11,
+    "purpose": "manifest <-> strategy.schema",
+    "depends_on": [
+      "contracts/strategy.schema.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_data_contract.py": {
+    "phase": 11,
+    "purpose": "Dataset.meta <-> data.schema",
+    "depends_on": [
+      "contracts/data.schema.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_trade_contract.py": {
+    "phase": 11,
+    "purpose": "Engine trades <-> trade.schema",
+    "depends_on": [
+      "contracts/trade.schema.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_run_contract.py": {
+    "phase": 11,
+    "purpose": "Run record <-> run.schema",
+    "depends_on": [
+      "contracts/run.schema.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_report_contract.py": {
+    "phase": 11,
+    "purpose": "Report <-> report.schema",
+    "depends_on": [
+      "contracts/report.schema.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_types_vs_contracts.py": {
+    "phase": 11,
+    "purpose": "frontend types <-> schemas",
+    "depends_on": [
+      "frontend/src/types/backtest.ts"
+    ],
+    "test": "see tests/"
+  },
+  "tests/contract/test_rolling_stats_parity.py": {
+    "phase": 11,
+    "purpose": "native vs reference parity",
+    "depends_on": [
+      "engines/bindings/native.py"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/vite.config.ts": {
+    "phase": 11,
+    "purpose": "Frontend bundler config",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/tests/api.test.ts": {
+    "phase": 11,
+    "purpose": "Frontend API client test placeholder",
+    "depends_on": [
+      "frontend/src/api/client.ts"
+    ],
+    "test": "see tests/"
+  },
+  "scripts/setup_truemax.sh": {
+    "phase": 11,
+    "purpose": "Naye machine par ek command me poora setup + verify",
+    "depends_on": [
+      "scripts/validate_repo.sh"
+    ],
+    "test": "see tests/"
+  },
+  "docs/RUNBOOK.md": {
+    "phase": 11,
+    "purpose": "Setup, run, verify steps",
+    "depends_on": [],
+    "test": "see tests/"
+  }
+}

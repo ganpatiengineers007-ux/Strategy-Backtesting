@@ -1,0 +1,6 @@
+id: gamma_blast
+version: 0.1.0
+entry_point: strategies.gamma_blast.strategy:GammaBlastStrategy
+required_data: [option_chain, oi]
+parameters: {}
+execution_modes: [backtest]

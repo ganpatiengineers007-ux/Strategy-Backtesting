@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "trade",
+  "type": "object",
+  "properties": {
+    "entry_ts": {
+      "type": "string"
+    },
+    "exit_ts": {
+      "type": "string"
+    },
+    "entry_price": {
+      "type": "number"
+    },
+    "exit_price": {
+      "type": "number"
+    },
+    "qty": {
+      "type": "integer"
+    },
+    "pnl": {
+      "type": "number"
+    },
+    "fees": {
+      "type": "number"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "entry_ts",
+    "exit_ts",
+    "entry_price",
+    "exit_price",
+    "qty",
+    "pnl",
+    "fees",
+    "reason"
+  ]
+}

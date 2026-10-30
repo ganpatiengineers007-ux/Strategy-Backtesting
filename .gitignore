@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+runs/
+data/samples/
+node_modules/
+target/
+build/
+dist/
+.pytest_cache/

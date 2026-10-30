@@ -1,0 +1,13 @@
+openapi: 3.1.0
+info: {title: strategy-validation-lab, version: 0.1.0}
+paths:
+  /health: {get: {summary: Health}}
+  /strategies: {get: {summary: List}, post: {summary: Create}}
+  /strategies/{id}: {get: {summary: Detail}}
+  /datasets: {get: {summary: List datasets}}
+  /backtests: {get: {summary: List runs}, post: {summary: Start run}}
+  /backtests/{id}: {get: {summary: Run detail + job status}}
+  /validations/{id}: {get: {summary: Validation result}}
+  /comparisons: {post: {summary: Compare runs}}
+  /reports/{id}: {get: {summary: Report}}
+  /audit: {get: {summary: Audit log}}

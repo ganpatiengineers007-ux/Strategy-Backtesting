@@ -1,0 +1,7 @@
+{
+  "initial_capital": 1000000.0,
+  "slippage_bps": 2.0,
+  "fee_pct": 0.0003,
+  "risk_per_trade_pct": 1.0,
+  "ambiguous_candle_policy": "stop_first"
+}

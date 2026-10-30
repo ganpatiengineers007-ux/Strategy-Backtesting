@@ -1,0 +1,7 @@
+// FILE: contracts/proto/metrics.proto
+// PURPOSE: Metrics messages
+// DEPENDS_ON: none
+// TEST: see tests/
+
+syntax = "proto3";
+package svl;

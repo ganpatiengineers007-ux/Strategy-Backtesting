@@ -1,0 +1,7 @@
+// FILE: contracts/proto/common.proto
+// PURPOSE: Shared types
+// DEPENDS_ON: none
+// TEST: see tests/
+
+syntax = "proto3";
+package svl;

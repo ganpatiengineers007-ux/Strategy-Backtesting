@@ -1,0 +1,7 @@
+// FILE: contracts/proto/signal.proto
+// PURPOSE: Signal messages
+// DEPENDS_ON: none
+// TEST: see tests/
+
+syntax = "proto3";
+package svl;

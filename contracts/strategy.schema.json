@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "strategy",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "entry_point": {
+      "type": "string"
+    },
+    "required_data": {
+      "type": "array"
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "execution_modes": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "entry_point",
+    "required_data",
+    "parameters",
+    "execution_modes"
+  ]
+}
