@@ -1,7 +1,12 @@
-// FILE: contracts/proto/signal.proto
-// PURPOSE: Signal messages
-// DEPENDS_ON: none
-// TEST: see tests/
-
 syntax = "proto3";
 package svl;
+
+import "common.proto";
+
+message Signal {
+  Side side = 1;
+  optional double stop_loss = 2;
+  optional double target = 3;
+  optional double size_hint = 4;
+  string reason = 5;
+}

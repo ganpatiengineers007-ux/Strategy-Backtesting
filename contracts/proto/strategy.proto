@@ -1,7 +1,12 @@
-// FILE: contracts/proto/strategy.proto
-// PURPOSE: Strategy messages
-// DEPENDS_ON: none
-// TEST: see tests/
-
 syntax = "proto3";
 package svl;
+
+message StrategyManifest {
+  string id = 1;
+  string version = 2;
+  string entry_point = 3;
+  repeated string required_data = 4;
+  map<string, string> parameters = 5;
+  repeated string execution_modes = 6;
+  bool live_trading_enabled = 7;
+}

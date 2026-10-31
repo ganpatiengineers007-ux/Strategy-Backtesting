@@ -2,6 +2,7 @@
 import importlib
 from pathlib import Path
 
+from registry import compatibility
 from registry.metadata import load_manifest
 from registry.versioning import source_hash as _hash
 from strategies.validation import validate_manifest
@@ -18,7 +19,7 @@ class Registry:
             mf = d / "manifest.yaml"
             if d.is_dir() and mf.exists():
                 m = load_manifest(mf)
-                errs = validate_manifest(m)
+                errs = validate_manifest(m) + compatibility.check(m)
                 if errs:
                     raise ValueError(f"{d.name}: invalid manifest {errs}")
                 self.records[m["id"]] = {"manifest": m, "dir": d}

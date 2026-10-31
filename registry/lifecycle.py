@@ -1,6 +1,9 @@
-"""Strategy lifecycle states."""
-ALLOWED = {"DRAFT": {"VALIDATED", "RETIRED"}, "VALIDATED": {"APPROVED", "DRAFT", "RETIRED"},
-           "APPROVED": {"RETIRED", "DRAFT"}, "RETIRED": set()}
+"""Strategy lifecycle states (blueprint: Draft, Validated, Rejected + Approved, Retired)."""
+ALLOWED = {"DRAFT": {"VALIDATED", "REJECTED", "RETIRED"},
+           "VALIDATED": {"APPROVED", "DRAFT", "REJECTED", "RETIRED"},
+           "APPROVED": {"RETIRED", "DRAFT"},
+           "REJECTED": {"DRAFT"},
+           "RETIRED": set()}
 
 
 def can_transition(a, b):

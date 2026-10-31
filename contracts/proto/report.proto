@@ -1,7 +1,12 @@
-// FILE: contracts/proto/report.proto
-// PURPOSE: Report messages
-// DEPENDS_ON: none
-// TEST: see tests/
-
 syntax = "proto3";
 package svl;
+
+import "metrics.proto";
+
+message Report {
+  string run_id = 1;
+  string status = 2;
+  Metrics metrics = 3;
+  ValidationResult validation = 4;
+  string generated_at = 5;
+}

@@ -31,7 +31,7 @@ def load_config():
 
 
 def run_full(strategy_id, data_path, params=None, config=None, out_root="runs", symbol="UNKNOWN",
-             timeframe="UNKNOWN", run_id=None, repo=None):
+             timeframe="UNKNOWN", run_id=None, repo=None, validation_opts=None):
     reg = Registry()
     manifest = reg.manifest(strategy_id)
     cfg = load_config()
@@ -42,7 +42,7 @@ def run_full(strategy_id, data_path, params=None, config=None, out_root="runs", 
     if result.status == "BLOCKED":
         metrics, validation = {}, {"status": "BLOCKED", "reason": result.reason, "checks": {}}
     else:
-        metrics, validation = compute_all(result, ds), run_validation(ds, factory, cfg)
+        metrics, validation = compute_all(result, ds), run_validation(ds, factory, cfg, **(validation_opts or {}))
     now = datetime.now(timezone.utc)
     run_id = run_id or f"run-{now.strftime('%Y%m%d%H%M%S')}-{strategy_id}"
     report, paths = generate_report(run_id, result, metrics, validation, out_root)

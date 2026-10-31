@@ -2080,5 +2080,75 @@
     "purpose": "CSS import declarations",
     "depends_on": [],
     "test": "see tests/"
+  },
+  "data/options.py": {
+    "phase": 15,
+    "purpose": "Option contract + chain validation (expiry, strike, lot size, bid/ask)",
+    "depends_on": [],
+    "test": "tests/unit/data/test_options.py"
+  },
+  "tests/contract/test_proto_files.py": {
+    "phase": 15,
+    "purpose": "Proto files ka structure (protoc ke bina)",
+    "depends_on": [
+      "contracts/proto/backtest.proto"
+    ],
+    "test": "see tests/"
+  },
+  "backend/jobs/run_job.py": {
+    "phase": 15,
+    "purpose": "Subprocess entry: limits lagakar run_full chalata hai (stdin JSON -> stdout JSON)",
+    "depends_on": [
+      "backend/services/backtest_service.py"
+    ],
+    "test": "tests/unit/backend/jobs/test_run_job.py"
+  },
+  "backend/jobs/isolated.py": {
+    "phase": 15,
+    "purpose": "Run ko alag process me limits ke saath chalana",
+    "depends_on": [
+      "backend/jobs/run_job.py"
+    ],
+    "test": "tests/unit/backend/jobs/test_isolated.py"
+  },
+  "tests/unit/backend/jobs/test_isolated.py": {
+    "phase": 15,
+    "purpose": "Isolated run: env saaf + result inline ke barabar",
+    "depends_on": [
+      "backend/jobs/isolated.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_background_worker.py": {
+    "phase": 15,
+    "purpose": "BACKGROUND_WORKER=1: job turant QUEUED/RUNNING, phir SUCCEEDED",
+    "depends_on": [
+      "backend/jobs/worker.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_api_validation_endpoint.py": {
+    "phase": 15,
+    "purpose": "POST /validations options + results endpoint",
+    "depends_on": [
+      "backend/api/validation.py"
+    ],
+    "test": "see tests/"
+  },
+  "engines/go/internal/jobs/jobs_test.go": {
+    "phase": 15,
+    "purpose": "Go test: job transitions",
+    "depends_on": [
+      "engines/go/internal/jobs/jobs.go"
+    ],
+    "test": "see tests/"
+  },
+  "engines/go/internal/observability/observability_test.go": {
+    "phase": 15,
+    "purpose": "Go test: counters",
+    "depends_on": [
+      "engines/go/internal/observability/observability.go"
+    ],
+    "test": "see tests/"
   }
 }

@@ -4,3 +4,4 @@ entry_point: strategies.gamma_blast.strategy:GammaBlastStrategy
 required_data: [option_chain, oi]
 parameters: {}
 execution_modes: [backtest]
+live_trading: {enabled: false}
