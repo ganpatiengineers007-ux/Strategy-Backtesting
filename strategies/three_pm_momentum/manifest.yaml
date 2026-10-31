@@ -4,3 +4,4 @@ entry_point: strategies.three_pm_momentum.strategy:ThreePMMomentumStrategy
 required_data: []
 parameters: {stop_pct: 0.5, target_pct: 1.0, entry_hour: 15, entry_minute: 0, exit_hour: 15, exit_minute: 25}
 execution_modes: [backtest]
+live_trading: {enabled: false}

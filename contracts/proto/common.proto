@@ -1,7 +1,21 @@
-// FILE: contracts/proto/common.proto
-// PURPOSE: Shared types
-// DEPENDS_ON: none
-// TEST: see tests/
-
 syntax = "proto3";
 package svl;
+
+enum Side {
+  SIDE_UNSPECIFIED = 0;
+  BUY = 1;
+  SELL = 2;
+  EXIT = 3;
+}
+
+enum QualityStatus {
+  QUALITY_UNSPECIFIED = 0;
+  PASS = 1;
+  WARN = 2;
+  BLOCKED = 3;
+}
+
+message Error {
+  string code = 1;
+  string message = 2;
+}

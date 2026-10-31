@@ -1,7 +1,8 @@
 """Backtest engine entry point.
 Flow: event -> strategy -> signal validation -> sizing -> risk -> next-bar-open fill (no look-ahead)
       -> stops -> portfolio/accounting -> risk recheck."""
-from backtest import fees, slippage, stop_manager, position_sizing
+from backtest import position_sizing
+from backtest.execution import ExecutionModel
 from backtest.accounting import EquityCurve
 from backtest.clock import SimClock
 from backtest.event_queue import EventQueue
@@ -34,18 +35,19 @@ def run_backtest(dataset, strategy, config=None):
     bps, fee_pct, policy = cfg["slippage_bps"], cfg["fee_pct"], cfg["ambiguous_candle_policy"]
     bars, pending, rejections, status, reason = dataset.bars, None, [], "COMPLETED", ""
 
+    model = ExecutionModel(bps, fee_pct, policy)
+
     def close(raw_price, bar, why):
-        px = slippage.apply(raw_price, "SELL", bps)
-        pf.close(px, bar.ts, fees.fee(pf.position.qty * px, fee_pct), why)
+        px, fee = model.fill_exit(raw_price, pf.position.qty)
+        pf.close(px, bar.ts, fee, why)
 
     for i, bar in EventQueue(bars):
         clock.set(bar.ts)
         if pending and pf.position is None:
-            px = slippage.apply(bar.open, "BUY", bps)
-            pf.open(pending["qty"], px, bar.ts, pending["stop"], pending["target"],
-                    fees.fee(pending["qty"] * px, fee_pct))
+            px, fee = model.fill_entry(bar.open, pending["qty"])
+            pf.open(pending["qty"], px, bar.ts, pending["stop"], pending["target"], fee)
         pending = None
-        ex = stop_manager.check(pf.position, bar, policy)
+        ex = model.check_exit(pf.position, bar)
         if ex:
             close(ex[0], bar, ex[1])
         eq = pf.equity(bar.close)
