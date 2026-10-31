@@ -1,6 +1,6 @@
 """
 FILE   : sweep_strategy.py
-STATUS : COMPLETE (पूरी चलने लायक फ़ाइल — कोई placeholder नहीं)
+STATUS : COMPLETE (पूरी चलने लायक फ़ाइल)
 PATH   : ./sweep_strategy.py  (अपने प्रोजेक्ट फ़ोल्डर के रूट में रखें)
 
 BANKNIFTY/NIFTY Futures — Liquidity Sweep & Stop-Hunting Reversal
@@ -530,8 +530,10 @@ def main():
     finally:
         try:
             feed.disconnect()
-        except Exception:                                            # noqa: BLE001
-            pass
+        except Exception as e:  # noqa: BLE001
+            import logging
+            log = logging.getLogger("sweep")
+            log.exception("Feed disconnect error")
 
 if __name__ == "__main__":
     main()

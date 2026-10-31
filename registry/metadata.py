@@ -12,6 +12,7 @@ def _scalar(s):
         try:
             return cast(s)
         except ValueError:
+            # Expected for non-numeric strings
             pass
     return s.strip("'\"")
 

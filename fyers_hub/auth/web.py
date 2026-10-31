@@ -17,6 +17,7 @@ from fyers_hub.settings import get_settings
 def make_handler(settings):
     class H(BaseHTTPRequestHandler):
         def log_message(self, *a):  # URL me auth_code hota hai - log nahi karna
+            # Intentionally silent: auth_code would leak in logs
             pass
 
         def _send(self, code, body, ctype="text/html; charset=utf-8", headers=()):
@@ -39,6 +40,9 @@ def make_handler(settings):
                     flow.exchange_code(code, settings)
                     msg = "Token save ho gaya. Ye page band kar sakte ho."
                 except Exception as e:  # noqa: BLE001
+                    import logging
+                    log = logging.getLogger("fyers_hub.auth.web")
+                    log.exception("Callback error")
                     msg = f"Fail: {html.escape(str(e))}"
                 self._send(200, f"<h3>{msg}</h3>")
             else:

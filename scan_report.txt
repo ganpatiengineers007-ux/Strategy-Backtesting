@@ -1,0 +1,104 @@
+स्कैन की गई फाइलें: 654
+ERROR: 10  WARN: 65  INFO: 26
+
+[ERROR] IMPORT           external/quant_stat_arb_framework/examples/run_backtest.py:4  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat)
+[ERROR] IMPORT           external/quant_stat_arb_framework/examples/run_backtest.py:5  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.backtest)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_indicators.py:4  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.indicators)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_risk_execution.py:2  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.config)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_risk_execution.py:3  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.models)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_risk_execution.py:4  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.risk)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_risk_execution.py:5  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.execution)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_strategy.py:3  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.config)
+[ERROR] IMPORT           external/quant_stat_arb_framework/tests/test_strategy.py:4  `quantstrat` न इंस्टॉल है न प्रोजेक्ट में है (import quantstrat.strategy)
+[ERROR] IMPORT           scripts/sweep_strategy.py:45  `dhanhq` न इंस्टॉल है न प्रोजेक्ट में है (import dhanhq)
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:188  placeholder/stub जैसा शब्द: # OVERRIDES: stub ki jagah asli, chalne wala code. Sirf stdlib (koi pi
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:221  placeholder/stub जैसा शब्द: ("frontend/tests/api.test.ts", "Frontend API client test placeholder",
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:294  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum ka logic placeholder hai
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:631  placeholder/stub जैसा शब्द: """GammaBlastStrategy: PLACEHOLDER. Asli niyam yahan daalne hain.
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:652  placeholder/stub जैसा शब्द: """ThreePMMomentumStrategy: PLACEHOLDER logic (interface demo). Asli n
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:1724  placeholder/stub जैसा शब्द: O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:2208  placeholder/stub जैसा शब्द: F("LICENSE", "License placeholder (license aap chunenge)", "All rights
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:2209  placeholder/stub जैसा शब्द: F("CHANGELOG.md", "Version history", "# Changelog\n\n## 0.1.0\n- Scaff
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:2289  placeholder/stub जैसा शब्द: F("strategies/gamma_blast/config.yaml", "GammaBlast tunable params (pl
+[WARN] PLACEHOLDER      archive/bootstrap (4).py:4163  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum placeholder - asli niyam
+[WARN] PLACEHOLDER      bootstrap.py:15  placeholder/stub जैसा शब्द: v6: Phase 15 (baaki 22 stubs me asli code, isolation, background worke
+[WARN] PLACEHOLDER      bootstrap.py:190  placeholder/stub जैसा शब्द: # OVERRIDES: stub ki jagah asli, chalne wala code. Sirf stdlib (koi pi
+[WARN] PLACEHOLDER      bootstrap.py:223  placeholder/stub जैसा शब्द: ("frontend/tests/api.test.ts", "Frontend API client test placeholder",
+[WARN] PLACEHOLDER      bootstrap.py:296  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum ka logic placeholder hai
+[WARN] PLACEHOLDER      bootstrap.py:633  placeholder/stub जैसा शब्द: """GammaBlastStrategy: PLACEHOLDER. Asli niyam yahan daalne hain.
+[WARN] PLACEHOLDER      bootstrap.py:654  placeholder/stub जैसा शब्द: """ThreePMMomentumStrategy: PLACEHOLDER logic (interface demo). Asli n
+[WARN] PLACEHOLDER      bootstrap.py:1726  placeholder/stub जैसा शब्द: O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[WARN] PLACEHOLDER      bootstrap.py:2210  placeholder/stub जैसा शब्द: F("LICENSE", "License placeholder (license aap chunenge)", "All rights
+[WARN] PLACEHOLDER      bootstrap.py:2211  placeholder/stub जैसा शब्द: F("CHANGELOG.md", "Version history", "# Changelog\n\n## 0.1.0\n- Scaff
+[WARN] PLACEHOLDER      bootstrap.py:2291  placeholder/stub जैसा शब्द: F("strategies/gamma_blast/config.yaml", "GammaBlast tunable params (pl
+[WARN] PLACEHOLDER      bootstrap.py:4165  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum placeholder - asli niyam
+[WARN] PLACEHOLDER      bootstrap.py:4168  placeholder/stub जैसा शब्द: # ================================================================= PH
+[WARN] PLACEHOLDER      bootstrap.py:5459  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum placeholder; bahari stra
+[WARN] PLACEHOLDER      bootstrap.py:5462  placeholder/stub जैसा शब्द: PHASES.append((15, "Baaki stubs me asli code + isolation, background w
+[WARN] PLACEHOLDER      frontend/tests/api.test.ts:1  placeholder/stub जैसा शब्द: // TODO: vitest se client.ts ka test (fetch mock). Abhi placeholder.
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:187  placeholder/stub जैसा शब्द: # OVERRIDES: stub ki jagah asli, chalne wala code. Sirf stdlib (koi pi
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:220  placeholder/stub जैसा शब्द: ("frontend/tests/api.test.ts", "Frontend API client test placeholder",
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:293  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum ka logic placeholder hai
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:630  placeholder/stub जैसा शब्द: """GammaBlastStrategy: PLACEHOLDER. Asli niyam yahan daalne hain.
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:651  placeholder/stub जैसा शब्द: """ThreePMMomentumStrategy: PLACEHOLDER logic (interface demo). Asli n
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:1723  placeholder/stub जैसा शब्द: O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:2207  placeholder/stub जैसा शब्द: F("LICENSE", "License placeholder (license aap chunenge)", "All rights
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:2208  placeholder/stub जैसा शब्द: F("CHANGELOG.md", "Version history", "# Changelog\n\n## 0.1.0\n- Scaff
+[WARN] PLACEHOLDER      scripts/bootstrap-5.py:2288  placeholder/stub जैसा शब्द: F("strategies/gamma_blast/config.yaml", "GammaBlast tunable params (pl
+[WARN] PLACEHOLDER      scripts/bootstrap.py:188  placeholder/stub जैसा शब्द: # OVERRIDES: stub ki jagah asli, chalne wala code. Sirf stdlib (koi pi
+[WARN] PLACEHOLDER      scripts/bootstrap.py:221  placeholder/stub जैसा शब्द: ("frontend/tests/api.test.ts", "Frontend API client test placeholder",
+[WARN] PLACEHOLDER      scripts/bootstrap.py:294  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum ka logic placeholder hai
+[WARN] PLACEHOLDER      scripts/bootstrap.py:631  placeholder/stub जैसा शब्द: """GammaBlastStrategy: PLACEHOLDER. Asli niyam yahan daalne hain.
+[WARN] PLACEHOLDER      scripts/bootstrap.py:652  placeholder/stub जैसा शब्द: """ThreePMMomentumStrategy: PLACEHOLDER logic (interface demo). Asli n
+[WARN] PLACEHOLDER      scripts/bootstrap.py:1724  placeholder/stub जैसा शब्द: O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[WARN] PLACEHOLDER      scripts/bootstrap.py:2208  placeholder/stub जैसा शब्द: F("LICENSE", "License placeholder (license aap chunenge)", "All rights
+[WARN] PLACEHOLDER      scripts/bootstrap.py:2209  placeholder/stub जैसा शब्द: F("CHANGELOG.md", "Version history", "# Changelog\n\n## 0.1.0\n- Scaff
+[WARN] PLACEHOLDER      scripts/bootstrap.py:2289  placeholder/stub जैसा शब्द: F("strategies/gamma_blast/config.yaml", "GammaBlast tunable params (pl
+[WARN] PLACEHOLDER      scripts/bootstrap.py:4163  placeholder/stub जैसा शब्द: Strategy logic: gamma_blast/three_pm_momentum placeholder - asli niyam
+[WARN] PLACEHOLDER      scripts/sweep_strategy.py:3  placeholder/stub जैसा शब्द: STATUS : COMPLETE (पूरी चलने लायक फ़ाइल — कोई placeholder नहीं)
+[WARN] PLACEHOLDER      strategies/gamma_blast/strategy.py:1  placeholder/stub जैसा शब्द: """GammaBlastStrategy: PLACEHOLDER. Asli niyam yahan daalne hain.
+[WARN] PLACEHOLDER      strategies/three_pm_momentum/strategy.py:1  placeholder/stub जैसा शब्द: """ThreePMMomentumStrategy: PLACEHOLDER logic (interface demo). Asli n
+[WARN] STUB             [zip fyers_hub.zip] fyers_hub/auth/web.py:19  फंक्शन `log_message`: सिर्फ़ pass / ... है
+[WARN] STUB             data/sources/broker_source.py:4  फंक्शन `read_rows`: सिर्फ़ NotImplementedError उठाता है
+[WARN] STUB             fyers_hub/auth/web.py:19  फंक्शन `log_message`: सिर्फ़ pass / ... है
+[WARN] SWALLOWED-ERROR  [zip fyers_hub.zip] fyers_hub/auth/web.py:61  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  [zip fyers_hub.zip] fyers_hub/ingest/ws.py:44  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  [zip fyers_hub.zip] fyers_hub/tests/test_flow.py:81  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  fyers_hub/auth/web.py:61  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  fyers_hub/ingest/ws.py:44  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  fyers_hub/tests/test_flow.py:81  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  registry/metadata.py:14  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  scripts/sweep_strategy.py:533  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/integration/test_api_validation_endpoint.py:23  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/unit/backtest/test_execution.py:18  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/unit/data/test_corporate_actions.py:26  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/unit/data/test_storage.py:27  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/unit/data/test_storage.py:32  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/unit/persistence/test_database.py:14  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[WARN] SWALLOWED-ERROR  tests/unit/registry/test_permissions.py:11  except के अंदर सिर्फ़ pass: error चुपचाप दब रहा है
+[INFO] SKIP             all_strategies  यह फोल्डर --skip से स्कैन के बाहर रखा गया
+[INFO] TODO             archive/bootstrap (4).py:641  return None  # TODO: real entry/exit rules
+[INFO] TODO             archive/bootstrap (4).py:1724  O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[INFO] TODO             archive/bootstrap (4).py:4182  return h("#") + "\n\ndef test_placeholder():\n    import pytest\n    p
+[INFO] TODO             archive/bootstrap (4).py:4202  if "openapi" in p.name else "id: TODO\nversion: 0.1.0\nentry_point: TO
+[INFO] TODO             archive/bootstrap (4).py:4206  return "#!/usr/bin/env bash\nset -euo pipefail\n" + h("#") + "# TODO: 
+[INFO] TODO             bootstrap.py:643  return None  # TODO: real entry/exit rules
+[INFO] TODO             bootstrap.py:1726  O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[INFO] TODO             bootstrap.py:5480  return h("#") + "\n\ndef test_placeholder():\n    import pytest\n    p
+[INFO] TODO             bootstrap.py:5500  if "openapi" in p.name else "id: TODO\nversion: 0.1.0\nentry_point: TO
+[INFO] TODO             bootstrap.py:5504  return "#!/usr/bin/env bash\nset -euo pipefail\n" + h("#") + "# TODO: 
+[INFO] TODO             frontend/tests/api.test.ts:1  // TODO: vitest se client.ts ka test (fetch mock). Abhi placeholder.
+[INFO] TODO             scripts/bootstrap-5.py:640  return None  # TODO: real entry/exit rules
+[INFO] TODO             scripts/bootstrap-5.py:1723  O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[INFO] TODO             scripts/bootstrap-5.py:2946  return h("#") + "\n\ndef test_placeholder():\n    import pytest\n    p
+[INFO] TODO             scripts/bootstrap-5.py:2966  if "openapi" in p.name else "id: TODO\nversion: 0.1.0\nentry_point: TO
+[INFO] TODO             scripts/bootstrap-5.py:2970  return "#!/usr/bin/env bash\nset -euo pipefail\n" + h("#") + "# TODO: 
+[INFO] TODO             scripts/bootstrap.py:641  return None  # TODO: real entry/exit rules
+[INFO] TODO             scripts/bootstrap.py:1724  O("frontend/tests/api.test.ts", "// TODO: vitest se client.ts ka test 
+[INFO] TODO             scripts/bootstrap.py:4182  return h("#") + "\n\ndef test_placeholder():\n    import pytest\n    p
+[INFO] TODO             scripts/bootstrap.py:4202  if "openapi" in p.name else "id: TODO\nversion: 0.1.0\nentry_point: TO
+[INFO] TODO             scripts/bootstrap.py:4206  return "#!/usr/bin/env bash\nset -euo pipefail\n" + h("#") + "# TODO: 
+[INFO] TODO             strategies/gamma_blast/strategy.py:11  return None  # TODO: real entry/exit rules
+[INFO] ZIP              [zip archive/gts_quant_lab.zip] -  इस zip की 25 फाइलें स्कैन हुईं
+[INFO] ZIP              [zip archive/quant_stat_arb_framework.zip] -  इस zip की 17 फाइलें स्कैन हुईं
+[INFO] ZIP              [zip fyers_hub.zip] -  इस zip की 38 फाइलें स्कैन हुईं
