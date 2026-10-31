@@ -1,6 +1,7 @@
-// FILE: frontend/src/pages/datasets.ts
-// PURPOSE: Datasets
-// DEPENDS_ON: frontend/src/api/client.ts
-// TEST: see tests/
+import { listDatasets } from "../api/datasets";
+import { mountPage } from "../components/page";
+import { renderTable } from "../components/data-table";
 
-export {};
+export function render(el: HTMLElement): Promise<void> {
+  return mountPage(el, "Datasets", async () => renderTable(await listDatasets()));
+}

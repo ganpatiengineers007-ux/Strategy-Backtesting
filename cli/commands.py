@@ -1,9 +1,13 @@
 import csv
+import json
 import random
 from datetime import date, timedelta
 from pathlib import Path
 
-from backend.services.backtest_service import run_full
+from backend.services.backtest_service import load_config, run_full
+from data.loaders import load_dataset
+from optimization import parameter_search
+from optimization.constraints import DEFAULT_RULES
 from registry.registry import Registry
 
 
@@ -46,3 +50,19 @@ def cmd_demo(args):
         record, paths = run_full(sid, csv_path, out_root=args.out, symbol="DEMO", timeframe="5m")
         print(f"[{sid}] status={record['status']} validation={record['validation_status']} {record['reason']}")
         print("   report:", paths["html"])
+
+
+def cmd_optimize(args):
+    reg = Registry()
+    ds = load_dataset(args.data)
+    out = parameter_search.search(ds, lambda p: reg.load(args.strategy, p), json.loads(args.grid), load_config(),
+                                  rules=DEFAULT_RULES, track_root=args.out, experiment_id=args.strategy)
+    print(f"status={out['status']} trials={out['n_trials']} {out.get('reason', '')}")
+    if "best_params" in out:
+        print("best:", out["best_params"], "holdout_trades:", out["holdout_trades"],
+              "holdout_expectancy:", round(out["holdout_expectancy"], 2))
+    print(out.get("warning", ""))
+
+
+def cmd_sample(args):
+    print("written:", make_sample_csv(args.out, days=args.days))

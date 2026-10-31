@@ -1,7 +1,5 @@
-"""Request ID
+import uuid
 
-DEPENDS_ON: none
-TEST: tests/unit/backend/middleware/test_request_id.py
-"""
 
-__all__: list[str] = []
+def new_request_id():
+    return uuid.uuid4().hex

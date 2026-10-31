@@ -1,6 +1,7 @@
-// FILE: frontend/src/pages/strategy-detail.ts
-// PURPOSE: Detail
-// DEPENDS_ON: frontend/src/api/client.ts
-// TEST: see tests/
+import { getStrategy } from "../api/strategies";
+import { mountPage } from "../components/page";
+import { renderKeyValues } from "../components/data-table";
 
-export {};
+export function render(el: HTMLElement, id = ""): Promise<void> {
+  return mountPage(el, `Strategy: ${id}`, async () => renderKeyValues(await getStrategy(id) as unknown as Record<string, unknown>));
+}

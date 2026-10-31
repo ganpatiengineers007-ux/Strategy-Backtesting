@@ -17,4 +17,5 @@ def test_fastapi_app_routes():
         pytest.skip("fastapi not installed")
     from backend.app import create_app
     paths = set(create_app().openapi()["paths"])
-    assert {"/health", "/audit"} <= paths  # TODO: baaki 6 routes service layer ke baad
+    assert {"/health", "/audit", "/strategies", "/backtests", "/reports/{run_id}", "/validations/{run_id}",
+            "/comparisons", "/datasets"} <= paths

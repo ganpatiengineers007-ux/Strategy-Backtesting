@@ -1,6 +1,7 @@
-"""Import/wiring test for backend/middleware/authentication.py"""
-import importlib
+from backend.middleware.authentication import is_authorized
 
 
-def test_module_imports():
-    importlib.import_module("backend.middleware.authentication")
+def test_dev_mode_and_key():
+    assert is_authorized({}, "") is True
+    assert is_authorized({"x-api-key": "k"}, "k") is True
+    assert is_authorized({"x-api-key": "bad"}, "k") is False and is_authorized({}, "k") is False

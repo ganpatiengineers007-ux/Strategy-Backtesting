@@ -1480,5 +1480,605 @@
     "purpose": "Setup, run, verify steps",
     "depends_on": [],
     "test": "see tests/"
+  },
+  "LICENSE": {
+    "phase": 12,
+    "purpose": "License placeholder (license aap chunenge)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "CHANGELOG.md": {
+    "phase": 12,
+    "purpose": "Version history",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "CONTRIBUTING.md": {
+    "phase": 12,
+    "purpose": "Contribution rules",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "SECURITY.md": {
+    "phase": 12,
+    "purpose": "Security reporting",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "requirements.lock": {
+    "phase": 12,
+    "purpose": "Pinned deps (core abhi stdlib-only)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  ".env.example": {
+    "phase": 12,
+    "purpose": "Env variables ka namuna",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  ".editorconfig": {
+    "phase": 12,
+    "purpose": "Editor settings",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  ".pre-commit-config.yaml": {
+    "phase": 12,
+    "purpose": "Commit se pehle tests",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  ".github/workflows/ci.yml": {
+    "phase": 12,
+    "purpose": "GitHub Actions: har push par tests",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "artifacts/.gitkeep": {
+    "phase": 12,
+    "purpose": "Artifacts folder (content git me nahi)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "output/.gitkeep": {
+    "phase": 12,
+    "purpose": "Output folder (content git me nahi)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/backtest.yaml": {
+    "phase": 12,
+    "purpose": "Capital + sizing + ambiguous candle rule (LOADED)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/costs.yaml": {
+    "phase": 12,
+    "purpose": "Slippage + fees (LOADED)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/risk.yaml": {
+    "phase": 12,
+    "purpose": "Risk limits (LOADED)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/system.yaml": {
+    "phase": 12,
+    "purpose": "System settings",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/data.yaml": {
+    "phase": 12,
+    "purpose": "Data settings",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/validation.yaml": {
+    "phase": 12,
+    "purpose": "Validation thresholds",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/reporting.yaml": {
+    "phase": 12,
+    "purpose": "Reporting settings",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "config/logging.yaml": {
+    "phase": 12,
+    "purpose": "Logging settings",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/ARCHITECTURE.md": {
+    "phase": 12,
+    "purpose": "Architecture",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/REPOSITORY_MAP.md": {
+    "phase": 12,
+    "purpose": "Repository map",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/STRATEGY_CONTRACT.md": {
+    "phase": 12,
+    "purpose": "Strategy contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/DATA_CONTRACT.md": {
+    "phase": 12,
+    "purpose": "Data contract",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/BACKTEST_ENGINE.md": {
+    "phase": 12,
+    "purpose": "Backtest engine",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/VALIDATION_POLICY.md": {
+    "phase": 12,
+    "purpose": "Validation policy",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/METRICS_DICTIONARY.md": {
+    "phase": 12,
+    "purpose": "Metrics dictionary",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/SECURITY_POLICY.md": {
+    "phase": 12,
+    "purpose": "Security policy",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/TESTING_POLICY.md": {
+    "phase": 12,
+    "purpose": "Testing policy",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/DEPLOYMENT.md": {
+    "phase": 12,
+    "purpose": "Deployment",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/DECISION_GATES.md": {
+    "phase": 12,
+    "purpose": "Decision gates",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/adr/ADR-001-LANGUAGE-BOUNDARIES.md": {
+    "phase": 12,
+    "purpose": "ADR-001 Language boundaries",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/adr/ADR-002-DATA-CONTRACTS.md": {
+    "phase": 12,
+    "purpose": "ADR-002 Data contracts",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "docs/adr/ADR-003-EXECUTION-MODEL.md": {
+    "phase": 12,
+    "purpose": "ADR-003 Execution model",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/public/favicon.svg": {
+    "phase": 12,
+    "purpose": "Favicon",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/public/logo.svg": {
+    "phase": 12,
+    "purpose": "Logo",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/styles/base.css": {
+    "phase": 12,
+    "purpose": "Base styles",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/styles/layout.css": {
+    "phase": 12,
+    "purpose": "Layout",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/styles/components.css": {
+    "phase": 12,
+    "purpose": "Components",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/styles/dashboard.css": {
+    "phase": 12,
+    "purpose": "Dashboard",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "strategies/examples/example_strategy.py": {
+    "phase": 12,
+    "purpose": "Example strategy (template)",
+    "depends_on": [
+      "strategies/base.py"
+    ],
+    "test": "tests/unit/strategies/examples/test_example_strategy.py"
+  },
+  "strategies/examples/example_strategy.yaml": {
+    "phase": 12,
+    "purpose": "Example manifest (discover nahi hota)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "strategies/gamma_blast/config.yaml": {
+    "phase": 12,
+    "purpose": "GammaBlast tunable params (placeholder)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "strategies/three_pm_momentum/config.yaml": {
+    "phase": 12,
+    "purpose": "ThreePM tunable params",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "indicators/trend.py": {
+    "phase": 12,
+    "purpose": "SMA / EMA",
+    "depends_on": [],
+    "test": "tests/unit/indicators/test_trend.py"
+  },
+  "indicators/momentum.py": {
+    "phase": 12,
+    "purpose": "RSI (Wilder) / ROC",
+    "depends_on": [],
+    "test": "tests/unit/indicators/test_momentum.py"
+  },
+  "indicators/volatility.py": {
+    "phase": 12,
+    "purpose": "True range / ATR (Wilder)",
+    "depends_on": [],
+    "test": "tests/unit/indicators/test_volatility.py"
+  },
+  "indicators/volume.py": {
+    "phase": 12,
+    "purpose": "VWAP (daily reset) / OBV",
+    "depends_on": [],
+    "test": "tests/unit/indicators/test_volume.py"
+  },
+  "indicators/market_structure.py": {
+    "phase": 12,
+    "purpose": "Swing pivots (confirmed, no look-ahead)",
+    "depends_on": [],
+    "test": "tests/unit/indicators/test_market_structure.py"
+  },
+  "indicators/options_greeks.py": {
+    "phase": 12,
+    "purpose": "Black-Scholes price + Greeks (European, no dividends)",
+    "depends_on": [],
+    "test": "tests/unit/indicators/test_options_greeks.py"
+  },
+  "observability/logging.py": {
+    "phase": 12,
+    "purpose": "JSON logging setup",
+    "depends_on": [],
+    "test": "tests/unit/observability/test_logging.py"
+  },
+  "observability/metrics.py": {
+    "phase": 12,
+    "purpose": "In-process counters",
+    "depends_on": [],
+    "test": "tests/unit/observability/test_metrics.py"
+  },
+  "observability/tracing.py": {
+    "phase": 12,
+    "purpose": "Simple timing spans",
+    "depends_on": [],
+    "test": "tests/unit/observability/test_tracing.py"
+  },
+  "observability/health.py": {
+    "phase": 12,
+    "purpose": "Health report",
+    "depends_on": [],
+    "test": "tests/unit/observability/test_health.py"
+  },
+  "backend/schemas/validation.py": {
+    "phase": 12,
+    "purpose": "Validation request/response models",
+    "depends_on": [],
+    "test": "tests/unit/backend/schemas/test_validation.py"
+  },
+  "cli/formatting.py": {
+    "phase": 12,
+    "purpose": "Metrics ko text table banana",
+    "depends_on": [],
+    "test": "tests/unit/cli/test_formatting.py"
+  },
+  "persistence/migrations/001_initial.sql": {
+    "phase": 12,
+    "purpose": "Initial PostgreSQL schema",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/go/README.md": {
+    "phase": 12,
+    "purpose": "Go engine",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/cpp/README.md": {
+    "phase": 12,
+    "purpose": "C++ engine",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/rust/README.md": {
+    "phase": 12,
+    "purpose": "Rust engine",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "engines/rust/tests/contract_tests.rs": {
+    "phase": 12,
+    "purpose": "Rust contract test",
+    "depends_on": [
+      "engines/rust/src/lib.rs"
+    ],
+    "test": "see tests/"
+  },
+  "scripts/run_tests.sh": {
+    "phase": 12,
+    "purpose": "Python tests",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "scripts/run_backtest.sh": {
+    "phase": 12,
+    "purpose": "Ek strategy ka backtest",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "scripts/build_frontend.sh": {
+    "phase": 12,
+    "purpose": "Frontend build",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "scripts/generate_report.sh": {
+    "phase": 12,
+    "purpose": "Demo report",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "infra/Dockerfile": {
+    "phase": 12,
+    "purpose": "Container image",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "infra/docker-compose.yml": {
+    "phase": 12,
+    "purpose": "Compose",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "infra/nginx.conf": {
+    "phase": 12,
+    "purpose": "Reverse proxy (frontend + API)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "infra/ci/pipeline.yml": {
+    "phase": 12,
+    "purpose": "CI pipeline (generic copy)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "tests/fixtures/sample_ohlcv.csv": {
+    "phase": 12,
+    "purpose": "Chhota OHLCV fixture (oi column ke saath)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "tests/fixtures/expected_results.json": {
+    "phase": 12,
+    "purpose": "Known result (regression)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "tests/unit/test_data.py": {
+    "phase": 12,
+    "purpose": "Fixture CSV load",
+    "depends_on": [
+      "data/loaders.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/unit/test_registry.py": {
+    "phase": 12,
+    "purpose": "Registry smoke",
+    "depends_on": [
+      "registry/registry.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/unit/test_backtest.py": {
+    "phase": 12,
+    "purpose": "Backtest smoke",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/unit/test_metrics.py": {
+    "phase": 12,
+    "purpose": "Metrics smoke",
+    "depends_on": [
+      "metrics/return_metrics.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/unit/test_risk.py": {
+    "phase": 12,
+    "purpose": "Risk smoke",
+    "depends_on": [
+      "risk/manager.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/unit/test_config.py": {
+    "phase": 12,
+    "purpose": "Config files actually load",
+    "depends_on": [
+      "backend/services/backtest_service.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_strategy_pipeline.py": {
+    "phase": 12,
+    "purpose": "registry -> data -> engine -> metrics",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_api.py": {
+    "phase": 12,
+    "purpose": "Health/audit payloads (+FastAPI ho to routes)",
+    "depends_on": [
+      "backend/app.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_report_pipeline.py": {
+    "phase": 12,
+    "purpose": "Report artifacts content",
+    "depends_on": [
+      "reporting/generator.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/regression/test_known_results.py": {
+    "phase": 12,
+    "purpose": "Fixed seed => fixed result",
+    "depends_on": [
+      "tests/fixtures/expected_results.json"
+    ],
+    "test": "see tests/"
+  },
+  "tests/property/test_accounting_invariants.py": {
+    "phase": 12,
+    "purpose": "Random runs me accounting invariants",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/performance/test_benchmark.py": {
+    "phase": 12,
+    "purpose": "Loose speed guard",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/test_no_lookahead.py": {
+    "phase": 12,
+    "purpose": "Future bars past results ko nahi badalte",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/test_reproducibility.py": {
+    "phase": 12,
+    "purpose": "Same input => same output",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/test_execution_costs.py": {
+    "phase": 12,
+    "purpose": "Zyada cost => kam PnL",
+    "depends_on": [
+      "backtest/engine.py"
+    ],
+    "test": "see tests/"
+  },
+  "docs/OPTIMIZATION.md": {
+    "phase": 13,
+    "purpose": "Optimization rules",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "tests/integration/test_optimization_flow.py": {
+    "phase": 13,
+    "purpose": "CLI optimize end-to-end",
+    "depends_on": [
+      "optimization/parameter_search.py"
+    ],
+    "test": "see tests/"
+  },
+  "backend/services/comparison_service.py": {
+    "phase": 14,
+    "purpose": "Runs ki metrics side-by-side",
+    "depends_on": [
+      "backend/services/report_service.py"
+    ],
+    "test": "tests/unit/backend/services/test_comparison_service.py"
+  },
+  "backend/api/common.py": {
+    "phase": 14,
+    "purpose": "Shared helpers: router factory, error mapping, env roots",
+    "depends_on": [],
+    "test": "tests/unit/backend/api/test_common.py"
+  },
+  "tests/integration/test_api_handlers.py": {
+    "phase": 14,
+    "purpose": "API handlers (framework ke bina) end-to-end",
+    "depends_on": [
+      "backend/api/backtests.py"
+    ],
+    "test": "see tests/"
+  },
+  "tests/integration/test_api_routes.py": {
+    "phase": 14,
+    "purpose": "FastAPI routes (CI me chalta hai; fastapi na ho to skip)",
+    "depends_on": [
+      "backend/app.py"
+    ],
+    "test": "see tests/"
+  },
+  "frontend/src/components/page.ts": {
+    "phase": 14,
+    "purpose": "Common page mount (loading + error handling)",
+    "depends_on": [],
+    "test": "see tests/"
+  },
+  "frontend/src/env.d.ts": {
+    "phase": 14,
+    "purpose": "CSS import declarations",
+    "depends_on": [],
+    "test": "see tests/"
   }
 }

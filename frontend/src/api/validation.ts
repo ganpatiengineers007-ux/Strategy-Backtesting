@@ -1,6 +1,2 @@
-// FILE: frontend/src/api/validation.ts
-// PURPOSE: /validations
-// DEPENDS_ON: contracts/openapi.yaml
-// TEST: see tests/
-
-export {};
+import { getJson } from "./client";
+export const getValidation = (id: string) => getJson<Record<string, any>>(`/validations/${id}`);

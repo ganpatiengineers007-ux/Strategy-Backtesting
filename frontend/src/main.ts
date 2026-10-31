@@ -1,6 +1,7 @@
-// FILE: frontend/src/main.ts
-// PURPOSE: Frontend start
-// DEPENDS_ON: frontend/src/pages/dashboard.ts
-// TEST: see tests/
+import "./styles/base.css";
+import "./styles/layout.css";
+import "./styles/components.css";
+import "./styles/dashboard.css";
+import { start } from "./app";
 
-export {};
+start(document.getElementById("app") as HTMLElement, document.getElementById("nav") as HTMLElement);
