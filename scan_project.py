@@ -267,7 +267,12 @@ def module_exists_locally(base, parts):
 def check_imports(tree, path, root, rel, rep):
     skip = import_skip_ids(tree)
     stdlib = getattr(sys, "stdlib_module_names", set())
-    search_bases = [root, root / "src", path.parent]
+    # pytest/python फाइल के ऊपर वाले हर फोल्डर को रास्ते में मान सकते हैं
+    # (जैसे tests/ के ऊपर वाला फोल्डर), इसलिए सब जोड़ते हैं
+    search_bases = [root, root / "src"]
+    for parent in [path.parent, *path.parent.parents]:
+        if parent == root or root in parent.parents:
+            search_bases.append(parent)
     for node in ast.walk(tree):
         if id(node) in skip:
             continue
