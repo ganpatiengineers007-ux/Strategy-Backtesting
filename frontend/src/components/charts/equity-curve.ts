@@ -1,6 +1,5 @@
-// FILE: frontend/src/components/charts/equity-curve.ts
-// PURPOSE: Equity
-// DEPENDS_ON: none
-// TEST: see tests/
+import { lineChartSvg } from "../chart-panel";
 
-export {};
+export function equityCurve(points: [string, number][]): string {
+  return lineChartSvg(points.map((p) => p[1]));
+}

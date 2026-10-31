@@ -1,7 +1,11 @@
-"""/comparisons
+from backend.api.common import guarded, make_router, runs_root
+from backend.services import comparison_service
 
-DEPENDS_ON: none
-TEST: tests/unit/backend/api/test_comparisons.py
-"""
 
-__all__: list[str] = []
+def create(payload: dict):
+    return comparison_service.compare(payload.get("run_ids") if isinstance(payload, dict) else None, runs_root())
+
+
+router = make_router()
+if router is not None:
+    router.post("/comparisons")(guarded(create))

@@ -1,6 +1,7 @@
-// FILE: frontend/src/pages/audit-log.ts
-// PURPOSE: Audit
-// DEPENDS_ON: frontend/src/api/client.ts
-// TEST: see tests/
+import { getAudit } from "../api/audit";
+import { mountPage } from "../components/page";
+import { renderTable } from "../components/data-table";
 
-export {};
+export function render(el: HTMLElement): Promise<void> {
+  return mountPage(el, "Audit log", async () => renderTable((await getAudit()).reverse()));
+}

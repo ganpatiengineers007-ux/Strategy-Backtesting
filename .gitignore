@@ -8,13 +8,8 @@ target/
 build/
 dist/
 .pytest_cache/
-
 .env
-.env.*
-!.env.example
-*.tgz
-archive/
-*.log
-.DS_Store
-external/
-external_report.*
+artifacts/*
+!artifacts/.gitkeep
+output/*
+!output/.gitkeep

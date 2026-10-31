@@ -1,6 +1,5 @@
-// FILE: frontend/src/components/error-panel.ts
-// PURPOSE: Errors
-// DEPENDS_ON: none
-// TEST: see tests/
+import { esc } from "./data-table";
 
-export {};
+export function errorPanel(message: string): string {
+  return `<div class="card badge fail">${esc(message)}</div>`;
+}

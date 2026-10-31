@@ -1,6 +1,2 @@
-// FILE: frontend/src/api/comparisons.ts
-// PURPOSE: /comparisons
-// DEPENDS_ON: contracts/openapi.yaml
-// TEST: see tests/
-
-export {};
+import { postJson } from "./client";
+export const compareRuns = (runIds: string[]) => postJson<Record<string, any>>("/comparisons", { run_ids: runIds });

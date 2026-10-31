@@ -1,6 +1,6 @@
-// FILE: frontend/src/components/status-badge.ts
-// PURPOSE: Status
-// DEPENDS_ON: none
-// TEST: see tests/
+import { esc } from "./data-table";
 
-export {};
+export function statusBadge(status: string): string {
+  const cls = String(status).toLowerCase();
+  return `<span class="badge ${esc(cls)}">${esc(status)}</span>`;
+}
