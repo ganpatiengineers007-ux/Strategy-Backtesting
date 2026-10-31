@@ -1,0 +1,14 @@
+# Ek line = ek symbol (Fyers format). # se shuru line comment hai.
+# Is file ko ~/.fyers_hub/watchlist.txt me copy karke apne symbols likho.
+NSE:NIFTY50-INDEX
+NSE:NIFTYBANK-INDEX
+NSE:FINNIFTY-INDEX
+NSE:MIDCPNIFTY-INDEX
+NSE:INDIAVIX-INDEX
+BSE:SENSEX-INDEX
+NSE:RELIANCE-EQ
+NSE:HDFCBANK-EQ
+NSE:ICICIBANK-EQ
+NSE:INFY-EQ
+NSE:TCS-EQ
+NSE:SBIN-EQ
