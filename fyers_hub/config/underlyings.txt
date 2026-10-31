@@ -1,0 +1,3 @@
+# Option chain / greeks inke liye khinchenge (index ya stock ka Fyers symbol)
+NSE:NIFTY50-INDEX
+NSE:NIFTYBANK-INDEX
