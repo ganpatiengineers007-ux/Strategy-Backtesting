@@ -16,3 +16,5 @@ dist/
 archive/
 *.log
 .DS_Store
+external/
+external_report.*
