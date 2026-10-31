@@ -32,6 +32,7 @@ PATH   : ~/Strategy-Backtesting/scan_project.py   (repo की root में �
     python scan_project.py --tests        # साथ में pytest भी
     python scan_project.py --zip-tests    # zip के अंदर के टेस्ट भी चलाओ
     python scan_project.py --no-zip       # zip फाइलें न खोलो
+    python scan_project.py --skip all_strategies   # इस फोल्डर को छोड़ दो
     python scan_project.py --all          # स्क्रीन पर सब कुछ दिखाओ
     python scan_project.py --no-go        # Go की जाँच छोड़ो
     python scan_project.py --root /path   # किसी और फोल्डर को स्कैन करो
@@ -109,12 +110,19 @@ class Report:
         return sum(1 for i in self.items if i[0] == sev)
 
 
+EXTRA_SKIP = []  # --skip से दिए फोल्डर (root के सापेक्ष), main() में भरता है
+
+
 def walk_files(root):
     for path in sorted(root.rglob("*")):
         if not path.is_file():
             continue
-        rel_parts = path.relative_to(root).parts
+        rel = path.relative_to(root)
+        rel_parts = rel.parts
         if any(p in SKIP_DIRS for p in rel_parts[:-1]):
+            continue
+        rel_posix = rel.as_posix()
+        if any(rel_posix == s or rel_posix.startswith(s + "/") for s in EXTRA_SKIP):
             continue
         if path.name in SELF_NAMES:
             continue
@@ -615,6 +623,9 @@ def main():
     ap.add_argument("--zip-tests", action="store_true",
                     help="zip के अंदर के टेस्ट भी चलाओ (zip का कोड चलता है)")
     ap.add_argument("--no-zip", action="store_true", help="zip फाइलें न खोलो")
+    ap.add_argument("--skip", action="append", default=[], metavar="FOLDER",
+                    help="इस फोल्डर को स्कैन से बाहर रखो (कई बार दे सकते हो), "
+                         "जैसे --skip all_strategies")
     ap.add_argument("--no-go", action="store_true", help="Go जाँच छोड़ो")
     ap.add_argument("--all", action="store_true", help="स्क्रीन पर सब दिखाओ")
     args = ap.parse_args()
@@ -624,7 +635,11 @@ def main():
         print(f"फोल्डर नहीं मिला: {root}")
         return 2
 
+    EXTRA_SKIP[:] = [s.strip().strip("/") for s in args.skip if s.strip().strip("/")]
+
     rep = Report()
+    for s in EXTRA_SKIP:
+        rep.add("INFO", "SKIP", s, 0, "यह फोल्डर --skip से स्कैन के बाहर रखा गया")
     files = scan_directory(root, rep, args.no_go, args.tests)
     total_files = len(files)
 
