@@ -1,0 +1,9 @@
+id: session_ignition
+version: 0.1.0
+entry_point: strategies.STR10_session_ignition.strategy:SessionIgnitionAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s10_session_ignition.py
+source_class: SessionIgnitionStrategy

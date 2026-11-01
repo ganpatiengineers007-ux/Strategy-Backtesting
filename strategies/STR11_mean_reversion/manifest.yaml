@@ -1,0 +1,9 @@
+id: mean_reversion
+version: 0.1.0
+entry_point: strategies.STR11_mean_reversion.strategy:MeanReversionAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/quant_stat_arb_framework/src/quantstrat/strategy.py
+source_class: MeanReversionStrategy

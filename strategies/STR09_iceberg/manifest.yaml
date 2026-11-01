@@ -1,0 +1,9 @@
+id: iceberg
+version: 0.1.0
+entry_point: strategies.STR09_iceberg.strategy:IcebergAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s09_iceberg.py
+source_class: IcebergStrategy

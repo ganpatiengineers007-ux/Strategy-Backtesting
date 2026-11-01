@@ -1,0 +1,9 @@
+id: reversal_ai
+version: 0.1.0
+entry_point: strategies.STR07_reversal_ai.strategy:ReversalAIAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s07_reversal_ai.py
+source_class: ReversalAIStrategy

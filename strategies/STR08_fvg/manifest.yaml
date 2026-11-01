@@ -1,0 +1,9 @@
+id: fvg
+version: 0.1.0
+entry_point: strategies.STR08_fvg.strategy:FVGAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s08_fvg.py
+source_class: FVGStrategy

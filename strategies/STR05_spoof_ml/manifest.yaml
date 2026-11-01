@@ -1,0 +1,9 @@
+id: spoof_ml
+version: 0.1.0
+entry_point: strategies.STR05_spoof_ml.strategy:SpoofMLAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s05_spoof_ml.py
+source_class: SpoofMLStrategy

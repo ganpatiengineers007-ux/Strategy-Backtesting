@@ -1,0 +1,9 @@
+id: volume_profile
+version: 0.1.0
+entry_point: strategies.STR06_volume_profile.strategy:VolumeProfileAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s06_volume_profile.py
+source_class: VolumeProfileStrategy
