@@ -1,0 +1,7 @@
+id: sweep
+version: 0.1.0
+entry_point: strategies.sweep.strategy:SweepStrategy
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
