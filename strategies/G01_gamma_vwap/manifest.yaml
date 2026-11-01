@@ -1,0 +1,8 @@
+id: gamma_vwap
+version: 0.1.0
+entry_point: strategies.G01_gamma_vwap.strategy:GammaVwapAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: all_strategies/greeks/gamma_vwap_strategy.py

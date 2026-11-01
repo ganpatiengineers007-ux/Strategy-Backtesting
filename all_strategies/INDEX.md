@@ -41,6 +41,7 @@ strategies/base.py, context.py, models.py, validation.py, examples/example_strat
 ## D. स्थिति
 - सब strategies का synthetic डेटा पर ही परीक्षण हुआ है (Greeks 5: सब FAIL, जो random डेटा पर स्वाभाविक है)। असली डेटा पर परीक्षण बाकी।
 - STR01 से STR11 और gamma_blast, three_pm_momentum, sweep: plug-in adapters repo में हैं।
+- G01 से G05: `manifest.yaml` जुड़ा है, यानी registry `discover()` में दिखनी चाहिए।
 - G01, G02, G03, G05: plug-in adapters बने हैं (long-only, synthetic bars पर signal निकलते हैं)।
 - G04 theta: सिर्फ़ ढाँचा, क्योंकि Signal v0 में short और options legs नहीं हैं।
 - STR01 से STR11 के adapters का `on_bar` अभी `return None` है, यानी असली लॉजिक जोड़ना बाकी।

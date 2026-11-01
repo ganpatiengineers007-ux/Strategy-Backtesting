@@ -1,0 +1,8 @@
+id: delta_vwap
+version: 0.1.0
+entry_point: strategies.G02_delta_vwap.strategy:DeltaVwapAdapter
+required_data: []
+parameters: {}
+execution_modes: [backtest]
+live_trading: {enabled: false}
+source: all_strategies/greeks/delta_vwap_strategy.py
