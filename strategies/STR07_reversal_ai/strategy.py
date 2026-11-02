@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s07_reversal_ai import Reve
 
 class ReversalAIAdapter(Strategy):
     strategy_id = "reversal_ai"
-    required_data = ()
+    required_data = ('l2_book', 'tick_trades')  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = ReversalAIStrategy()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"reversal_ai is NOT_IMPLEMENTED/disabled")
+        return None

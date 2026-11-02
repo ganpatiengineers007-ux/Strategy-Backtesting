@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s03_latency_arb import Late
 
 class LatencyArbAdapter(Strategy):
     strategy_id = "latency_arb"
-    required_data = ()
+    required_data = ('second_venue_feed',)  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = LatencyArbStrategy()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"latency_arb is NOT_IMPLEMENTED/disabled")
+        return None

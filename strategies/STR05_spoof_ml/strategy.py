@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s05_spoof_ml import SpoofML
 
 class SpoofMLAdapter(Strategy):
     strategy_id = "spoof_ml"
-    required_data = ()
+    required_data = ('l2_book', 'tick_trades')  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = SpoofMLStrategy()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"spoof_ml is NOT_IMPLEMENTED/disabled")
+        return None

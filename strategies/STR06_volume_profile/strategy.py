@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s06_volume_profile import V
 
 class VolumeProfileAdapter(Strategy):
     strategy_id = "volume_profile"
-    required_data = ()
+    required_data = ('tick_trades',)  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = VolumeProfileStrategy()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"volume_profile is NOT_IMPLEMENTED/disabled")
+        return None

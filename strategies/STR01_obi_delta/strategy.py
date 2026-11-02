@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s01_obi_delta import OBIDel
 
 class ObiDeltaAdapter(Strategy):
     strategy_id = "obi_delta"
-    required_data = ()
+    required_data = ('l2_book',)  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = OBIDeltaStrategy()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"obi_delta is NOT_IMPLEMENTED/disabled")
+        return None

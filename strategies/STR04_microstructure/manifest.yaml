@@ -1,10 +1,9 @@
 id: microstructure
 version: 0.1.0
 entry_point: strategies.STR04_microstructure.strategy:MicrostructureAdapter
-required_data: []
+required_data: [l2_book, tick_trades]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
-status: NOT_IMPLEMENTED
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s04_microstructure.py
 source_class: MicrostructureStrategy

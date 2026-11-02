@@ -1,23 +1,13 @@
-"""Adapter for STR10 session_ignition (external quantlab). Wraps SessionIgnitionStrategy for Registry plug-in."""
-import sys
-from pathlib import Path
+"""STR10 session_ignition: quantlab S10 ka asli logic, NSE open (9:15 IST) ke opening range + volume surge breakout par."""
+from strategies._positions import PositionsAdapter
+from gts_quant_lab.gts_quant_lab.quantlab.strategies import s10_session_ignition as s10
+from gts_quant_lab.gts_quant_lab.quantlab.strategies.s10_session_ignition import SessionConfig, SessionIgnitionStrategy
 
-_EXTERNAL_ROOT = Path(__file__).resolve().parent.parent.parent / "external"
-if str(_EXTERNAL_ROOT) not in sys.path:
-    sys.path.insert(0, str(_EXTERNAL_ROOT))
-
-from strategies.base import Strategy
-
-from gts_quant_lab.gts_quant_lab.quantlab.strategies.s10_session_ignition import SessionIgnitionStrategy  # noqa: E402
+s10.SESSIONS.setdefault("nse", 9 * 60 + 15)  # ts wall-clock IST ko UTC jaisa maana gaya hai (to_quantlab_bars)
 
 
-class SessionIgnitionAdapter(Strategy):
+class SessionIgnitionAdapter(PositionsAdapter):
     strategy_id = "session_ignition"
-    required_data = ()
 
-    def __init__(self, params=None):
-        super().__init__(params)
-        self._inner = SessionIgnitionStrategy()
-
-    def on_bar(self, ctx):
-        raise NotImplementedError(f"session_ignition is NOT_IMPLEMENTED/disabled")
+    def _make_inner(self):
+        return SessionIgnitionStrategy(SessionConfig(sessions=("nse",)))

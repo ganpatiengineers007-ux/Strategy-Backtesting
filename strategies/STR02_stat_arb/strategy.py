@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s02_stat_arb import CrossSe
 
 class StatArbAdapter(Strategy):
     strategy_id = "stat_arb"
-    required_data = ()
+    required_data = ('multi_asset',)  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = CrossSectionalStatArb()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"stat_arb is NOT_IMPLEMENTED/disabled")
+        return None

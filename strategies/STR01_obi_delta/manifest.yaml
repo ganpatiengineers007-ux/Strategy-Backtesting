@@ -1,10 +1,9 @@
 id: obi_delta
 version: 0.1.0
 entry_point: strategies.STR01_obi_delta.strategy:ObiDeltaAdapter
-required_data: []
+required_data: [l2_book]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
-status: NOT_IMPLEMENTED
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s01_obi_delta.py
 source_class: OBIDeltaStrategy

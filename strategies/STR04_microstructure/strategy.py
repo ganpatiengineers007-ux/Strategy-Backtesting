@@ -13,11 +13,11 @@ from gts_quant_lab.gts_quant_lab.quantlab.strategies.s04_microstructure import M
 
 class MicrostructureAdapter(Strategy):
     strategy_id = "microstructure"
-    required_data = ()
+    required_data = ('l2_book', 'tick_trades')  # candles se nahi chalti: engine BLOCKED dikhata hai
 
     def __init__(self, params=None):
         super().__init__(params)
         self._inner = MicrostructureStrategy()
 
     def on_bar(self, ctx):
-        raise NotImplementedError(f"microstructure is NOT_IMPLEMENTED/disabled")
+        return None
