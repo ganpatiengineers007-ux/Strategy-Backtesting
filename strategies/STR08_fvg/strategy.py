@@ -20,4 +20,4 @@ class FVGAdapter(Strategy):
         self._inner = FVGStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"fvg is NOT_IMPLEMENTED/disabled")

@@ -20,4 +20,4 @@ class MeanReversionAdapter(Strategy):
         self._inner = MeanReversionStrategy.__new__(MeanReversionStrategy)
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"mean_reversion is NOT_IMPLEMENTED/disabled")

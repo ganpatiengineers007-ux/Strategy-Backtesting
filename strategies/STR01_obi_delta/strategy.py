@@ -20,4 +20,4 @@ class ObiDeltaAdapter(Strategy):
         self._inner = OBIDeltaStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"obi_delta is NOT_IMPLEMENTED/disabled")

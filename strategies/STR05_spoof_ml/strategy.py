@@ -20,4 +20,4 @@ class SpoofMLAdapter(Strategy):
         self._inner = SpoofMLStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"spoof_ml is NOT_IMPLEMENTED/disabled")

@@ -20,4 +20,4 @@ class VolumeProfileAdapter(Strategy):
         self._inner = VolumeProfileStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"volume_profile is NOT_IMPLEMENTED/disabled")

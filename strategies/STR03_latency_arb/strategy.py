@@ -20,4 +20,4 @@ class LatencyArbAdapter(Strategy):
         self._inner = LatencyArbStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"latency_arb is NOT_IMPLEMENTED/disabled")

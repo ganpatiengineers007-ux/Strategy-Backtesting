@@ -20,4 +20,4 @@ class SessionIgnitionAdapter(Strategy):
         self._inner = SessionIgnitionStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"session_ignition is NOT_IMPLEMENTED/disabled")

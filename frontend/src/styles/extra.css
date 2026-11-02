@@ -1,0 +1,10 @@
+nav{display:flex;flex-wrap:wrap;gap:6px 14px;padding:10px 12px;border-bottom:1px solid #8884}
+nav a{text-decoration:none;color:var(--accent);font-size:15px}
+main{padding:12px;max-width:1100px;margin:0 auto}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;font-size:13px;white-space:nowrap}
+th,td{border-bottom:1px solid #8884;padding:4px 8px;text-align:left}
+input,select,button{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid #8886;background:var(--bg);color:var(--fg);max-width:100%}
+button{background:var(--accent);color:#fff;border:0;cursor:pointer}
+label{display:inline-block;margin:0 8px 6px 0}
+.badge.completed{background:#16a34a;color:#fff}.badge.halted{background:#dc2626;color:#fff}

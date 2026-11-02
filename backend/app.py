@@ -42,7 +42,7 @@ def create_app():
         from fastapi.responses import JSONResponse
     except ImportError as e:
         raise RuntimeError("`pip install fastapi uvicorn` chahiye") from e
-    from backend.api import audit, backtests, comparisons, datasets, health, reports, strategies, validation
+    from backend.api import audit, backtests, comparisons, datasets, health, hub, reports, strategies, validation
     from backend.middleware.authentication import is_authorized
     from backend.middleware.request_id import new_request_id
 
@@ -59,6 +59,6 @@ def create_app():
         response.headers["X-Request-ID"] = rid
         return response
 
-    for module in (health, strategies, datasets, backtests, validation, comparisons, reports, audit):
+    for module in (health, strategies, datasets, backtests, validation, comparisons, reports, audit, hub):
         app.include_router(module.router)
     return app

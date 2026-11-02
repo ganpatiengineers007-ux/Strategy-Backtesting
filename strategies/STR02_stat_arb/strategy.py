@@ -20,4 +20,4 @@ class StatArbAdapter(Strategy):
         self._inner = CrossSectionalStatArb()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"stat_arb is NOT_IMPLEMENTED/disabled")

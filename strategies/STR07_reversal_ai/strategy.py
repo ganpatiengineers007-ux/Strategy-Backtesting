@@ -20,4 +20,4 @@ class ReversalAIAdapter(Strategy):
         self._inner = ReversalAIStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"reversal_ai is NOT_IMPLEMENTED/disabled")

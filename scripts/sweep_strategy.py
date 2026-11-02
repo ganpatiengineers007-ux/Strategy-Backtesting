@@ -34,6 +34,7 @@ import os
 import csv
 import sys
 import time
+import argparse
 import logging
 import threading
 from collections import deque
@@ -196,9 +197,10 @@ def journal_trade(side, qty, entry, exit_price, reason, pnl):
 
 # ------------------------------------------------------------------ strategy
 class SweepStrategy:
-    def __init__(self, api: dhanhq, depth: DepthReader):
+    def __init__(self, api: dhanhq, depth: DepthReader, dry_run: bool | None = None):
         self.api = api
         self.depth = depth
+        self.DRY_RUN = DRY_RUN if dry_run is None else dry_run
         self.position = None
         self.trades_today = 0
         self.realized_pnl = 0.0
@@ -249,7 +251,7 @@ class SweepStrategy:
 
     # ---------------- orders
     def _order(self, side: str, qty: int, why: str) -> str:
-        if DRY_RUN:
+        if self.DRY_RUN:
             log.info(f"[DRY-RUN] {side} {qty} @ mkt · {why}")
             return f"DRY-{side}"
         try:
@@ -467,9 +469,20 @@ def depth_worker(depth_feed, depth: DepthReader):
             time.sleep(2)
 
 def main():
+    parser = argparse.ArgumentParser(description="Sweep strategy runner")
+    parser.add_argument("--live", action="store_true", help="Enable LIVE trading (requires SVL_LIVE=YES)")
+    args = parser.parse_args()
+
+    svl_live = os.environ.get("SVL_LIVE", "").strip().upper() == "YES"
+    live = svl_live and args.live
+    DRY_RUN = not live
+
     logging.basicConfig(level=logging.DEBUG,
                         format="%(asctime)s.%(msecs)03d  %(levelname)-5s  %(message)s",
                         datefmt="%H:%M:%S")
+    log.info(f"MODE={'LIVE' if live else 'PAPER'} · DRY_RUN={DRY_RUN}")
+    if live:
+        log.warning("LIVE trading enabled — real orders will be placed")
     client_id = os.environ.get("DHAN_CLIENT_ID", "")
     token = os.environ.get("DHAN_ACCESS_TOKEN", "")
     if not client_id or not token:
@@ -479,7 +492,7 @@ def main():
     ctx = DhanContext(client_id, token)
     api = dhanhq(ctx)
     depth = DepthReader()
-    strat = SweepStrategy(api, depth)
+    strat = SweepStrategy(api, depth, dry_run=DRY_RUN)
     builder = CandleBuilder(300)
 
     feed = MarketFeed(ctx, [(EXCHANGE_SEGMENT, SECURITY_ID, MarketFeed.Quote)], version="v2")

@@ -20,4 +20,4 @@ class MicrostructureAdapter(Strategy):
         self._inner = MicrostructureStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"microstructure is NOT_IMPLEMENTED/disabled")

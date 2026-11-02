@@ -20,4 +20,4 @@ class IcebergAdapter(Strategy):
         self._inner = IcebergStrategy()
 
     def on_bar(self, ctx):
-        return None
+        raise NotImplementedError(f"iceberg is NOT_IMPLEMENTED/disabled")

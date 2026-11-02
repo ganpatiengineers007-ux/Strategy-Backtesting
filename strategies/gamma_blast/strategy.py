@@ -66,20 +66,14 @@ class GammaBlastStrategy(Strategy):
         if total_gamma > p["gamma_threshold"] and avg_iv < p["iv_threshold"]:
             # Direction based on put/call gamma imbalance
             if ce_gamma > pe_gamma:
-                # Call gamma dominant - expect upside
+                # Call gamma dominant - expect upside (long-only engine)
                 return Signal(
                     "BUY",
                     stop_loss=round(bar.close * (1 - p["stop_pct"] / 100), 2),
                     target=round(bar.close * (1 + p["target_pct"] / 100), 2),
                     reason=f"gamma_blast_call: gamma={total_gamma:.0f}, iv={avg_iv:.2f}"
                 )
-            else:
-                # Put gamma dominant - expect downside (but we only go long in this framework)
-                return Signal(
-                    "BUY",
-                    stop_loss=round(bar.close * (1 - p["stop_pct"] / 100), 2),
-                    target=round(bar.close * (1 + p["target_pct"] / 100), 2),
-                    reason=f"gamma_blast_put: gamma={total_gamma:.0f}, iv={avg_iv:.2f}"
-                )
+            # Put gamma dominant - skip (long-only engine, no short side)
+            return None
 
         return None
