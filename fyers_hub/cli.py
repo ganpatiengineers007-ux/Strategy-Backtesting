@@ -6,10 +6,11 @@ import csv
 import shutil
 import sys
 import time
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from fyers_hub import settings as cfg
 from fyers_hub.settings import DEFAULT_BASE_TFS, DEFAULT_DERIVED_TFS, get_settings, read_symbol_file
+from fyers_hub.timeutil import IST
 
 
 def _api(s):
@@ -175,6 +176,12 @@ def cmd_validate(a, s):
             print(f"{flag}{sym} {tf}: rows={r['rows']} bad_ohlc={r['bad_ohlc']} short_days={len(r['short_days'])}")
 
 
+def _export_rows(rows):
+    """Hub ka epoch ts ISO IST me likho - data/loaders ISO timestamp hi maanta hai."""
+    for r in rows:
+        yield (datetime.fromtimestamp(int(r[0]), IST).strftime("%Y-%m-%dT%H:%M:%S"),) + tuple(r[1:])
+
+
 def cmd_export(a, s):
     from fyers_hub.serve.hub import DataHub
 
@@ -182,7 +189,7 @@ def cmd_export(a, s):
     with open(a.out, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(("ts", "open", "high", "low", "close", "volume"))
-        w.writerows(hub.candles(a.symbol, a.tf, a.start, a.end))
+        w.writerows(_export_rows(hub.candles(a.symbol, a.tf, a.start, a.end)))
     print("saved:", a.out)
 
 

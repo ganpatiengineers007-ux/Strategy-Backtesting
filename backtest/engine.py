@@ -34,6 +34,7 @@ def run_backtest(dataset, strategy, config=None):
     risk = RiskManager(RiskLimits(cfg["max_position_pct"], cfg["max_drawdown_pct"]))
     bps, fee_pct, policy = cfg["slippage_bps"], cfg["fee_pct"], cfg["ambiguous_candle_policy"]
     bars, pending, rejections, status, reason = dataset.bars, None, [], "COMPLETED", ""
+    exit_pending = False
 
     model = ExecutionModel(bps, fee_pct, policy)
 
@@ -47,6 +48,9 @@ def run_backtest(dataset, strategy, config=None):
             px, fee = model.fill_entry(bar.open, pending["qty"])
             pf.open(pending["qty"], px, bar.ts, pending["stop"], pending["target"], fee)
         pending = None
+        if exit_pending and pf.position is not None:
+            close(bar.open, bar, "SIGNAL_EXIT")   # EXIT agle bar ke open par (lookahead nahi)
+        exit_pending = False
         ex = model.check_exit(pf.position, bar)
         if ex:
             close(ex[0], bar, ex[1])
@@ -73,7 +77,7 @@ def run_backtest(dataset, strategy, config=None):
             else:
                 rejections.append({"ts": bar.ts, "reason": why})
         elif sig.side == "EXIT" and pf.position:
-            close(bar.close, bar, "SIGNAL_EXIT")
+            exit_pending = True
     if pf.position and bars:
         close(bars[-1].close, bars[-1], "END_OF_DATA")
     return BacktestResult(status, reason, pf.trades, curve.points, rejections, cfg, meta)

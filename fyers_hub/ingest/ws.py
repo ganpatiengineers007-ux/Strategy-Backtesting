@@ -45,7 +45,7 @@ def run_ws(settings, symbols: list[str], tfs=("5S", "1"), log=print) -> None:
         pass
     except Exception as e:  # noqa: BLE001
         import logging
-        log = logging.getLogger("fyers_hub.ingest.ws")
-        log.exception("WebSocket keep_running error")
+        _log = logging.getLogger("fyers_hub.ingest.ws")
+        _log.exception("WebSocket keep_running error")
     finally:
         agg.flush()

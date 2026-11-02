@@ -23,7 +23,7 @@ class TokenError(ApiError):
 def _is_auth_error(resp: dict) -> bool:
     code = resp.get("code")
     msg = str(resp.get("message", "")).lower()
-    return code in (-16, -15, -8, 401, 403) or "token" in msg or "authenticate" in msg
+    return code in (-16, -15, -8, 401, 403) or "invalid token" in msg or "token expired" in msg or "authenticate" in msg
 
 
 class FyersApi:

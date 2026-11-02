@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-11-02T01:25:24+00:00",
+  "repo_source": "/home/claude/repo/Strategy-Backtesting-main",
+  "files": {
+    ".dockerignore": "aae5e1cc45ad979b756bf6260ff220abe5fd41e7d653d01b682b1fe9c2c1eca9",
+    ".github/workflows/ci.yml": "77051d51030b2411a19911e6387cf861280ff7c9f691deb5d6278914cf2f63b8",
+    "backend/app.py": "a3e73f4cc8db673b671b88e2352eda6b6e3e42de88bc582ee5778266070aba2f",
+    "backtest/engine.py": "366bda9d370ff8e162bf4f772bc725cddde0d65e297716416b78f7db75bade55",
+    "frontend/src/api/client.ts": "5957abae52b3d2a961d3610e60a08fab93cf9fb24908025068f0a9ea194b5794",
+    "fyers_hub/cli.py": "72c87fec1f3767cad225246f28036d9466dae6fa0d9287b4ee8b1ee65cd88b51",
+    "fyers_hub/client/api.py": "54644258e333582fba864f43811761cc90be3d43855eecc04ba03875c159ecaf",
+    "fyers_hub/ingest/live.py": "b6a763b1551db856243876afda44809839802f4c0f3c4799a8d05eda5043c938",
+    "fyers_hub/ingest/ws.py": "57a92ff2b6d67cb8003d4a949e45e1417c3014a07e3a5adab1a341eca96c07bc",
+    "infra/.env.example": "3c91ecc5b55895e95f21860120338567735e7196af0e01690dc5f1854e422b54",
+    "infra/Dockerfile": "0b7e2da8f008c8961af76e722713b8ee051f31dd6bf2a0568f4d1772dc3755a4",
+    "infra/Dockerfile.frontend": "8275ef5a158f958c6886b7e6a5a089bf0d4bc656c0f7ffb081cf518f8966c7e7",
+    "infra/docker-compose.yml": "8e59d0e988804fee56407343e2c2a4b73e69e414501bf4afa144613100690abd",
+    "infra/nginx.conf": "6140326297a2eaa164d4c1e73648659e2dfdbd72ba3b46bd060d0573f3220987",
+    "infra/nginx.tls.conf.example": "9cee0e11f571e9f4865760c12858e21f8de3be6daf209f8aabe7a78687a0db77",
+    "registry/registry.py": "a91c678af573fa28a28397bf18139fefac4213617735b937bcff260c3448d408",
+    "requirements-prod.txt": "5f6a4c5175f7c3a253787308612015f515d10680f557860377b59025f1893b94",
+    "scripts/cleanup_unused.sh": "e67546c57f8c31653f4bfae306ba8b16c696791836ba5c512a624f126da720c2",
+    "scripts/sweep_strategy.py": "982b6e1df7a22eb22da7eee1c7acfc7607cffa73d51feb4ce51090cbb58ba8f8",
+    "tests/unit/fixes/__init__.py": "3ef7764eac4941ab06d4809c051b9c0c6387f0f9787f93e1e565c7ac4df12934",
+    "tests/unit/fixes/test_app_production_guard.py": "25bae469f3e1f23f7c03a609bfe0f763e85b9cb1741be1540b2f5d66ad4c56e9",
+    "tests/unit/fixes/test_derive_window.py": "f8d3b68420feab6efc8c76b02db90f10412db74d9adbb6b844c5a76a71bfc98b",
+    "tests/unit/fixes/test_engine_exit_next_open.py": "97f771d8b7727cc8cfadff987efba60844d2a8a68dc80bbc303f4dc2b0d8f71b",
+    "tests/unit/fixes/test_export_and_since.py": "f27893a55252804b2c7545d205587f862c2fbd5bb1f1bcd49ca49488adce342f",
+    "tests/unit/fixes/test_registry_resilience.py": "1090d23079a3a5035606281e3deec91a32da0ff75464b747d1576cd286aae830",
+    "tests/unit/fixes/test_sweep_order_state.py": "0cb8ef21eeab8525db43412c1a15cf8f182a2dc78a5bf8051141bd54fbe4ae15"
+  },
+  "verify": {
+    "status": "skipped",
+    "note": "pytest install nahi - tests/unit/fixes server par chalao"
+  }
+}

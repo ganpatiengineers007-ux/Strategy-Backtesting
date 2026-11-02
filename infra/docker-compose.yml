@@ -1,7 +1,40 @@
+# Production stack. Chalane se pehle infra/.env me API_KEY bharo (infra/.env.example dekho).
+name: strategy-lab
+
 services:
-  lab:
+  backend:
     build:
       context: ..
       dockerfile: infra/Dockerfile
+    restart: unless-stopped
+    environment:
+      SVL_ENV: production
+      API_KEY: ${API_KEY:?API_KEY set karo (infra/.env me)}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      RUN_ISOLATED: "1"
+      DATA_DIR: /app/data
+      RUNS_ROOT: /app/runs
+      DATABASE_URL: sqlite:////app/runs/svl.sqlite3
     volumes:
-      - ../output:/app/runs
+      - ../runs:/app/runs
+      - ../data:/app/data:ro
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5).status == 200 else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.frontend
+      args:
+        VITE_API_BASE: /api
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"

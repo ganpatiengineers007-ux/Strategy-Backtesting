@@ -1,0 +1,10 @@
+# Backend runtime (production / docker). fyers-apiv3 hub host par alag se lagta hai; dev tools (pytest) nahi.
+fastapi>=0.100.0,<1.0
+uvicorn>=0.23.0,<1.0
+pydantic>=2.0.0,<3.0
+httpx>=0.24.0,<1.0
+pandas>=2.0.0,<3.0
+numpy>=1.24.0,<3.0
+pyarrow>=14.0.0,<30.0
+PyYAML>=6.0.0,<7.0
+python-dotenv>=1.0.0,<2.0

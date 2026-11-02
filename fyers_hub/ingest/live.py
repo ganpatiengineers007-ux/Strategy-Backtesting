@@ -8,9 +8,21 @@ from typing import Callable
 
 from fyers_hub.ingest.chain import snapshot_chain
 from fyers_hub.ingest.quotes import poll_quotes
-from fyers_hub.process.resample import derive
+from fyers_hub.process.resample import derive, parse_tf
 from fyers_hub.storage.db import upsert_candles
-from fyers_hub.timeutil import ist_date, is_market_open
+from fyers_hub.timeutil import ist_date, is_market_open, day_start_epoch
+
+
+def safe_since(tf, now):
+    """derive() ke liye since_ts. Purana window (now - 3 din) candles kharab karta tha.
+
+    Minute/second tf: din ki shuruaat se. Session open (09:15) se pehle koi candle nahi hoti,
+    isliye din ke andar ke sab bucket poore rahte hain. Daily-based tf (jaise 15D): None = poori
+    history, kyunki adhoora window ka block pehle se saved candle ko overwrite karta tha.
+    """
+    if parse_tf(tf)[0] == "d":
+        return None
+    return day_start_epoch(ist_date(now))
 
 
 def run_live(api, conn, watchlist: list[str], underlyings: list[str], derive_tfs=(), quote_every: int = 5,
@@ -49,7 +61,7 @@ def run_live(api, conn, watchlist: list[str], underlyings: list[str], derive_tfs
                     try:
                         upsert_candles(conn, s, "1", api.history(s, "1", today, today))
                         for tf in derive_tfs:
-                            derive(conn, s, tf, since_ts=int(t) - 3 * 86400)
+                            derive(conn, s, tf, since_ts=safe_since(tf, t))
                     except Exception as e:  # noqa: BLE001
                         log(f"candles {s} error: {e}")
         sleep(1)

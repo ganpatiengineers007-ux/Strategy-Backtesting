@@ -83,6 +83,7 @@ DAILY_LOSS_CAP   = 4000
 ENTRY_START   = dtime(9, 30)
 LAST_ENTRY    = dtime(14, 30)
 SQUARE_OFF    = dtime(15, 20)
+RETRY_COOLDOWN_SEC = 2.0   # exit reject hone par itne sec baad dobara koshish
 
 DRY_RUN   = True
 TRADE_LOG = "sweep_trades.csv"
@@ -214,6 +215,7 @@ class SweepStrategy:
         self.cum_vol = 0.0
         self.start_epoch = None
         self.atr = 0.0
+        self._retry_after = 0.0
 
     # ---------------- setup
     def build_levels(self, ltp: float):
@@ -262,7 +264,7 @@ class SweepStrategy:
             return oid
         except Exception as e:                                       # noqa: BLE001
             log.error(f"order failed ({side} {qty}): {e}")
-            return ""
+            return None  # broker ne order reject kiya
 
     def _enter(self, side: str, entry: float, stop: float, level_name: str):
         risk_pts = abs(entry - stop)
@@ -275,7 +277,10 @@ class SweepStrategy:
             return
         lots = max(1, min(MAX_LOTS, int(RISK_PER_TRADE // (risk_pts * LOT_SIZE))))
         qty = lots * LOT_SIZE
-        self._order("BUY" if side == "LONG" else "SELL", qty, f"entry-{level_name}")
+        oid = self._order("BUY" if side == "LONG" else "SELL", qty, f"entry-{level_name}")
+        if oid is None:
+            log.error("entry broker ne reject kiya - position record NAHI ki (orderbook check karo)")
+            return
         self.position = {
             "side": side, "entry": entry, "stop": stop, "qty": qty,
             "risk_pts": risk_pts, "be_moved": False,
@@ -287,7 +292,11 @@ class SweepStrategy:
 
     def _exit(self, price: float, why: str):
         p = self.position
-        self._order("SELL" if p["side"] == "LONG" else "BUY", p["qty"], why)
+        oid = self._order("SELL" if p["side"] == "LONG" else "BUY", p["qty"], why)
+        if oid is None:
+            log.error(f"EXIT reject ({why}) - position khuli rakhi, {RETRY_COOLDOWN_SEC}s baad retry")
+            self._retry_after = time.time() + RETRY_COOLDOWN_SEC
+            return
         pnl = (price - p["entry"]) * p["qty"] if p["side"] == "LONG" \
             else (p["entry"] - price) * p["qty"]
         self.realized_pnl += pnl
@@ -314,6 +323,11 @@ class SweepStrategy:
         self.session_low = min(self.session_low, ltp)
 
         if self.position is not None:
+            if time.time() < self._retry_after:
+                return          # reject hui exit ka cooldown
+            if ts.time() >= SQUARE_OFF:
+                self._exit(ltp, "eod-square-off")
+                return
             self._manage(ltp, ts)
             return
         if self.halted or not (ENTRY_START <= ts.time() <= LAST_ENTRY):

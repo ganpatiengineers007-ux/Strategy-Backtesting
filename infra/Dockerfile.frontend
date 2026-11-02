@@ -1,0 +1,14 @@
+# Frontend image (repo root se build): docker build -f infra/Dockerfile.frontend -t svl-web .
+FROM node:20-alpine AS build
+WORKDIR /src/frontend
+COPY frontend/package*.json ./
+RUN if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+COPY frontend/ ./
+ARG VITE_API_BASE=/api
+ENV VITE_API_BASE=$VITE_API_BASE
+RUN npx vite build
+
+FROM nginx:1.27-alpine
+COPY infra/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /src/frontend/dist /usr/share/nginx/html
+EXPOSE 80
