@@ -5,5 +5,6 @@ required_data: [l2_book, tick_trades]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires level-2 book + labelled spoofing episodes; OHLCV candles contain neither depth nor labels
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s05_spoof_ml.py
 source_class: SpoofMLStrategy

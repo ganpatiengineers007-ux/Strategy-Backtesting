@@ -6,18 +6,15 @@ _EXTERNAL_ROOT = Path(__file__).resolve().parent.parent.parent / "external"
 if str(_EXTERNAL_ROOT) not in sys.path:
     sys.path.insert(0, str(_EXTERNAL_ROOT))
 
-from strategies.base import Strategy
+from strategies._blocked import BookBackedStrategy
 
 from gts_quant_lab.gts_quant_lab.quantlab.strategies.s02_stat_arb import CrossSectionalStatArb  # noqa: E402
 
 
-class StatArbAdapter(Strategy):
+class StatArbAdapter(BookBackedStrategy):
     strategy_id = "stat_arb"
-    required_data = ('multi_asset',)  # candles se nahi chalti: engine BLOCKED dikhata hai
+    required_data = ('multi_asset',)
+    blocked_reason = "requires a synchronized multi-asset price panel; single-symbol OHLCV candles cannot form cross-sectional weights"
 
     def __init__(self, params=None):
-        super().__init__(params)
-        self._inner = CrossSectionalStatArb()
-
-    def on_bar(self, ctx):
-        return None
+        super().__init__(params, CrossSectionalStatArb())

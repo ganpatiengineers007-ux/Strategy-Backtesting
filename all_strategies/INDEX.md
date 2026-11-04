@@ -1,6 +1,6 @@
 # Strategy-Backtesting: Strategy INDEX (1 Nov 2026)
 
-कुल अलग strategies: **19** (14 क्रमांकित global + 5 Greeks). कुछ भी हटाया नहीं गया है।
+कुल अलग strategies: **20** (14 क्रमांकित global + S03b liquidity_sweep + 5 Greeks). कुछ भी हटाया नहीं गया है।
 
 ## A. क्रमांकित global strategies (STR01 से STR14)
 
@@ -21,7 +21,7 @@
 | 13 | three_pm_momentum | 3 PM momentum | हाँ | हाँ (three_pm_momentum/) | - |
 | 14 | sweep | liquidity sweep | हाँ | हाँ (sweep/) | - |
 
-अतिरिक्त: `all_strategies/sweep/sweep_strategy.py`, `all_strategies/quantstrat/strategy.py`
+अतिरिक्त: `all_strategies/sweep/sweep_strategy.py`, `all_strategies/quantstrat/strategy.py`, S03b `liquidity_sweep` (`strategies/STR15_liquidity_sweep/`)
 
 ## B. Greeks strategies (G01 से G05)
 
@@ -40,8 +40,7 @@ strategies/base.py, context.py, models.py, validation.py, examples/example_strat
 
 ## D. स्थिति
 - सब strategies का synthetic डेटा पर ही परीक्षण हुआ है (Greeks 5: सब FAIL, जो random डेटा पर स्वाभाविक है)। असली डेटा पर परीक्षण बाकी।
-- STR01 से STR11 और gamma_blast, three_pm_momentum, sweep: plug-in adapters repo में हैं।
-- G01 से G05: `manifest.yaml` जुड़ा है, यानी registry `discover()` में दिखनी चाहिए।
-- G01, G02, G03, G05: plug-in adapters बने हैं (long-only, synthetic bars पर signal निकलते हैं)।
-- G04 theta: सिर्फ़ ढाँचा, क्योंकि Signal v0 में short और options legs नहीं हैं।
-- STR01 से STR11 के adapters का `on_bar` अभी `return None` है, यानी असली लॉजिक जोड़ना बाकी।
+- सभी 20 strategies registry `discover()` में आती हैं और API `/strategies` से दिखती हैं।
+- STR08, STR10, STR11 (mean_reversion), S03b liquidity_sweep, G01, G02, G03, G05, gamma_blast, three_pm_momentum, sweep: असली लॉजिक plug-in adapters से जुड़ा है।
+- Book/tick आधारित strategies (STR01-STR07, STR09) और G04 theta registry में visible हैं, पर engine उन्हें स्पष्ट `blocked_reason` के साथ BLOCKED रखता है; वे fake signal नहीं देतीं।
+- G04 theta standalone backtest `all_strategies/greeks/theta_straddle_strategy.py` में चलता है; Signal v0 long-only है इसलिए plugin route blocked है।

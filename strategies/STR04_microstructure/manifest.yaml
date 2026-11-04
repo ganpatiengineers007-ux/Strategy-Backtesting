@@ -5,5 +5,6 @@ required_data: [l2_book, tick_trades]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires level-2 order book and tick trades for VPIN/Kyle-lambda; OHLCV candles lack trade-side data
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s04_microstructure.py
 source_class: MicrostructureStrategy

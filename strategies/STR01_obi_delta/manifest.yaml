@@ -5,5 +5,6 @@ required_data: [l2_book]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires level-2 order-book depth and trade tape; OHLCV candles do not contain OBI/delta
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s01_obi_delta.py
 source_class: OBIDeltaStrategy

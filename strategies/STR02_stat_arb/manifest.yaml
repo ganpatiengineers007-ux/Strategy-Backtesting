@@ -5,5 +5,6 @@ required_data: [multi_asset]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires a synchronized multi-asset price panel; single-symbol OHLCV candles cannot form cross-sectional weights
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s02_stat_arb.py
 source_class: CrossSectionalStatArb

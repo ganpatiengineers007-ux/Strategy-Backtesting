@@ -5,5 +5,6 @@ required_data: [second_venue_feed]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires synchronized feeds from two venues; only one OHLCV candle feed is available
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s03_latency_arb.py
 source_class: LatencyArbStrategy

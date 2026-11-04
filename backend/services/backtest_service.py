@@ -34,8 +34,6 @@ def run_full(strategy_id, data_path, params=None, config=None, out_root="runs", 
              timeframe="UNKNOWN", run_id=None, repo=None, validation_opts=None):
     reg = Registry()
     manifest = reg.manifest(strategy_id)
-    if manifest.get("status") == "NOT_IMPLEMENTED":
-        raise ValueError(f"STRATEGY_DISABLED: {strategy_id} is NOT_IMPLEMENTED/disabled")
     cfg = load_config()
     cfg.update(config or {})
     ds = load_dataset(data_path, symbol=symbol, timeframe=timeframe)

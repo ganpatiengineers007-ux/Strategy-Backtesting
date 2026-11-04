@@ -5,4 +5,5 @@ required_data: []
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires short option legs (two-leg short straddle); the current Signal v0 engine is long-only and cannot model short options
 source: all_strategies/greeks/theta_straddle_strategy.py

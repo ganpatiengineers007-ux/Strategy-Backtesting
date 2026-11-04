@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 class Strategy(ABC):
     strategy_id = "base"
     required_data = ()
+    blocked_reason = None
 
     def __init__(self, params=None):
         self.params = dict(params or {})

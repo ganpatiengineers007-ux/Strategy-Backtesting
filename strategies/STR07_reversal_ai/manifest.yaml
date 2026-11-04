@@ -5,5 +5,6 @@ required_data: [l2_book, tick_trades]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires L2 book imbalance, delta, spread and trade-count features; OHLCV candles do not provide them
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s07_reversal_ai.py
 source_class: ReversalAIStrategy

@@ -15,4 +15,5 @@
 | STR11 | mean_reversion | quantstrat | `external/quant_stat_arb_framework/src/quantstrat/strategy.py` | nahi | quantstrat tests (6 pass) |
 | STR12 | gamma_blast | bootstrap | `strategies/gamma_blast/strategy.py` | nahi | tests/unit/strategies/gamma_blast |
 | STR13 | three_pm_momentum | bootstrap | `strategies/three_pm_momentum/strategy.py` | nahi | tests/unit/strategies/three_pm_momentum |
-| STR14 | sweep | sweep_strategy | `sweep_strategy.py` | HAAN (asli order) | KOI TEST NAHI |
+| STR14 | sweep | sweep_strategy | `scripts/sweep_strategy.py` | HAAN (asli order) | registry proxy tested in tests/unit/strategies/sweep |
+| S03b | liquidity_sweep | quantlab | `external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s03_latency_arb.py` | nahi | tests/unit/strategies/test_registry_wiring.py |

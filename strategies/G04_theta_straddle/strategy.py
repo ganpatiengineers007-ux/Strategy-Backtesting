@@ -1,9 +1,11 @@
-"""G04 Theta short-straddle  (plug-in adapter, Greeks strategy G04)
+"""G04 Theta short-straddle (plug-in adapter, Greeks strategy G04).
 
-अभी सिर्फ़ ढाँचा। यह strategy दो options बेचती है (short straddle), जबकि registry का
-Signal v0 सिर्फ़ long-only (BUY/EXIT) है और options legs नहीं जानता।
-पूरा backtest: all_strategies/greeks/theta_straddle_strategy.py (अलग से चलता है)।
-Signal v1 (short + options legs) आने पर यहाँ on_bar भरा जाएगा।
+This strategy sells an ATM call and put (short straddle). The registry Signal
+contract is long-only (BUY/EXIT) and has no option legs / short side, so this
+strategy cannot produce a faithful backtest here. It stays registered and
+visible, but the engine blocks it with a clear reason instead of faking a
+long-only proxy. The standalone version lives in
+all_strategies/greeks/theta_straddle_strategy.py.
 """
 from strategies.base import Strategy
 
@@ -11,6 +13,8 @@ from strategies.base import Strategy
 class ThetaStraddleAdapter(Strategy):
     strategy_id = "theta_straddle"
     required_data = ()
+    blocked_reason = ("requires short option legs (two-leg short straddle); "
+                      "the current Signal v0 engine is long-only and cannot model short options")
 
     def on_bar(self, ctx):
-        return None   # जानबूझकर खाली: ऊपर वजह लिखी है
+        raise RuntimeError(f"{self.strategy_id}: {self.blocked_reason}")

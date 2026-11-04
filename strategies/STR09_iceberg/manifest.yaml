@@ -5,5 +5,6 @@ required_data: [l2_book, tick_trades]
 parameters: {}
 execution_modes: [backtest]
 live_trading: {enabled: false}
+blocked_reason: requires best-level order-book refill events; OHLCV candles do not expose displayed depth
 source: external/gts_quant_lab/gts_quant_lab/quantlab/strategies/s09_iceberg.py
 source_class: IcebergStrategy

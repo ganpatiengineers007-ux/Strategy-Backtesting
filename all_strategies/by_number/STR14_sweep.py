@@ -1,1 +1,1 @@
-../../sweep_strategy.py
+../../scripts/sweep_strategy.py

@@ -1,10 +1,14 @@
 """Registry entry point: manifests discover, validate, strategy load.
 
-Production fix: ek kharab manifest se poori registry ab nahi girti. Kharab strategy
-self.errors me record hoti hai aur baaki strategies chalti rehti hain.
+Discovery scans every strategy root in the repository (`strategies/`,
+`all_strategies/`, `engines/`, `external/`) so a strategy is registered no
+matter where its manifest lives. A single bad manifest never takes down the
+whole registry: the failure is recorded in `self.errors` and the remaining
+strategies keep working.
 """
 import importlib
 import logging
+import os
 from pathlib import Path
 
 from registry import compatibility
@@ -14,20 +18,40 @@ from strategies.validation import validate_manifest
 
 log = logging.getLogger("registry")
 
+_ROOT = Path(__file__).resolve().parent.parent
+_DEFAULT_ROOTS = ("strategies", "all_strategies", "engines", "external")
+_SKIP_DIRS = {"__pycache__", ".git", ".venv", "node_modules", ".pytest_cache", "target", "build", "dist"}
+
 
 class Registry:
-    def __init__(self, strategies_dir=None):
-        self.dir = Path(strategies_dir) if strategies_dir else Path(__file__).resolve().parent.parent / "strategies"
+    def __init__(self, strategies_dir=None, strategy_dirs=None):
+        if strategies_dir is not None:
+            dirs = [Path(strategies_dir)]
+        elif strategy_dirs is not None:
+            dirs = [Path(d) for d in strategy_dirs]
+        else:
+            env_dirs = [d for d in os.environ.get("SVL_STRATEGY_DIRS", "").split(os.pathsep) if d.strip()]
+            dirs = [Path(d) for d in env_dirs] if env_dirs else [_ROOT / name for name in _DEFAULT_ROOTS]
+        self.dirs = [d for d in dirs if d.exists()]
+        self.dir = self.dirs[0] if self.dirs else _ROOT / "strategies"
         self.records = {}
         self.errors = {}
+
+    def _manifest_dirs(self):
+        for root in self.dirs:
+            found = []
+            for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
+                dirnames[:] = sorted(d for d in dirnames if d not in _SKIP_DIRS)
+                if "manifest.yaml" in filenames:
+                    found.append(Path(dirpath))
+            for path in sorted(found):
+                yield path
 
     def discover(self):
         self.records.clear()
         self.errors.clear()
-        for d in sorted(self.dir.iterdir()):
+        for d in self._manifest_dirs():
             mf = d / "manifest.yaml"
-            if not (d.is_dir() and mf.exists()):
-                continue
             try:
                 m = load_manifest(mf)
                 errs = validate_manifest(m) + compatibility.check(m)
@@ -35,11 +59,15 @@ class Registry:
                     raise ValueError(f"invalid manifest: {errs}")
                 sid = m["id"]
                 if sid in self.records:
-                    raise ValueError(f"duplicate strategy id: {sid}")
+                    existing = self.records[sid]["dir"]
+                    raise ValueError(f"duplicate strategy id: {sid} (already registered from {existing})")
                 self.records[sid] = {"manifest": m, "dir": d}
             except Exception as e:  # noqa: BLE001 - ek kharab strategy poori registry na roke
-                self.errors[d.name] = f"{type(e).__name__}: {e}"
-                log.error("strategy %s skip: %s", d.name, self.errors[d.name])
+                key = d.name
+                if key in self.errors:
+                    key = str(d.relative_to(_ROOT)) if d.is_relative_to(_ROOT) else str(d)
+                self.errors[key] = f"{type(e).__name__}: {e}"
+                log.error("strategy %s skip: %s", d, self.errors[key])
         return sorted(self.records)
 
     def _rec(self, sid):

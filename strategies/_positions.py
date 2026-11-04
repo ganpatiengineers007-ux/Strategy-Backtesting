@@ -33,7 +33,7 @@ class PositionsAdapter(Strategy):
     required_data = ()
 
     def _make_inner(self):
-        raise NotImplementedError
+        raise TypeError(f"{type(self).__name__} must implement _make_inner()")
 
     def __init__(self, params=None):
         super().__init__(params)

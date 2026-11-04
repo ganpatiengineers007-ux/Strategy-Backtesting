@@ -26,9 +26,15 @@ def run_backtest(dataset, strategy, config=None):
     meta["engine_version"] = ENGINE_VERSION
     if dataset.quality_status == "BLOCKED":
         return BacktestResult("BLOCKED", "DATA_QUALITY_BLOCKED", config=cfg, meta=meta)
+    blocked_reason = getattr(strategy, "blocked_reason", None)
     ok, missing = check_data_requirements(strategy.required_data, dataset)
     if not ok:
-        return BacktestResult("BLOCKED", "MISSING_DATA:" + ",".join(missing), config=cfg, meta=meta)
+        reason = "MISSING_DATA:" + ",".join(missing)
+        if blocked_reason:
+            reason += f" ({blocked_reason})"
+        return BacktestResult("BLOCKED", reason, config=cfg, meta=meta)
+    if blocked_reason:
+        return BacktestResult("BLOCKED", "UNSUPPORTED_STRATEGY:" + blocked_reason, config=cfg, meta=meta)
 
     pf, curve, clock = Portfolio(cfg["initial_capital"]), EquityCurve(), SimClock()
     risk = RiskManager(RiskLimits(cfg["max_position_pct"], cfg["max_drawdown_pct"]))
