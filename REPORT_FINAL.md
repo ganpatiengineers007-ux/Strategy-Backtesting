@@ -7,7 +7,7 @@ Scope: repository root cleanup, strategy wiring, tests/build, Docker stack, and 
 
 - **20 strategies** are registered and visible through the API; **0 registry errors** and **0 broken symlinks**.
 - Live API run on generated sample data: **11 COMPLETED**, **9 BLOCKED** with explicit reasons.
-- Full Python suite: **270 passed** (includes repo, `fyers_hub`, and both vendored external suites).
+- Full Python suite: **280 passed** (includes repo, `fyers_hub`, and both vendored external suites).
 - Frontend `typecheck` + production build: **passed**.
 - Go tests/vet and C++ parity test: **passed**. Rust was not run because `cargo` is not installed.
 - Docker stack rebuild: backend **healthy**, web on `http://localhost:8080`, `/api/health` **200**, 20 strategies.
@@ -56,6 +56,7 @@ Reference updates: `docs/GENERATED_MAP.md` now points at `scripts/bootstrap.py`;
 | `GET /api/strategies` | 20 strategies |
 | `GET /api/datasets` | `sample_5m.csv` (9000 bars), `sample_options_5m.csv` (1500 bars, option chain) |
 | Root broken symlinks | none |
+| UI page flows against live API | 16/16 OK |
 
 Docker fixes made during the audit:
 

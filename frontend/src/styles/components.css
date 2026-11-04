@@ -1,3 +1,8 @@
 .card{border:1px solid #8884;border-radius:8px;padding:12px}
 .badge{padding:2px 8px;border-radius:10px;font-size:12px}
 .badge.pass{background:#16a34a;color:#fff}.badge.fail{background:#dc2626;color:#fff}.badge.blocked{background:#f59e0b}
+.badge.synthetic{background:#7c3aed;color:#fff}
+.badge.runnable{background:#16a34a;color:#fff}
+.badge.unknown{background:#6b7280;color:#fff}
+.notice{border-left:4px solid #7c3aed;background:#f5f3ff;color:#3b0764;padding:8px 12px;margin:10px 0}
+.notice.warn{border-left-color:#f59e0b;background:#fffbeb;color:#78350f}

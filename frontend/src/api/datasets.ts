@@ -1,2 +1,3 @@
 import { getJson } from "./client";
-export const listDatasets = () => getJson<Record<string, unknown>[]>("/datasets");
+import { Dataset } from "../types/dataset";
+export const listDatasets = () => getJson<Dataset[]>("/datasets");

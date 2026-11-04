@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 from data.loaders import load_dataset
+from data.provenance import data_label, is_synthetic_path
 
 _NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*\.csv$")
 
@@ -26,5 +27,7 @@ def list_datasets():
     out = []
     for f in sorted(d.glob("*.csv")) if d.exists() else []:
         ds = load_dataset(f)
-        out.append({"file": f.name, **ds.meta(), "bars": len(ds.bars)})
+        synthetic = is_synthetic_path(f)
+        out.append({"file": f.name, **ds.meta(), "bars": len(ds.bars),
+                    "synthetic": synthetic, "data_label": data_label(f)})
     return out

@@ -13,6 +13,8 @@ def run_next(queue, handler):
         job.status = JobStatus.SUCCEEDED
     except Exception as e:  # noqa: BLE001 - failure reason save karna hai
         job.status, job.error = JobStatus.FAILED, f"{type(e).__name__}: {e}"
+    finally:
+        queue.save(job)
     return job
 
 

@@ -1,6 +1,7 @@
 import { compareRuns } from "../api/comparisons";
 import { mountPage } from "../components/page";
-import { esc, renderTable } from "../components/data-table";
+import { Raw, esc, renderTable } from "../components/data-table";
+import { statusBadge, syntheticBadge } from "../components/status-badge";
 
 export function render(el: HTMLElement, ids = ""): Promise<void> {
   return mountPage(el, "Compare runs", async () => {
@@ -8,8 +9,15 @@ export function render(el: HTMLElement, ids = ""): Promise<void> {
     const runIds = ids.split(",").map((s) => s.trim()).filter(Boolean);
     if (runIds.length < 2) return form + "<p>Kam se kam 2 run id likho (Runs page se copy karo).</p>";
     const c = await compareRuns(runIds);
+    const summary = c.runs.map((r: any) => ({
+      run_id: r.run_id, status: new Raw(statusBadge(String(r.status))), validation: r.validation,
+      data: new Raw(syntheticBadge(r.synthetic) || '<span class="badge unknown">real/unknown</span>'),
+      reason: r.reason ?? "",
+    }));
     const rows = (c.metric_names as string[]).map((m) => ({ metric: m, ...Object.fromEntries(c.runs.map((r: any) => [r.run_id, r.metrics[m]])) }));
-    return form + renderTable(rows);
+    const synthetic = c.runs.some((r: any) => r.synthetic);
+    return form + (synthetic ? `<div class="notice">${syntheticBadge(true)} At least one comparison run uses synthetic sample data.</div>` : "") +
+      renderTable(summary) + renderTable(rows);
   }).then(() => {
     el.querySelector("#cmp-go")?.addEventListener("click", () => {
       const v = (el.querySelector("#cmp-ids") as HTMLInputElement).value.replace(/\s+/g, "");

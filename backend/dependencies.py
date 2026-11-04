@@ -4,7 +4,7 @@ from backend.jobs.queue import JobQueue
 from persistence.repositories import RunRepository
 from registry.registry import Registry
 
-_QUEUE = JobQueue()
+_QUEUE = None
 
 
 def get_registry():
@@ -12,6 +12,9 @@ def get_registry():
 
 
 def get_queue():
+    global _QUEUE
+    if _QUEUE is None:
+        _QUEUE = JobQueue(os.environ.get("JOB_STATE_DIR"))
     return _QUEUE
 
 

@@ -28,7 +28,10 @@
 | G04 | theta_straddle | Greeks | `all_strategies/greeks/theta_straddle_strategy.py` | nahi | registry block test (short legs unsupported) |
 | G05 | greeks_confluence | Greeks | `all_strategies/greeks/greeks_confluence_strategy.py` | nahi | tests/unit/strategies/test_greeks_adapters.py |
 
-Sample datasets are gitignored. Generate them with:
+`GET /strategies` now also returns `status` (`RUNNABLE`/`BLOCKED`), `runnable`, `reason` and `data_hint`.
+The dashboard/registry render that status directly; blocked strategies stay blocked and are never given fake metrics.
+
+Sample datasets are gitignored and labelled `synthetic` by the API, reports and every result page. Generate them with:
 
 ```bash
 python -m cli.main make-sample                 # data/samples/sample_5m.csv

@@ -1,4 +1,5 @@
 """/hub/*: Fyers data hub ka stored + live data (sirf padhna). Frontend ka Live page yahin se bharta hai."""
+import sqlite3
 import time
 
 from backend.api.common import guarded, make_router
@@ -7,7 +8,18 @@ from backend.api.common import guarded, make_router
 def _hub():
     from fyers_hub.serve.hub import DataHub
 
-    return DataHub()
+    try:
+        return DataHub()
+    except (OSError, PermissionError, sqlite3.Error) as e:
+        try:
+            from fastapi import HTTPException
+        except ImportError:
+            raise
+        raise HTTPException(status_code=503, detail={
+            "error": "hub_unavailable",
+            "detail": "Fyers data hub is not initialized. Set HUB_DB_PATH to a writable path and ingest data.",
+            "cause": type(e).__name__,
+        }) from e
 
 
 def _clamp(n, lo, hi):

@@ -11,6 +11,14 @@ export function setApiKey(key: string): void {
   }
 }
 
+export function clearApiKey(): void {
+  try {
+    sessionStorage.removeItem(KEY_NAME);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function hasApiKey(): boolean {
   try {
     return !!sessionStorage.getItem(KEY_NAME);
@@ -32,7 +40,17 @@ function headers(extra: Record<string, string> = {}): Record<string, string> {
 
 async function handle<T>(r: Response, label: string): Promise<T> {
   if (r.status === 401) throw new Error(`${label}: unauthorized (Settings me API key daalo)`);
-  if (!r.ok) throw new Error(`${label} failed: ${r.status}`);
+  if (!r.ok) {
+    let detail = "";
+    try {
+      const body = await r.json();
+      detail = typeof body?.detail === "string" ? body.detail : JSON.stringify(body?.detail ?? body);
+    } catch {
+      detail = "";
+    }
+    const rid = r.headers.get("X-Request-ID");
+    throw new Error(`${label} failed: ${r.status}${detail ? ` - ${detail}` : ""}${rid ? ` (request ${rid})` : ""}`);
+  }
   return (await r.json()) as T;
 }
 

@@ -14,9 +14,11 @@ def _rows(d):
 def write(report, equity, path):
     checks = {k: f"{v.get('status')} {v.get('reason', '')}".strip()
               for k, v in report["validation"].get("checks", {}).items()}
+    synthetic = bool(report.get("synthetic"))
+    data_label = "SYNTHETIC SAMPLE DATA - not real market evidence" if synthetic else report.get("data_label", "unknown")
     text = Template(TEMPLATE.read_text(encoding="utf-8")).safe_substitute(
         title=html.escape(report["run_id"]), status=html.escape(f"{report['status']} {report.get('reason', '')}"),
-        validation=html.escape(str(report["validation"].get("status"))), metrics_rows=_rows(report["metrics"]),
-        validation_rows=_rows(checks), chart=equity_svg(equity))
+        validation=html.escape(str(report["validation"].get("status"))), data_label=html.escape(str(data_label)),
+        metrics_rows=_rows(report["metrics"]), validation_rows=_rows(checks), chart=equity_svg(equity))
     Path(path).write_text(text, encoding="utf-8")
     return str(path)

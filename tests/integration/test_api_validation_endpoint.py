@@ -13,7 +13,7 @@ def test_validation_start_with_options(tmp_path):
     rid = job["result"]["run_id"]
     v = validation.get_one(rid)
     assert len(v["checks"]["walk_forward"].get("windows", [])) in (0, 3)
-    assert set(backtests.get_results(rid)) == {"run_id", "status", "reason", "metrics", "trades", "equity"}
+    assert {"run_id", "status", "reason", "metrics", "trades", "equity", "synthetic"} <= set(backtests.get_results(rid))
 
 
 def test_bad_validation_options_rejected(tmp_path):

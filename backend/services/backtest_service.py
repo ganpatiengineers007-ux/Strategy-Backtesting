@@ -1,10 +1,12 @@
 """Poora flow: registry -> data -> engine -> validation -> metrics -> report -> persistence -> audit."""
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
 from backtest.engine import ENGINE_VERSION, run_backtest
 from data.loaders import load_dataset
+from data.provenance import data_label, is_synthetic_path
 from metrics import compute_all
 from persistence import audit
 from persistence.repositories import RunRepository
@@ -45,13 +47,22 @@ def run_full(strategy_id, data_path, params=None, config=None, out_root="runs", 
         metrics, validation = compute_all(result, ds), run_validation(ds, factory, cfg, **(validation_opts or {}))
     now = datetime.now(timezone.utc)
     run_id = run_id or f"run-{now.strftime('%Y%m%d%H%M%S')}-{strategy_id}"
-    report, paths = generate_report(run_id, result, metrics, validation, out_root)
+    synthetic = is_synthetic_path(data_path)
+    report, paths = generate_report(run_id, result, metrics, validation, out_root,
+                                    meta={"dataset_id": ds.dataset_id, "synthetic": synthetic,
+                                          "data_label": data_label(data_path)})
     record = {"run_id": run_id, "strategy_id": strategy_id, "strategy_version": str(manifest["version"]),
               "source_hash": reg.source_hash(strategy_id), "dataset_id": ds.dataset_id,
-              "dataset_hash": ds.content_hash, "status": result.status, "reason": result.reason,
+              "dataset_hash": ds.content_hash, "dataset_synthetic": synthetic,
+              "data_label": data_label(data_path), "status": result.status, "reason": result.reason,
               "validation_status": validation["status"], "parameters": {**manifest.get("parameters", {}), **(params or {})},
               "config": result.config, "engine_version": ENGINE_VERSION, "created_at": now.isoformat(),
               "report": paths}
     (repo or RunRepository(out_root)).save(run_id, record)
-    audit.log(out_root, "run_completed", run_id=run_id, status=result.status, validation=validation["status"])
+    db_url = os.environ.get("DATABASE_URL", "")
+    if repo is None and db_url.startswith("sqlite:///"):
+        from persistence.database import SqliteRunRepository
+        SqliteRunRepository(db_url[len("sqlite:///"):]).save(run_id, record)
+    audit.log(out_root, "run_completed", run_id=run_id, status=result.status, validation=validation["status"],
+              reason=result.reason, dataset_id=ds.dataset_id, synthetic=synthetic)
     return record, paths

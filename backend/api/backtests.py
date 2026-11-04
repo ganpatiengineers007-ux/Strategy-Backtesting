@@ -25,7 +25,8 @@ def _handler(payload):
         record, _ = run_full(req.strategy_id, data_path, req.params, req.config, out_root=out_root, symbol=req.symbol,
                              timeframe=req.timeframe, validation_opts=req.validation)
     return {"run_id": record["run_id"], "status": record["status"], "validation_status": record["validation_status"],
-            "reason": record["reason"]}
+            "reason": record["reason"], "synthetic": record.get("dataset_synthetic", False),
+            "data_label": record.get("data_label", "real")}
 
 
 def _job_view(job):
@@ -63,7 +64,8 @@ def get_one(item_id: str):
 
 def get_results(item_id: str):
     r = report_service.get_report(item_id, runs_root())
-    return {k: r.get(k) for k in ("run_id", "status", "reason", "metrics", "trades", "equity")}
+    return {k: r.get(k) for k in ("run_id", "status", "reason", "validation", "metrics", "trades", "equity",
+                                  "dataset_id", "synthetic", "data_label")}
 
 
 router = make_router()

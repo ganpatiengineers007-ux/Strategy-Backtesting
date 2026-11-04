@@ -1,0 +1,33 @@
+# Optional TLS front door. Disabled unless the "tls" profile is enabled.
+# Usage after DNS + certs:
+#   docker compose -f infra/docker-compose.yml -f infra/docker-compose.tls.yml --profile tls up -d --build
+# Keep the plain 8080 web port private when TLS is enabled.
+name: strategy-lab
+
+services:
+  tls:
+    image: nginx:1.27-alpine
+    profiles: ["tls"]
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    environment:
+      DOMAIN: ${DOMAIN:-your-domain.example}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.tls.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ${TLS_CERT_PATH:-./certs/fullchain.pem}:/etc/nginx/certs/fullchain.pem:ro
+      - ${TLS_KEY_PATH:-./certs/privkey.pem}:/etc/nginx/certs/privkey.pem:ro
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

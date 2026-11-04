@@ -26,6 +26,11 @@ services:
       DATA_DIR: /app/data/samples
       RUNS_ROOT: /app/runs
       DATABASE_URL: sqlite:////app/runs/svl.sqlite3
+      HUB_DB_PATH: /app/runs/hub.db
+      JOB_STATE_DIR: /app/runs/.jobs
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-120}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_JSON: ${LOG_JSON:-1}
     volumes:
       - ../runs:/app/runs
       - ../data:/app/data:ro
@@ -36,6 +41,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   web:
     build:
@@ -48,4 +58,14 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

@@ -39,3 +39,15 @@ def test_api_key_enforced(tmp_path):
         assert c.get("/strategies", headers={"x-api-key": "secret"}).status_code == 200
     finally:
         os.environ.pop("API_KEY", None)
+
+
+def test_rate_limit_returns_429(tmp_path):
+    os.environ["RATE_LIMIT_PER_MINUTE"] = "2"
+    try:
+        c = _client(tmp_path)
+        assert c.get("/strategies").status_code == 200
+        assert c.get("/strategies").status_code == 200
+        r = c.get("/strategies")
+        assert r.status_code == 429 and r.headers.get("retry-after") and r.headers.get("x-request-id")
+    finally:
+        os.environ.pop("RATE_LIMIT_PER_MINUTE", None)

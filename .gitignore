@@ -13,3 +13,13 @@ artifacts/*
 !artifacts/.gitkeep
 output/*
 !output/.gitkeep
+backups/
+infra/certs/*.pem
+infra/certs/*.key
+*.sqlite3
+
+# TLS certs/keys never in git
+infra/certs/*
+!infra/certs/.gitkeep
+*.pem
+*.key
