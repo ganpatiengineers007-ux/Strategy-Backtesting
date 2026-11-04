@@ -2,17 +2,28 @@
 name: strategy-lab
 
 services:
+  runs-init:
+    image: python:3.12-slim
+    command: ["sh", "-c", "chown -R 10001:10001 /app/runs"]
+    user: "0:0"
+    volumes:
+      - ../runs:/app/runs
+    restart: "no"
+
   backend:
     build:
       context: ..
       dockerfile: infra/Dockerfile
     restart: unless-stopped
+    depends_on:
+      runs-init:
+        condition: service_completed_successfully
     environment:
       SVL_ENV: production
       API_KEY: ${API_KEY:?API_KEY set karo (infra/.env me)}
       CORS_ORIGINS: ${CORS_ORIGINS:-}
       RUN_ISOLATED: "1"
-      DATA_DIR: /app/data
+      DATA_DIR: /app/data/samples
       RUNS_ROOT: /app/runs
       DATABASE_URL: sqlite:////app/runs/svl.sqlite3
     volumes:

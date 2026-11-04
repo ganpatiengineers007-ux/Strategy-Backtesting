@@ -4,5 +4,10 @@ version = "0.1.0"
 requires-python = ">=3.10"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["."]
+testpaths = [
+    "tests",
+    "fyers_hub/tests",
+    "external/gts_quant_lab/gts_quant_lab/tests",
+    "external/quant_stat_arb_framework/tests",
+]
+pythonpath = [".", "external/quant_stat_arb_framework/src"]

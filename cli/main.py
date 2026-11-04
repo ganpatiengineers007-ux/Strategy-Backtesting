@@ -27,6 +27,10 @@ def main(argv=None):
     s.add_argument("--out", default="data/samples/sample_5m.csv")
     s.add_argument("--days", type=int, default=120)
     s.set_defaults(fn=commands.cmd_sample)
+    os = sub.add_parser("make-options-sample")
+    os.add_argument("--out", default="data/samples/sample_options_5m.csv")
+    os.add_argument("--days", type=int, default=20)
+    os.set_defaults(fn=commands.cmd_sample_options)
     args = ap.parse_args(argv)
     args.fn(args)
     return 0

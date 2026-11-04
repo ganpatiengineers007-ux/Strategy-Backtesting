@@ -12,6 +12,8 @@ Usage:
   python bootstrap.py --verify             # wiring check: files + dependencies
   python bootstrap.py --test               # generated repo ke tests chalao (pytest chahiye)
 
+v6: Phase 15 (baaki 22 stubs me asli code, isolation, background worker, proto, registry gates, options checks).
+v5.1: test_api route check openapi()-based (naye FastAPI ke liye).
 v5: Phase 13 (analysis+optimization) + Phase 14 (API, services, SQLite, frontend pages).
 v4: Phase 12 (docs, config yaml, indicators, observability, infra, CI) bhi shamil.
 v3: Phase 11 (missing files) + asli chalne wala code (data, backtest, risk, validation,
@@ -2769,7 +2771,7 @@ def test_fastapi_app_routes():
     except ImportError:
         pytest.skip("fastapi not installed")
     from backend.app import create_app
-    paths = {r.path for r in create_app().routes}
+    paths = set(create_app().openapi()["paths"])
     assert "/health" in paths and "/audit" in paths
 ''', ["backend/app.py"])
 F("tests/integration/test_report_pipeline.py", "Report artifacts content", r'''
@@ -3754,7 +3756,7 @@ def test_fastapi_app_routes():
     except ImportError:
         pytest.skip("fastapi not installed")
     from backend.app import create_app
-    paths = {r.path for r in create_app().routes}
+    paths = set(create_app().openapi()["paths"])
     assert {"/health", "/audit", "/strategies", "/backtests", "/reports/{run_id}", "/validations/{run_id}",
             "/comparisons", "/datasets"} <= paths
 '''
@@ -4162,6 +4164,1302 @@ Asli: data (csv), registry, backtest, risk, saare 8 validation checks, optimizat
 Baaki: parquet/broker source, PostgreSQL adapter, background worker, CORS, strategy create API, auth > API key.
 Strategy logic: gamma_blast/three_pm_momentum placeholder - asli niyam aapko dene honge.
 ''')
+
+# ================================================================= PHASE 15: baaki stubs me asli code + blueprint ke gaps
+_P15 = []
+
+def F15(path, purpose, text, deps=()):
+    _P15.append((path, purpose, list(deps)))
+    O(path, text)
+
+def _patch(path, old, new, count=1):
+    assert OVERRIDES[path].count(old) >= 1, (path, old[:60])
+    OVERRIDES[path] = OVERRIDES[path].replace(old, new) if count == 0 else OVERRIDES[path].replace(old, new, count)
+
+# ---------------------------------------------------------------- backend/schemas
+O("backend/schemas/backtest.py", r'''
+"""Backtest request/response models + strict validation (API ke andar aane wala data yahin parkha jaata hai)."""
+from dataclasses import dataclass, field
+
+ALLOWED_KEYS = {"strategy_id", "dataset", "params", "config", "symbol", "timeframe", "validation"}
+
+
+@dataclass
+class BacktestRequest:
+    strategy_id: str
+    dataset: str
+    params: dict = field(default_factory=dict)
+    config: dict = field(default_factory=dict)
+    symbol: str = "UNKNOWN"
+    timeframe: str = "UNKNOWN"
+    validation: dict = field(default_factory=dict)  # optional: {"split": 0.7, "windows": 4}
+
+    @classmethod
+    def from_dict(cls, d):
+        if not isinstance(d, dict):
+            raise ValueError("JSON object chahiye")
+        unknown = set(d) - ALLOWED_KEYS
+        if unknown:
+            raise ValueError("unknown keys: " + ", ".join(sorted(unknown)))
+        for k in ("strategy_id", "dataset"):
+            if not isinstance(d.get(k), str) or not d[k].strip():
+                raise ValueError(f"{k} chahiye")
+        for k in ("params", "config", "validation"):
+            if d.get(k) is not None and not isinstance(d[k], dict):
+                raise ValueError(f"{k} object hona chahiye")
+        v = d.get("validation") or {}
+        if set(v) - {"split", "windows"}:
+            raise ValueError("validation me sirf split, windows allowed")
+        if "split" in v and not (isinstance(v["split"], (int, float)) and 0.1 <= v["split"] <= 0.9):
+            raise ValueError("split 0.1 se 0.9 ke beech")
+        if "windows" in v and not (isinstance(v["windows"], int) and not isinstance(v["windows"], bool) and 2 <= v["windows"] <= 12):
+            raise ValueError("windows 2 se 12 ke beech (int)")
+        return cls(d["strategy_id"].strip(), d["dataset"].strip(), dict(d.get("params") or {}), dict(d.get("config") or {}),
+                   str(d.get("symbol", "UNKNOWN")), str(d.get("timeframe", "UNKNOWN")), dict(v))
+
+
+@dataclass
+class BacktestResponse:
+    job_id: str
+    status: str
+    result: dict = None
+    error: str = None
+''')
+O("backend/schemas/strategy.py", r'''
+from dataclasses import dataclass, field
+
+
+@dataclass
+class StrategySummary:
+    id: str
+    version: str
+    required_data: list = field(default_factory=list)
+    execution_modes: list = field(default_factory=list)
+    live_trading_enabled: bool = False
+
+    @classmethod
+    def from_manifest(cls, m):
+        lt = m.get("live_trading")
+        return cls(str(m["id"]), str(m["version"]), list(m.get("required_data") or []),
+                   list(m.get("execution_modes") or []), bool(lt.get("enabled")) if isinstance(lt, dict) else bool(lt))
+''')
+O("backend/schemas/report.py", r'''
+from dataclasses import dataclass
+
+
+@dataclass
+class ReportSummary:
+    run_id: str
+    status: str
+    validation_status: str
+    n_trades: int
+    total_return_pct: float
+
+    @classmethod
+    def from_report(cls, r):
+        m = r.get("metrics") or {}
+        return cls(r["run_id"], r["status"], (r.get("validation") or {}).get("status", "UNKNOWN"),
+                   int(m.get("n_trades", 0)), float(m.get("total_return_pct", 0.0)))
+''')
+O("tests/unit/backend/schemas/test_backtest.py", r'''
+from backend.schemas.backtest import BacktestRequest
+
+
+def _bad(d):
+    try:
+        BacktestRequest.from_dict(d)
+    except ValueError:
+        return True
+    return False
+
+
+def test_valid_and_defaults():
+    r = BacktestRequest.from_dict({"strategy_id": " s ", "dataset": "a.csv", "validation": {"split": 0.8, "windows": 5}})
+    assert r.strategy_id == "s" and r.params == {} and r.validation["windows"] == 5
+
+
+def test_rejects_bad_input():
+    assert _bad("x") and _bad({"strategy_id": "s"}) and _bad({"strategy_id": "s", "dataset": ""})
+    assert _bad({"strategy_id": "s", "dataset": "a.csv", "typo_key": 1})
+    assert _bad({"strategy_id": "s", "dataset": "a.csv", "params": [1]})
+    assert _bad({"strategy_id": "s", "dataset": "a.csv", "validation": {"split": 2}})
+    assert _bad({"strategy_id": "s", "dataset": "a.csv", "validation": {"windows": True}})
+''')
+O("tests/unit/backend/schemas/test_strategy.py", r'''
+from backend.schemas.strategy import StrategySummary
+
+
+def test_summary_and_live_flag():
+    m = {"id": "x", "version": "0.1.0", "required_data": ["oi"], "execution_modes": ["backtest"], "live_trading": {"enabled": False}}
+    s = StrategySummary.from_manifest(m)
+    assert s.id == "x" and s.live_trading_enabled is False and s.required_data == ["oi"]
+    m["live_trading"] = {"enabled": True}
+    assert StrategySummary.from_manifest(m).live_trading_enabled is True
+''')
+O("tests/unit/backend/schemas/test_report.py", r'''
+from backend.schemas.report import ReportSummary
+
+
+def test_summary():
+    r = ReportSummary.from_report({"run_id": "r", "status": "COMPLETED", "validation": {"status": "FAIL"},
+                                   "metrics": {"n_trades": 4, "total_return_pct": -1.5}})
+    assert r.validation_status == "FAIL" and r.n_trades == 4 and r.total_return_pct == -1.5
+''')
+
+# ---------------------------------------------------------------- backtest/execution.py + engine refactor
+O("backtest/execution.py", r'''
+"""ExecutionModel: slippage + fees + fill rules ek jagah (engine seedha slippage/fees nahi bulata)."""
+from backtest import fees, slippage, stop_manager
+
+
+class ExecutionModel:
+    def __init__(self, slippage_bps=2.0, fee_pct=0.0003, ambiguous_candle_policy="stop_first"):
+        if slippage_bps < 0 or fee_pct < 0:
+            raise ValueError("slippage_bps aur fee_pct negative nahi ho sakte")
+        self.slippage_bps, self.fee_pct, self.policy = slippage_bps, fee_pct, ambiguous_candle_policy
+
+    def fill_entry(self, ref_price, qty):
+        px = slippage.apply(ref_price, "BUY", self.slippage_bps)
+        return px, fees.fee(qty * px, self.fee_pct)
+
+    def fill_exit(self, raw_price, qty):
+        px = slippage.apply(raw_price, "SELL", self.slippage_bps)
+        return px, fees.fee(qty * px, self.fee_pct)
+
+    def check_exit(self, position, bar):
+        return stop_manager.check(position, bar, self.policy)
+''')
+O("tests/unit/backtest/test_execution.py", r'''
+from backtest.execution import ExecutionModel
+from data.models import Bar
+from backtest.portfolio import Position
+
+
+def test_costs_direction_and_amounts():
+    m = ExecutionModel(slippage_bps=10, fee_pct=0.001)
+    px, fee = m.fill_entry(100.0, 10)
+    assert abs(px - 100.1) < 1e-9 and abs(fee - 1.001) < 1e-9
+    px, fee = m.fill_exit(100.0, 10)
+    assert abs(px - 99.9) < 1e-9 and abs(fee - 0.999) < 1e-9
+
+
+def test_negative_costs_rejected_and_exit_rule():
+    try:
+        ExecutionModel(-1, 0)
+        raise AssertionError("expected ValueError")
+    except ValueError:
+        pass
+    pos = Position(1, 100.0, "t", 95.0, 108.0, 0.0)
+    assert ExecutionModel().check_exit(pos, Bar("t", 100, 110, 90, 105)) == (95.0, "STOP_AMBIGUOUS_CONSERVATIVE")
+''')
+_patch("backtest/engine.py", "from backtest import fees, slippage, stop_manager, position_sizing\n",
+       "from backtest import position_sizing\nfrom backtest.execution import ExecutionModel\n")
+_patch("backtest/engine.py", '''    def close(raw_price, bar, why):
+        px = slippage.apply(raw_price, "SELL", bps)
+        pf.close(px, bar.ts, fees.fee(pf.position.qty * px, fee_pct), why)
+''', '''    model = ExecutionModel(bps, fee_pct, policy)
+
+    def close(raw_price, bar, why):
+        px, fee = model.fill_exit(raw_price, pf.position.qty)
+        pf.close(px, bar.ts, fee, why)
+''')
+_patch("backtest/engine.py", '''            px = slippage.apply(bar.open, "BUY", bps)
+            pf.open(pending["qty"], px, bar.ts, pending["stop"], pending["target"],
+                    fees.fee(pending["qty"] * px, fee_pct))''', '''            px, fee = model.fill_entry(bar.open, pending["qty"])
+            pf.open(pending["qty"], px, bar.ts, pending["stop"], pending["target"], fee)''')
+_patch("backtest/engine.py", "ex = stop_manager.check(pf.position, bar, policy)", "ex = model.check_exit(pf.position, bar)")
+
+# ---------------------------------------------------------------- data/corporate_actions, survivorship, storage, options
+O("data/corporate_actions.py", r'''
+"""Corporate actions: pichhli bars ko back-adjust (split, dividend). Naya Bar list lautata hai, original nahi badalta."""
+from data.models import Bar
+
+
+def _scale(bar, price_factor, volume_factor=1.0):
+    return Bar(bar.ts, bar.open * price_factor, bar.high * price_factor, bar.low * price_factor,
+               bar.close * price_factor, bar.volume * volume_factor, dict(bar.extras))
+
+
+def apply_splits(bars, splits):
+    """splits: [{"date": "YYYY-MM-DD", "ratio": 2.0}]  (2-for-1 => ratio 2.0). date se pehle ki bars adjust."""
+    for s in splits:
+        if s["ratio"] <= 0:
+            raise ValueError("split ratio > 0 hona chahiye")
+    out = []
+    for b in bars:
+        f = 1.0
+        for s in splits:
+            if b.ts[:10] < s["date"]:
+                f *= s["ratio"]
+        out.append(_scale(b, 1.0 / f, f))
+    return out
+
+
+def apply_dividends(bars, dividends):
+    """dividends: [{"date": "YYYY-MM-DD", "amount": 5.0}]. Factor = 1 - amount / (ex-date se pehle ka last close)."""
+    factors = []
+    for d in dividends:
+        prev = [b for b in bars if b.ts[:10] < d["date"]]
+        if not prev:
+            continue
+        if d["amount"] < 0 or d["amount"] >= prev[-1].close:
+            raise ValueError("dividend amount 0 se close ke beech hona chahiye")
+        factors.append((d["date"], 1.0 - d["amount"] / prev[-1].close))
+    out = []
+    for b in bars:
+        f = 1.0
+        for date, k in factors:
+            if b.ts[:10] < date:
+                f *= k
+        out.append(_scale(b, f))
+    return out
+''')
+O("tests/unit/data/test_corporate_actions.py", r'''
+from data.corporate_actions import apply_dividends, apply_splits
+from data.models import Bar
+
+
+def _bars():
+    return [Bar("2024-01-01T09:15:00", 100, 102, 98, 100, 10), Bar("2024-01-02T09:15:00", 50, 51, 49, 50, 20)]
+
+
+def test_split_adjusts_only_before_date_and_original_untouched():
+    orig = _bars()
+    out = apply_splits(orig, [{"date": "2024-01-02", "ratio": 2.0}])
+    assert out[0].close == 50.0 and out[0].volume == 20.0 and out[1].close == 50.0 and out[1].volume == 20
+    assert orig[0].close == 100  # original nahi badla
+
+
+def test_dividend_factor():
+    out = apply_dividends(_bars(), [{"date": "2024-01-02", "amount": 10.0}])
+    assert abs(out[0].close - 90.0) < 1e-9 and out[1].close == 50
+
+
+def test_bad_inputs():
+    for fn, arg in ((apply_splits, [{"date": "2024-01-02", "ratio": 0}]), (apply_dividends, [{"date": "2024-01-02", "amount": 100.0}])):
+        try:
+            fn(_bars(), arg)
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
+''')
+O("data/survivorship.py", r'''
+"""Survivorship-bias check: universe snapshots (date -> symbols) me churn dikhna chahiye."""
+
+
+def check(snapshots):
+    dates = sorted(snapshots)
+    if len(dates) < 2:
+        return {"status": "UNAVAILABLE", "reason": "NEED_MULTIPLE_UNIVERSE_SNAPSHOTS"}
+    first, last = set(snapshots[dates[0]]), set(snapshots[dates[-1]])
+    dropped, added = sorted(first - last), sorted(last - first)
+    if not dropped and not added:
+        return {"status": "WARN", "reason": "NO_CHURN: sirf aaj ke constituents hone ka khatra (survivorship bias)",
+                "dropped": [], "added": []}
+    return {"status": "PASS", "dropped": dropped, "added": added,
+            "churn_pct": 100.0 * len(dropped) / len(first) if first else 0.0}
+''')
+O("tests/unit/data/test_survivorship.py", r'''
+from data.survivorship import check
+
+
+def test_statuses():
+    assert check({"2020-01-01": ["A"]})["status"] == "UNAVAILABLE"
+    assert check({"2020-01-01": ["A", "B"], "2024-01-01": ["A", "B"]})["status"] == "WARN"
+    r = check({"2020-01-01": ["A", "B"], "2024-01-01": ["A", "C"]})
+    assert r["status"] == "PASS" and r["dropped"] == ["B"] and r["added"] == ["C"] and r["churn_pct"] == 50.0
+''')
+O("data/storage.py", r'''
+"""DatasetStore: Dataset ko disk par (meta.json + bars.jsonl) checksum ke saath rakhna. Parquet baad me (pyarrow optional)."""
+import hashlib
+import json
+import re
+from pathlib import Path
+
+from data.models import Bar, Dataset
+
+
+def _safe(name):
+    s = re.sub(r"[^A-Za-z0-9_.-]", "_", name)
+    if not s or s.startswith("."):
+        raise ValueError("invalid dataset id")
+    return s
+
+
+class DatasetStore:
+    def __init__(self, root="data/store"):
+        self.root = Path(root)
+
+    def save(self, ds):
+        d = self.root / _safe(ds.dataset_id)
+        d.mkdir(parents=True, exist_ok=True)
+        lines = [json.dumps([b.ts, b.open, b.high, b.low, b.close, b.volume, b.extras]) for b in ds.bars]
+        body = "\n".join(lines) + ("\n" if lines else "")
+        (d / "bars.jsonl").write_text(body, encoding="utf-8")
+        meta = {**ds.meta(), "fields": sorted(ds.fields), "quality": ds.quality, "bars": len(ds.bars),
+                "bars_sha256": hashlib.sha256(body.encode()).hexdigest()}
+        (d / "meta.json").write_text(json.dumps(meta, indent=2, default=str), encoding="utf-8")
+        return str(d)
+
+    def load(self, dataset_id):
+        d = self.root / _safe(dataset_id)
+        if not (d / "meta.json").exists():
+            raise KeyError(dataset_id)
+        meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
+        body = (d / "bars.jsonl").read_text(encoding="utf-8")
+        if hashlib.sha256(body.encode()).hexdigest() != meta["bars_sha256"]:
+            raise ValueError("checksum mismatch: dataset badla gaya hai")
+        bars = [Bar(*json.loads(x)) for x in body.splitlines()]
+        return Dataset(meta["dataset_id"], meta["symbol"], meta["timeframe"], bars, meta["timezone"], meta["source"],
+                       meta["schema_version"], meta["content_hash"], set(meta["fields"]), meta["quality_status"], meta["quality"])
+
+    def list_ids(self):
+        return sorted(p.parent.name for p in self.root.glob("*/meta.json")) if self.root.exists() else []
+''')
+O("tests/unit/data/test_storage.py", r'''
+from data.storage import DatasetStore
+from tests._helpers import make_bars, make_dataset
+
+
+def test_round_trip_and_tamper_detection(tmp_path):
+    store = DatasetStore(tmp_path)
+    ds = make_dataset(make_bars(15))
+    store.save(ds)
+    back = store.load("t")
+    assert back.bars == ds.bars and back.fields == ds.fields and back.meta() == ds.meta()
+    assert store.list_ids() == ["t"]
+    f = tmp_path / "t" / "bars.jsonl"
+    f.write_text(f.read_text().replace("100.", "999.", 1))
+    try:
+        store.load("t")
+        raise AssertionError("expected ValueError")
+    except ValueError as e:
+        assert "checksum" in str(e)
+
+
+def test_unsafe_id_and_unknown(tmp_path):
+    store = DatasetStore(tmp_path)
+    for fn in (store.load,):
+        try:
+            fn("..")
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
+    try:
+        store.load("nope")
+        raise AssertionError("expected KeyError")
+    except KeyError:
+        pass
+''')
+F15("data/options.py", "Option contract + chain validation (expiry, strike, lot size, bid/ask)", r'''
+"""Option data checks. Poora option backtest tab banega jab option-chain data + strategy ke niyam milenge."""
+from dataclasses import dataclass
+from datetime import date
+
+REQUIRED = ("ts", "underlying", "expiry", "strike", "option_type", "lot_size")
+
+
+@dataclass(frozen=True)
+class OptionContract:
+    underlying: str
+    expiry: str
+    strike: float
+    kind: str
+    lot_size: int
+
+
+def days_to_expiry(ts, expiry):
+    return (date.fromisoformat(expiry) - date.fromisoformat(ts[:10])).days
+
+
+def validate_chain(rows):
+    issues = []
+    for i, r in enumerate(rows):
+        missing = [k for k in REQUIRED if r.get(k) in (None, "")]
+        if missing:
+            issues.append({"row": i, "code": "MISSING_FIELDS", "msg": ",".join(missing)})
+            continue
+        try:
+            if float(r["strike"]) <= 0:
+                issues.append({"row": i, "code": "BAD_STRIKE", "msg": str(r["strike"])})
+            if int(r["lot_size"]) <= 0:
+                issues.append({"row": i, "code": "BAD_LOT_SIZE", "msg": str(r["lot_size"])})
+            if str(r["option_type"]).upper() not in ("CE", "PE", "CALL", "PUT"):
+                issues.append({"row": i, "code": "BAD_OPTION_TYPE", "msg": str(r["option_type"])})
+            if days_to_expiry(r["ts"], r["expiry"]) < 0:
+                issues.append({"row": i, "code": "EXPIRED_CONTRACT", "msg": r["expiry"]})
+        except (ValueError, TypeError) as e:
+            issues.append({"row": i, "code": "BAD_VALUE", "msg": str(e)})
+            continue
+        bid, ask = r.get("bid"), r.get("ask")
+        if bid is not None and ask is not None and (float(bid) < 0 or float(bid) > float(ask)):
+            issues.append({"row": i, "code": "BAD_BID_ASK", "msg": f"{bid}>{ask}"})
+    return issues
+
+
+def quality_status(issues):
+    return "BLOCKED" if issues else "PASS"
+''')
+O("tests/unit/data/test_options.py", r'''
+from data.options import days_to_expiry, quality_status, validate_chain
+
+GOOD = {"ts": "2024-01-01T09:15:00", "underlying": "NIFTY", "expiry": "2024-01-04", "strike": 21000, "option_type": "CE",
+        "lot_size": 25, "bid": 100.0, "ask": 101.0}
+
+
+def test_good_row_and_days():
+    assert validate_chain([GOOD]) == [] and quality_status([]) == "PASS"
+    assert days_to_expiry("2024-01-01T09:15:00", "2024-01-04") == 3
+
+
+def test_bad_rows_flagged():
+    bad = [dict(GOOD, strike=0), dict(GOOD, lot_size=0), dict(GOOD, option_type="XX"), dict(GOOD, expiry="2023-12-01"),
+           dict(GOOD, bid=5, ask=1), dict(GOOD, expiry=""), dict(GOOD, expiry="not-a-date")]
+    codes = [i["code"] for i in validate_chain(bad)]
+    assert codes == ["BAD_STRIKE", "BAD_LOT_SIZE", "BAD_OPTION_TYPE", "EXPIRED_CONTRACT", "BAD_BID_ASK", "MISSING_FIELDS", "BAD_VALUE"]
+    assert quality_status(validate_chain(bad)) == "BLOCKED"
+''')
+
+# ---------------------------------------------------------------- registry: lifecycle, compatibility, permissions, storage
+O("registry/lifecycle.py", r'''
+"""Strategy lifecycle states (blueprint: Draft, Validated, Rejected + Approved, Retired)."""
+ALLOWED = {"DRAFT": {"VALIDATED", "REJECTED", "RETIRED"},
+           "VALIDATED": {"APPROVED", "DRAFT", "REJECTED", "RETIRED"},
+           "APPROVED": {"RETIRED", "DRAFT"},
+           "REJECTED": {"DRAFT"},
+           "RETIRED": set()}
+
+
+def can_transition(a, b):
+    return b in ALLOWED.get(a, set())
+''')
+O("registry/permissions.py", r'''
+"""Role-based permissions. viewer < analyst < admin."""
+_VIEWER = {"list", "view", "view_report"}
+_ANALYST = _VIEWER | {"run_backtest", "run_validation", "compare"}
+ROLES = {"viewer": _VIEWER, "analyst": _ANALYST, "admin": _ANALYST | {"register", "approve", "reject", "retire"}}
+
+
+def can(role, action):
+    return action in ROLES.get(role, set())
+
+
+def require(role, action):
+    if not can(role, action):
+        raise PermissionError(f"role '{role}' ko '{action}' ki ijazat nahi")
+''')
+O("registry/compatibility.py", r'''
+"""Manifest compatibility: backtest mode, live-trading band, min engine version."""
+
+
+def _ver(s):
+    parts = [int(x) for x in str(s).split(".")[:3]]
+    return tuple(parts + [0] * (3 - len(parts)))
+
+
+def check(manifest, engine_version=None):
+    if engine_version is None:
+        from backtest.engine import ENGINE_VERSION as engine_version
+    errs = []
+    if "backtest" not in (manifest.get("execution_modes") or []):
+        errs.append("EXECUTION_MODE_BACKTEST_MISSING")
+    lt = manifest.get("live_trading")
+    if lt is True or (isinstance(lt, dict) and lt.get("enabled") is True):
+        errs.append("LIVE_TRADING_NOT_ALLOWED")
+    mv = manifest.get("min_engine_version")
+    if mv is not None:
+        try:
+            if _ver(mv) > _ver(engine_version):
+                errs.append(f"ENGINE_TOO_OLD:needs {mv}")
+        except ValueError:
+            errs.append("BAD_MIN_ENGINE_VERSION")
+    return errs
+''')
+O("registry/storage.py", r'''
+"""RegistryStore: strategy status + history (JSON). Gates: VALIDATED ke liye validation PASS, APPROVED ke liye admin + pichhli PASS."""
+import json
+import os
+from datetime import datetime, timezone
+from pathlib import Path
+
+from registry import lifecycle, permissions
+
+_ACTION = {"DRAFT": "register", "VALIDATED": "run_validation", "APPROVED": "approve", "REJECTED": "reject", "RETIRED": "retire"}
+
+
+class RegistryStore:
+    def __init__(self, root="registry_state"):
+        self.file = Path(root) / "state.json"
+
+    def _load(self):
+        return json.loads(self.file.read_text(encoding="utf-8")) if self.file.exists() else {}
+
+    def _save(self, state):
+        self.file.parent.mkdir(parents=True, exist_ok=True)
+        tmp = self.file.with_suffix(".tmp")
+        tmp.write_text(json.dumps(state, indent=2), encoding="utf-8")
+        os.replace(tmp, self.file)
+
+    def get(self, sid):
+        return self._load().get(sid, {"status": "DRAFT", "validation_status": None, "validation_run_id": None, "history": []})
+
+    def promote(self, sid, to, role, validation_status=None, validation_run_id=None, note=""):
+        if to not in _ACTION:
+            raise ValueError(f"unknown status {to}")
+        permissions.require(role, _ACTION[to])
+        entry = self.get(sid)
+        cur = entry["status"]
+        if not lifecycle.can_transition(cur, to):
+            raise ValueError(f"transition {cur} -> {to} allowed nahi")
+        if to == "VALIDATED":
+            if validation_status != "PASS":
+                raise ValueError("VALIDATED ke liye validation status PASS chahiye")
+            entry["validation_status"], entry["validation_run_id"] = validation_status, validation_run_id
+        if to == "APPROVED" and entry.get("validation_status") != "PASS":
+            raise ValueError("APPROVED ke liye pichhli validation PASS honi chahiye")
+        entry["status"] = to
+        entry["history"].append({"ts": datetime.now(timezone.utc).isoformat(), "from": cur, "to": to, "role": role, "note": note})
+        state = self._load()
+        state[sid] = entry
+        self._save(state)
+        return entry
+''')
+O("tests/unit/registry/test_permissions.py", r'''
+from registry.permissions import can, require
+
+
+def test_roles():
+    assert can("viewer", "list") and not can("viewer", "run_backtest")
+    assert can("analyst", "run_backtest") and not can("analyst", "approve")
+    assert can("admin", "approve") and not can("nobody", "list")
+    try:
+        require("analyst", "approve")
+        raise AssertionError("expected PermissionError")
+    except PermissionError:
+        pass
+''')
+O("tests/unit/registry/test_compatibility.py", r'''
+from registry import compatibility as c
+
+OK = {"execution_modes": ["backtest"], "live_trading": {"enabled": False}}
+
+
+def test_checks():
+    assert c.check(OK, "0.1.0") == []
+    assert "EXECUTION_MODE_BACKTEST_MISSING" in c.check({"execution_modes": ["paper"]}, "0.1.0")
+    assert "LIVE_TRADING_NOT_ALLOWED" in c.check({**OK, "live_trading": {"enabled": True}}, "0.1.0")
+    assert "LIVE_TRADING_NOT_ALLOWED" in c.check({**OK, "live_trading": True}, "0.1.0")
+    assert c.check({**OK, "min_engine_version": "0.2"}, "0.1.0")[0].startswith("ENGINE_TOO_OLD")
+    assert c.check({**OK, "min_engine_version": "0.1.0"}, "0.1.0") == []
+    assert c.check({**OK, "min_engine_version": "x.y"}, "0.1.0") == ["BAD_MIN_ENGINE_VERSION"]
+
+
+def test_real_manifests_are_compatible():
+    from registry.registry import Registry
+    reg = Registry()
+    for sid in reg.discover():
+        assert c.check(reg.manifest(sid)) == [], sid
+''')
+O("tests/unit/registry/test_storage.py", r'''
+from registry.storage import RegistryStore
+
+
+def _fails(fn, exc, *a, **k):
+    try:
+        fn(*a, **k)
+    except exc:
+        return True
+    return False
+
+
+def test_gates_and_history(tmp_path):
+    s = RegistryStore(tmp_path)
+    assert s.get("x")["status"] == "DRAFT"
+    assert _fails(s.promote, ValueError, "x", "VALIDATED", "analyst", validation_status="FAIL")
+    assert _fails(s.promote, PermissionError, "x", "REJECTED", "analyst")
+    assert _fails(s.promote, ValueError, "x", "APPROVED", "admin")  # DRAFT -> APPROVED allowed nahi
+    s.promote("x", "VALIDATED", "analyst", validation_status="PASS", validation_run_id="run-1")
+    assert _fails(s.promote, PermissionError, "x", "APPROVED", "analyst")
+    e = s.promote("x", "APPROVED", "admin", note="manual review")
+    assert e["status"] == "APPROVED" and e["validation_run_id"] == "run-1" and len(e["history"]) == 2
+    assert RegistryStore(tmp_path).get("x")["status"] == "APPROVED"  # disk par bacha
+
+
+def test_reject_then_back_to_draft(tmp_path):
+    s = RegistryStore(tmp_path)
+    s.promote("y", "REJECTED", "admin")
+    assert s.promote("y", "DRAFT", "admin")["status"] == "DRAFT"
+''')
+_patch("registry/registry.py", "from registry.metadata import load_manifest\n", "from registry import compatibility\nfrom registry.metadata import load_manifest\n")
+_patch("registry/registry.py", "errs = validate_manifest(m)", "errs = validate_manifest(m) + compatibility.check(m)")
+for _sid in ("strategies/gamma_blast/manifest.yaml", "strategies/three_pm_momentum/manifest.yaml"):
+    OVERRIDES[_sid] = OVERRIDES[_sid].rstrip("\n") + "\nlive_trading: {enabled: false}\n"
+
+# ---------------------------------------------------------------- contracts/proto (real messages; protoc ke bina bhi structure test hota hai)
+O("contracts/proto/common.proto", r'''
+syntax = "proto3";
+package svl;
+
+enum Side {
+  SIDE_UNSPECIFIED = 0;
+  BUY = 1;
+  SELL = 2;
+  EXIT = 3;
+}
+
+enum QualityStatus {
+  QUALITY_UNSPECIFIED = 0;
+  PASS = 1;
+  WARN = 2;
+  BLOCKED = 3;
+}
+
+message Error {
+  string code = 1;
+  string message = 2;
+}
+''')
+O("contracts/proto/market_data.proto", r'''
+syntax = "proto3";
+package svl;
+
+import "common.proto";
+
+message Bar {
+  string ts = 1;
+  double open = 2;
+  double high = 3;
+  double low = 4;
+  double close = 5;
+  double volume = 6;
+  map<string, double> extras = 7;
+}
+
+message Dataset {
+  string dataset_id = 1;
+  string symbol = 2;
+  string timeframe = 3;
+  string start_time = 4;
+  string end_time = 5;
+  string timezone = 6;
+  string source = 7;
+  string schema_version = 8;
+  string content_hash = 9;
+  QualityStatus quality_status = 10;
+  repeated Bar bars = 11;
+}
+''')
+O("contracts/proto/strategy.proto", r'''
+syntax = "proto3";
+package svl;
+
+message StrategyManifest {
+  string id = 1;
+  string version = 2;
+  string entry_point = 3;
+  repeated string required_data = 4;
+  map<string, string> parameters = 5;
+  repeated string execution_modes = 6;
+  bool live_trading_enabled = 7;
+}
+''')
+O("contracts/proto/signal.proto", r'''
+syntax = "proto3";
+package svl;
+
+import "common.proto";
+
+message Signal {
+  Side side = 1;
+  optional double stop_loss = 2;
+  optional double target = 3;
+  optional double size_hint = 4;
+  string reason = 5;
+}
+''')
+O("contracts/proto/backtest.proto", r'''
+syntax = "proto3";
+package svl;
+
+message Trade {
+  string entry_ts = 1;
+  string exit_ts = 2;
+  double entry_price = 3;
+  double exit_price = 4;
+  int64 qty = 5;
+  double pnl = 6;
+  double fees = 7;
+  string reason = 8;
+}
+
+message EquityPoint {
+  string ts = 1;
+  double equity = 2;
+}
+
+message BacktestRequest {
+  string strategy_id = 1;
+  string dataset = 2;
+  map<string, string> params = 3;
+  string symbol = 4;
+  string timeframe = 5;
+}
+
+message BacktestResult {
+  string run_id = 1;
+  string status = 2;
+  string reason = 3;
+  repeated Trade trades = 4;
+  repeated EquityPoint equity = 5;
+}
+''')
+O("contracts/proto/metrics.proto", r'''
+syntax = "proto3";
+package svl;
+
+message Metrics {
+  map<string, double> values = 1;
+}
+
+message CheckResult {
+  string status = 1;
+  string reason = 2;
+}
+
+message ValidationResult {
+  string status = 1;
+  map<string, CheckResult> checks = 2;
+}
+''')
+O("contracts/proto/report.proto", r'''
+syntax = "proto3";
+package svl;
+
+import "metrics.proto";
+
+message Report {
+  string run_id = 1;
+  string status = 2;
+  Metrics metrics = 3;
+  ValidationResult validation = 4;
+  string generated_at = 5;
+}
+''')
+F15("tests/contract/test_proto_files.py", "Proto files ka structure (protoc ke bina)", r'''
+import re
+from pathlib import Path
+
+PROTO = Path(__file__).resolve().parents[2] / "contracts" / "proto"
+BLOCK = re.compile(r"(message|enum)\s+(\w+)\s*\{([^{}]*)\}")
+FIELD = re.compile(r"^\s*(?:repeated\s+|optional\s+)?(?:map<\s*\w+\s*,\s*[\w.]+\s*>|[\w.]+)\s+(\w+)\s*=\s*(\d+)\s*;", re.M)
+ENUM_VAL = re.compile(r"^\s*(\w+)\s*=\s*(-?\d+)\s*;", re.M)
+
+
+def _clean(text):
+    return re.sub(r"//.*", "", text)
+
+
+def test_every_proto_is_well_formed():
+    files = sorted(PROTO.glob("*.proto"))
+    assert len(files) == 7
+    names_seen = {}
+    for f in files:
+        t = _clean(f.read_text(encoding="utf-8"))
+        assert 'syntax = "proto3";' in t and "package svl;" in t, f.name
+        assert t.count("{") == t.count("}"), f.name
+        for imp in re.findall(r'import\s+"([^"]+)";', t):
+            assert (PROTO / imp).exists(), f"{f.name}: missing import {imp}"
+        blocks = BLOCK.findall(t)
+        assert blocks, f.name
+        for kind, name, body in blocks:
+            assert name not in names_seen, f"duplicate type {name}"
+            names_seen[name] = f.name
+            if kind == "message":
+                nums = [int(n) for _, n in FIELD.findall(body)]
+                fields = [n for n, _ in FIELD.findall(body)]
+                assert len(nums) == len(set(nums)) and len(fields) == len(set(fields)), f"{f.name}:{name}"
+                assert all(n >= 1 for n in nums)
+            else:
+                vals = ENUM_VAL.findall(body)
+                assert vals and vals[0][1] == "0", f"{f.name}:{name} pehla enum value 0 hona chahiye"
+    assert {"Bar", "Dataset", "Signal", "Trade", "BacktestResult", "Metrics", "Report"} <= set(names_seen)
+
+
+def test_proto_fields_cover_json_schema_trade_fields():
+    from contracts import schema_check
+    trade_fields = set(schema_check.load("trade.schema.json")["required"])
+    body = re.search(r"message Trade\s*\{([^{}]*)\}", _clean((PROTO / "backtest.proto").read_text(encoding="utf-8"))).group(1)
+    assert trade_fields <= {n for n, _ in FIELD.findall(body)}
+''', ["contracts/proto/backtest.proto"])
+
+# ---------------------------------------------------------------- isolated run + background worker
+F15("backend/jobs/run_job.py", "Subprocess entry: limits lagakar run_full chalata hai (stdin JSON -> stdout JSON)", r'''
+"""Alag process me chalne wala entry. Pehle resource limits, phir hi koi strategy code import hota hai.
+Sandbox nahi: sirf CPU/memory/time limit + saaf env. Network/filesystem isolation ke liye container/OS user chahiye."""
+import json
+import os
+import sys
+
+
+def _apply_limits():
+    try:
+        import resource
+    except ImportError:  # non-posix
+        return
+    cpu = int(os.environ.get("SVL_CPU_SECONDS", "0"))
+    mem = int(os.environ.get("SVL_MEM_MB", "0"))
+    if cpu:
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
+    if mem:
+        resource.setrlimit(resource.RLIMIT_AS, (mem * 1024 * 1024, mem * 1024 * 1024))
+
+
+def main():
+    _apply_limits()
+    req = json.load(sys.stdin)
+    from backend.services.backtest_service import run_full
+    record, paths = run_full(req["strategy_id"], req["data_path"], req.get("params"), req.get("config"),
+                             out_root=req["out_root"], symbol=req.get("symbol", "UNKNOWN"),
+                             timeframe=req.get("timeframe", "UNKNOWN"), validation_opts=req.get("validation_opts"))
+    print(json.dumps({"record": record, "paths": paths}, default=str))
+
+
+if __name__ == "__main__":
+    main()
+''', ["backend/services/backtest_service.py"])
+F15("backend/jobs/isolated.py", "Run ko alag process me limits ke saath chalana", r'''
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def child_env(cpu_seconds, mem_mb):
+    """Sirf zaroori env (koi API key/token child ko nahi jaata)."""
+    return {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "PYTHONPATH": str(ROOT), "LANG": "C.UTF-8",
+            "SVL_CPU_SECONDS": str(cpu_seconds), "SVL_MEM_MB": str(mem_mb)}
+
+
+def run_isolated(request, timeout=300, mem_mb=2048):
+    p = subprocess.run([sys.executable, "-m", "backend.jobs.run_job"], input=json.dumps(request), capture_output=True,
+                       text=True, timeout=timeout, cwd=str(ROOT), env=child_env(timeout, mem_mb))
+    if p.returncode != 0:
+        tail = (p.stderr.strip().splitlines() or ["no stderr"])[-1][:300]
+        raise RuntimeError(f"isolated run failed (exit {p.returncode}): {tail}")
+    return json.loads(p.stdout.strip().splitlines()[-1])
+''', ["backend/jobs/run_job.py"])
+O("backend/jobs/queue.py", r'''
+import itertools
+import threading
+
+from backend.jobs.job_status import Job, JobStatus
+
+
+class JobQueue:
+    def __init__(self):
+        self.jobs, self._ids, self._lock = {}, itertools.count(1), threading.Lock()
+
+    def submit(self, payload):
+        with self._lock:
+            job = Job(f"job-{next(self._ids)}", payload)
+            self.jobs[job.job_id] = job
+            return job
+
+    def get(self, job_id):
+        return self.jobs[job_id]
+
+    def next_queued(self):
+        return next((j for j in self.jobs.values() if j.status == JobStatus.QUEUED), None)
+
+    def claim_next(self):
+        """Atomically pehla QUEUED job RUNNING bana kar deta hai."""
+        with self._lock:
+            job = self.next_queued()
+            if job is not None:
+                job.status = JobStatus.RUNNING
+            return job
+''')
+O("backend/jobs/worker.py", r'''
+"""Worker: job RUNNING -> SUCCEEDED/FAILED (failure ka karan save). BackgroundWorker = daemon thread."""
+import threading
+
+from backend.jobs.job_status import JobStatus
+
+
+def run_next(queue, handler):
+    job = queue.claim_next()
+    if job is None:
+        return None
+    try:
+        job.result = handler(job.payload)
+        job.status = JobStatus.SUCCEEDED
+    except Exception as e:  # noqa: BLE001 - failure reason save karna hai
+        job.status, job.error = JobStatus.FAILED, f"{type(e).__name__}: {e}"
+    return job
+
+
+class BackgroundWorker:
+    def __init__(self, queue, handler, interval=0.2):
+        self.queue, self.handler, self.interval = queue, handler, interval
+        self._stop, self._thread = threading.Event(), None
+
+    def start(self):
+        if self._thread is not None and self._thread.is_alive():
+            return
+        self._stop.clear()
+        self._thread = threading.Thread(target=self._loop, daemon=True, name="svl-worker")
+        self._thread.start()
+
+    def _loop(self):
+        while not self._stop.is_set():
+            if run_next(self.queue, self.handler) is None:
+                self._stop.wait(self.interval)
+
+    def stop(self, timeout=5):
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout)
+''')
+_patch("backend/services/backtest_service.py", 'timeframe="UNKNOWN", run_id=None, repo=None):', 'timeframe="UNKNOWN", run_id=None, repo=None, validation_opts=None):')
+_patch("backend/services/backtest_service.py", "run_validation(ds, factory, cfg)", "run_validation(ds, factory, cfg, **(validation_opts or {}))")
+O("backend/api/backtests.py", r'''
+"""/backtests. Default: job inline chalta hai. Env: BACKGROUND_WORKER=1 (thread), RUN_ISOLATED=1 (alag process + limits)."""
+import os
+from pathlib import Path
+
+from backend.api.common import guarded, make_router, runs_root
+from backend.dependencies import get_queue
+from backend.jobs.worker import BackgroundWorker, run_next
+from backend.schemas.backtest import BacktestRequest
+from backend.services import dataset_service, report_service
+from backend.services.backtest_service import run_full
+
+_worker = None
+
+
+def _handler(payload):
+    req = BacktestRequest.from_dict(payload)
+    data_path = str(Path(dataset_service.resolve(req.dataset)).resolve())
+    out_root = str(Path(runs_root()).resolve())
+    if os.environ.get("RUN_ISOLATED") == "1":
+        from backend.jobs.isolated import run_isolated
+        record = run_isolated({"strategy_id": req.strategy_id, "data_path": data_path, "params": req.params,
+                               "config": req.config, "out_root": out_root, "symbol": req.symbol,
+                               "timeframe": req.timeframe, "validation_opts": req.validation})["record"]
+    else:
+        record, _ = run_full(req.strategy_id, data_path, req.params, req.config, out_root=out_root, symbol=req.symbol,
+                             timeframe=req.timeframe, validation_opts=req.validation)
+    return {"run_id": record["run_id"], "status": record["status"], "validation_status": record["validation_status"],
+            "reason": record["reason"]}
+
+
+def _job_view(job):
+    return {"job_id": job.job_id, "status": job.status.value, "result": job.result, "error": job.error}
+
+
+def _ensure_worker():
+    global _worker
+    if _worker is None:
+        _worker = BackgroundWorker(get_queue(), _handler)
+    _worker.start()
+    return _worker
+
+
+def start(payload: dict):
+    BacktestRequest.from_dict(payload)  # galat input turant ValueError
+    q = get_queue()
+    job = q.submit(payload)
+    if os.environ.get("BACKGROUND_WORKER") == "1":
+        _ensure_worker()
+    else:
+        run_next(q, _handler)
+    return _job_view(job)
+
+
+def list_runs():
+    return report_service.list_runs(runs_root())
+
+
+def get_one(item_id: str):
+    if item_id.startswith("job-"):
+        return _job_view(get_queue().get(item_id))
+    return report_service.get_run(item_id, runs_root())
+
+
+def get_results(item_id: str):
+    r = report_service.get_report(item_id, runs_root())
+    return {k: r.get(k) for k in ("run_id", "status", "reason", "metrics", "trades", "equity")}
+
+
+router = make_router()
+if router is not None:
+    router.post("/backtests")(guarded(start))
+    router.get("/backtests")(guarded(list_runs))
+    router.get("/backtests/{item_id}")(guarded(get_one))
+    router.get("/backtests/{item_id}/results")(guarded(get_results))
+''')
+O("backend/api/validation.py", r'''
+from backend.api import backtests
+from backend.api.common import guarded, make_router, runs_root
+from backend.services import validation_service
+
+
+def start(payload: dict):
+    """POST /validations: pura pipeline chalta hai; payload me optional validation={'split':..,'windows':..}."""
+    return backtests.start(payload)
+
+
+def get_one(run_id: str):
+    return validation_service.get_validation(run_id, runs_root())
+
+
+router = make_router()
+if router is not None:
+    router.post("/validations")(guarded(start))
+    router.get("/validations/{run_id}")(guarded(get_one))
+''')
+O("contracts/openapi.yaml", r'''
+openapi: 3.1.0
+info: {title: strategy-validation-lab, version: 0.1.0}
+paths:
+  /health: {get: {summary: Health}}
+  /strategies: {get: {summary: List}, post: {summary: Create (abhi band)}}
+  /strategies/{id}: {get: {summary: Detail}}
+  /datasets: {get: {summary: List datasets}}
+  /backtests: {get: {summary: List runs}, post: {summary: Start run}}
+  /backtests/{id}: {get: {summary: Run detail + job status}}
+  /backtests/{id}/results: {get: {summary: Run results (metrics, trades, equity)}}
+  /validations: {post: {summary: Start validation run}}
+  /validations/{id}: {get: {summary: Validation result}}
+  /comparisons: {post: {summary: Compare runs}}
+  /reports/{id}: {get: {summary: Report}}
+  /audit: {get: {summary: Audit log}}
+''')
+F15("tests/unit/backend/jobs/test_isolated.py", "Isolated run: env saaf + result inline ke barabar", r'''
+import os
+
+from backend.jobs.isolated import child_env, run_isolated
+from backend.services.backtest_service import run_full
+from cli.commands import make_sample_csv
+
+
+def test_child_env_has_no_secrets():
+    os.environ["SVL_SECRET_TEST"] = "x"
+    try:
+        env = child_env(60, 512)
+        assert "SVL_SECRET_TEST" not in env and env["SVL_MEM_MB"] == "512" and "PYTHONPATH" in env
+    finally:
+        os.environ.pop("SVL_SECRET_TEST", None)
+
+
+def test_isolated_matches_inline(tmp_path):
+    csv = make_sample_csv(tmp_path / "s.csv", days=15)
+    req = {"strategy_id": "three_pm_momentum", "data_path": str(csv), "out_root": str(tmp_path / "iso"), "params": None, "config": None}
+    iso = run_isolated(req, timeout=120, mem_mb=2048)["record"]
+    inline, _ = run_full("three_pm_momentum", str(csv), out_root=str(tmp_path / "inl"))
+    assert iso["status"] == inline["status"] and iso["dataset_hash"] == inline["dataset_hash"]
+    assert iso["validation_status"] == inline["validation_status"]
+
+
+def test_isolated_failure_is_reported(tmp_path):
+    csv = make_sample_csv(tmp_path / "s.csv", days=5)
+    try:
+        run_isolated({"strategy_id": "no_such_strategy", "data_path": str(csv), "out_root": str(tmp_path / "o")}, timeout=60)
+        raise AssertionError("expected RuntimeError")
+    except RuntimeError as e:
+        assert "isolated run failed" in str(e)
+''', ["backend/jobs/isolated.py"])
+F15("tests/integration/test_background_worker.py", "BACKGROUND_WORKER=1: job turant QUEUED/RUNNING, phir SUCCEEDED", r'''
+import os
+import time
+
+from backend.api import backtests
+from cli.commands import make_sample_csv
+
+
+def test_background_job_completes(tmp_path):
+    make_sample_csv(tmp_path / "data" / "s.csv", days=15)
+    os.environ.update({"DATA_DIR": str(tmp_path / "data"), "RUNS_ROOT": str(tmp_path / "runs"), "BACKGROUND_WORKER": "1"})
+    try:
+        job = backtests.start({"strategy_id": "three_pm_momentum", "dataset": "s.csv"})
+        deadline = time.time() + 90
+        while time.time() < deadline:
+            view = backtests.get_one(job["job_id"])
+            if view["status"] in ("SUCCEEDED", "FAILED"):
+                break
+            time.sleep(0.2)
+        assert view["status"] == "SUCCEEDED", view
+        run_id = view["result"]["run_id"]
+        res = backtests.get_results(run_id)
+        assert res["run_id"] == run_id and "metrics" in res and len(res["equity"]) > 10
+    finally:
+        os.environ.pop("BACKGROUND_WORKER", None)
+        if backtests._worker is not None:
+            backtests._worker.stop()
+''', ["backend/jobs/worker.py"])
+F15("tests/integration/test_api_validation_endpoint.py", "POST /validations options + results endpoint", r'''
+import os
+
+from backend.api import backtests, validation
+from cli.commands import make_sample_csv
+
+
+def test_validation_start_with_options(tmp_path):
+    make_sample_csv(tmp_path / "data" / "s.csv", days=30)
+    os.environ.update({"DATA_DIR": str(tmp_path / "data"), "RUNS_ROOT": str(tmp_path / "runs")})
+    os.environ.pop("BACKGROUND_WORKER", None)
+    job = validation.start({"strategy_id": "three_pm_momentum", "dataset": "s.csv", "validation": {"split": 0.6, "windows": 3}})
+    assert job["status"] == "SUCCEEDED"
+    rid = job["result"]["run_id"]
+    v = validation.get_one(rid)
+    assert len(v["checks"]["walk_forward"].get("windows", [])) in (0, 3)
+    assert set(backtests.get_results(rid)) == {"run_id", "status", "reason", "metrics", "trades", "equity"}
+
+
+def test_bad_validation_options_rejected(tmp_path):
+    try:
+        validation.start({"strategy_id": "x", "dataset": "s.csv", "validation": {"windows": 99}})
+        raise AssertionError("expected ValueError")
+    except ValueError:
+        pass
+''', ["backend/api/validation.py"])
+
+# ---------------------------------------------------------------- Go jobs + observability (+ tests)
+O("engines/go/internal/jobs/jobs.go", r'''
+package jobs
+
+import "svl/validator/internal/contracts"
+
+var allowed = map[contracts.JobStatus][]contracts.JobStatus{
+	contracts.Queued:  {contracts.Running, contracts.Failed},
+	contracts.Running: {contracts.Succeeded, contracts.Failed},
+}
+
+// CanTransition: job ki avastha ka sahi badlaav hai ya nahi (Python ke JobStatus ke saath same).
+func CanTransition(from, to contracts.JobStatus) bool {
+	for _, t := range allowed[from] {
+		if t == to {
+			return true
+		}
+	}
+	return false
+}
+''')
+O("engines/go/internal/observability/observability.go", r'''
+package observability
+
+import "sync"
+
+// Counters: thread-safe naam-wale counter.
+type Counters struct {
+	mu sync.Mutex
+	m  map[string]int
+}
+
+func NewCounters() *Counters { return &Counters{m: map[string]int{}} }
+
+func (c *Counters) Inc(name string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.m[name]++
+}
+
+func (c *Counters) Get(name string) int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.m[name]
+}
+''')
+F15("engines/go/internal/jobs/jobs_test.go", "Go test: job transitions", r'''
+package jobs
+
+import (
+	"testing"
+
+	"svl/validator/internal/contracts"
+)
+
+func TestCanTransition(t *testing.T) {
+	if !CanTransition(contracts.Queued, contracts.Running) || !CanTransition(contracts.Running, contracts.Succeeded) {
+		t.Fatal("QUEUED->RUNNING aur RUNNING->SUCCEEDED allowed hone chahiye")
+	}
+	if CanTransition(contracts.Succeeded, contracts.Running) || CanTransition(contracts.Queued, contracts.Succeeded) {
+		t.Fatal("ye transitions allowed nahi")
+	}
+}
+''', ["engines/go/internal/jobs/jobs.go"])
+F15("engines/go/internal/observability/observability_test.go", "Go test: counters", r'''
+package observability
+
+import "testing"
+
+func TestCounters(t *testing.T) {
+	c := NewCounters()
+	c.Inc("runs")
+	c.Inc("runs")
+	if c.Get("runs") != 2 || c.Get("none") != 0 {
+		t.Fatal("counter galat")
+	}
+}
+''', ["engines/go/internal/observability/observability.go"])
+
+# ---------------------------------------------------------------- docs
+O("docs/architecture/wiring-map.md", r'''
+# Wiring map
+
+Machine-readable: `WIRING_MAP.json` (har file: phase, purpose, depends_on, test). Order: `BUILD_ORDER.md`.
+
+Runtime flow:
+```
+frontend/src/pages -> frontend/src/api -> backend/api -> backend/services
+  -> registry (manifest + compatibility) -> data/loaders (+ validators, quality)
+  -> strategies/<id> -> backtest/engine (+ execution model, risk) -> validation/pipeline
+  -> metrics -> reporting/generator -> persistence (runs/, audit.jsonl, optional SQLite)
+```
+Jobs: `POST /backtests` -> `backend/jobs/queue` -> inline ya `BackgroundWorker` (BACKGROUND_WORKER=1)
+-> optional `RUN_ISOLATED=1` (alag process, CPU/memory/time limit, saaf env).
+Contracts: `contracts/*.schema.json`, `contracts/proto/*.proto`, `openapi.yaml`; contract tests unhe consumers se milate hain.
+''')
+O("docs/architecture/build-order.md", r'''
+# Build order
+
+Exact file-level order: `BUILD_ORDER.md` (dependency topological order, generator banata hai).
+
+Phases: 0 foundation | 1 contracts | 2 data | 3 strategies+registry | 4 backtest+risk | 5 validation+metrics |
+6 reporting+persistence | 7 backend+cli | 8 frontend | 9 engines | 10 tests | 11 config/bindings/contract tests |
+12 docs/config yaml/indicators/observability/infra/CI | 13 analysis+optimization | 14 API+services+frontend pages |
+15 schemas, execution model, corporate actions, storage, registry gates, proto, isolation, background worker.
+
+Regeneration: `python scripts/bootstrap.py --all --root . --force` (README kabhi overwrite nahi hota).
+''')
+O("docs/RUNBOOK.md", r'''
+# RUNBOOK
+
+1. `python scripts/bootstrap.py --all --root .` (naye repo me); update ke liye `--force` (README kabhi overwrite nahi hota)
+2. `python -m pytest -q`
+3. `python scripts/bootstrap.py --verify --root .`
+
+Demo: `python -m cli.main demo` -> `runs/<run_id>/report.html|json`, `trades.csv`, `run.json`
+Optimize: `python -m cli.main optimize --strategy three_pm_momentum --data data/samples/sample_5m.csv --grid '{"stop_pct":[0.3,0.5],"target_pct":[0.8,1.0]}'`
+Sample data: `python -m cli.main make-sample`
+
+API: `pip install fastapi uvicorn` -> `uvicorn --factory backend.app:create_app`
+Env: API_KEY (set ho to X-API-Key zaroori), RUNS_ROOT, DATA_DIR, DATABASE_URL=sqlite:///path,
+BACKGROUND_WORKER=1 (job thread me), RUN_ISOLATED=1 (job alag process me, limits ke saath)
+
+## Abhi asli vs baaki
+Asli: data (csv, corporate actions, storage, options checks), registry (compatibility, permissions, lifecycle gates),
+backtest (execution model), risk, 8 validation checks, optimization (holdout), metrics, reporting, jobs (inline/background/isolated),
+CLI, API (saare blueprint routes, POST /strategies chhodkar), SQLite repo, proto messages, frontend pages.
+Baaki: parquet/broker source ka asli connection, PostgreSQL adapter, option backtest (option-chain data + niyam chahiye),
+strategy create API, full sandbox (network/filesystem isolation), Go/Rust/C++ ko Python se asli call karna.
+Strategy logic: gamma_blast/three_pm_momentum placeholder; bahari strategies (archive/) abhi jodi nahi gayi.
+''')
+
+PHASES.append((15, "Baaki stubs me asli code + isolation, background worker, proto, registry gates, options checks", _P15))
 
 # ----------------------------------------------------------------- content
 def header(path, purpose, deps, test, c):

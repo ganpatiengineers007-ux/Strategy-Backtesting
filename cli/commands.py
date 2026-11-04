@@ -33,6 +33,36 @@ def make_sample_csv(path, days=120, seed=42):
     return str(path)
 
 
+def make_option_sample_csv(path, days=20, seed=7):
+    """Deterministic 5-min bars with a JSON option chain at the 09:30 entry bar."""
+    rng, price, d, rows = random.Random(seed), 1000.0, date(2024, 1, 1), []
+    while len(rows) < days * 75:
+        if d.weekday() < 5:
+            for i in range(75):
+                mins = 9 * 60 + 15 + i * 5
+                o = price
+                c = max(1.0, o * (1 + rng.gauss(0, 0.0010)))
+                high = round(max(o, c) * (1 + abs(rng.gauss(0, 0.0005))), 2)
+                low = round(min(o, c) * (1 - abs(rng.gauss(0, 0.0005))), 2)
+                chain = ""
+                if mins == 9 * 60 + 30:
+                    strike = round(c)
+                    chain = json.dumps([
+                        {"strike": strike, "opt_type": "CE", "gamma": 20.0, "oi": 100000, "iv": 0.15},
+                        {"strike": strike, "opt_type": "PE", "gamma": 10.0, "oi": 100000, "iv": 0.15},
+                    ])
+                rows.append([f"{d.isoformat()}T{mins // 60:02d}:{mins % 60:02d}:00", round(o, 2),
+                             high, low, round(c, 2), rng.randint(100, 5000), 5000 + i, chain])
+                price = c
+        d += timedelta(days=1)
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["ts", "open", "high", "low", "close", "volume", "oi", "option_chain"])
+        w.writerows(rows)
+    return str(path)
+
+
 def cmd_list(_args):
     for sid in Registry().discover():
         print(sid)
@@ -66,3 +96,7 @@ def cmd_optimize(args):
 
 def cmd_sample(args):
     print("written:", make_sample_csv(args.out, days=args.days))
+
+
+def cmd_sample_options(args):
+    print("written:", make_option_sample_csv(args.out, days=args.days))

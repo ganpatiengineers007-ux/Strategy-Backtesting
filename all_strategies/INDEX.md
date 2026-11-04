@@ -39,8 +39,12 @@
 strategies/base.py, context.py, models.py, validation.py, examples/example_strategy.py, all_strategies/quantlab/base.py, gts_lab/gts_quant_lab.py
 
 ## D. स्थिति
-- सब strategies का synthetic डेटा पर ही परीक्षण हुआ है (Greeks 5: सब FAIL, जो random डेटा पर स्वाभाविक है)। असली डेटा पर परीक्षण बाकी।
 - सभी 20 strategies registry `discover()` में आती हैं और API `/strategies` से दिखती हैं।
-- STR08, STR10, STR11 (mean_reversion), S03b liquidity_sweep, G01, G02, G03, G05, gamma_blast, three_pm_momentum, sweep: असली लॉजिक plug-in adapters से जुड़ा है।
-- Book/tick आधारित strategies (STR01-STR07, STR09) और G04 theta registry में visible हैं, पर engine उन्हें स्पष्ट `blocked_reason` के साथ BLOCKED रखता है; वे fake signal नहीं देतीं।
-- G04 theta standalone backtest `all_strategies/greeks/theta_straddle_strategy.py` में चलता है; Signal v0 long-only है इसलिए plugin route blocked है।
+- Synthetic sample data par API backtest: **11 COMPLETED, 9 BLOCKED**.
+- COMPLETED: STR08 fvg, STR10 session_ignition, STR11 mean_reversion, STR12 gamma_blast (option-chain CSV),
+  STR13 three_pm_momentum, STR14 sweep, S03b liquidity_sweep, G01 gamma_vwap, G02 delta_vwap,
+  G03 vega_iv, G05 greeks_confluence.
+- BLOCKED: STR01-STR07 + STR09 (book/tick/multi-asset data missing) aur G04 theta_straddle
+  (Signal v0 long-only, short option legs unsupported). Har block ka reason API response me hai.
+- G04 ka standalone backtest `all_strategies/greeks/theta_straddle_strategy.py` me chalta hai; plugin route jaan-boojh kar blocked hai.
+- Sample data gitignored hai; `python -m cli.main make-sample` aur `make-options-sample` se banti hai.

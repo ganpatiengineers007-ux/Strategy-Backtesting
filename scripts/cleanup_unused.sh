@@ -18,7 +18,7 @@ TARGETS=(
   "gts_lab_strategies (2).zip"
   "archive/gts_quant_lab.zip"
   "archive/quant_stat_arb_framework.zip"
-  "scripts/bootstrap-5.py"
+  "archive/bootstrap-5.py"
   "archive/bootstrap (4).py"
 )
 
@@ -40,7 +40,7 @@ while IFS= read -r link; do
   fi
 done < <(find . -xtype l -not -path './.git/*')
 
-echo "NOTE: root bootstrap.py aur scripts/bootstrap.py ko manually review karo (generator scripts hain)."
+echo "NOTE: canonical generator scripts/bootstrap.py hai; purane copies archive/ me hain."
 if [ $APPLY -ne 1 ]; then
   echo "Dry run tha. Asli delete ke liye: $0 --apply"
 fi

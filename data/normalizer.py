@@ -1,7 +1,10 @@
-"""Raw rows -> Bar list (common schema). Extra numeric columns (oi, option_chain...) extras me jaate hain."""
+"""Raw rows -> Bar list (common schema). Extra columns (oi, option_chain...) extras me jaate hain."""
+import json
+
 from data.models import Bar
 
 BASE = ("ts", "timestamp", "datetime", "open", "high", "low", "close", "volume")
+_JSON_EXTRAS = {"option_chain"}
 
 
 def _num(v):
@@ -9,6 +12,16 @@ def _num(v):
         return float(v)
     except (TypeError, ValueError):
         return v
+
+
+def _extra(key, v):
+    if key in _JSON_EXTRAS and isinstance(v, str):
+        text = v.strip()
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            return text
+    return _num(v)
 
 
 def normalize(rows):
@@ -21,7 +34,7 @@ def normalize(rows):
         for col in ("open", "high", "low", "close"):
             if col not in r:
                 raise ValueError(f"column missing: {col}")
-        extras = {k: _num(v) for k, v in r.items() if k not in BASE and v not in ("", None)}
+        extras = {k: _extra(k, v) for k, v in r.items() if k not in BASE and v not in ("", None)}
         bars.append(Bar(str(ts).strip(), float(r["open"]), float(r["high"]), float(r["low"]),
                         float(r["close"]), float(r.get("volume") or 0), extras))
     return bars
