@@ -3,7 +3,7 @@ import { listRuns } from "../api/backtests";
 import { listDatasets } from "../api/datasets";
 import { listStrategies } from "../api/strategies";
 import { hubStatus } from "../api/hub";
-import { mountPage } from "../components/page";
+import { mountPage, card } from "../components/page";
 import { Raw, esc, renderTable } from "../components/data-table";
 import { metricCard } from "../components/metric-card";
 import { statusBadge, readinessBadge, syntheticBadge } from "../components/status-badge";
@@ -17,25 +17,27 @@ export function render(el: HTMLElement): Promise<void> {
     const runnable = strategies.filter((s) => s.runnable).length;
     const blocked = strategies.length - runnable;
     const synthetic = datasets.filter((d) => d.synthetic).length;
-    let hub = '<p>Hub: <a href="#live">Live page</a> par dekho</p>';
+    let hub = '<p>Hub: <a href="#live">लाइव पेज पर देखें</a></p>';
     try {
       const h = await hubStatus();
       const live = h.last_quote_age_s !== null && h.last_quote_age_s <= 30;
-      hub = `<p>Hub: ${statusBadge(live ? "PASS" : "FAIL")} ${live ? "LIVE" : "STALE / band"} | quotes ${h.quotes} | candle series ${h.candle_series}</p>`;
+      hub = `<p>Hub: ${statusBadge(live ? "PASS" : "FAIL")} ${live ? "लाइव" : "स्टेल / बंद"} | quotes ${h.quotes} | कैंडल सीरीज़ ${h.candle_series}</p>`;
     } catch {
-      hub = '<p>Hub: <span class="badge blocked">NOT INITIALIZED</span> Live market data is optional; sample backtests do not need it.</p>';
+      hub = '<p>Hub: <span class="badge blocked">प्रारंभ नहीं हुआ</span> लाइव बाज़ार डेटा वैकल्पिक है; सैंपल बैकटेस्ट को इसकी ज़रूरत नहीं है।</p>';
     }
+    const metrics = card(
+      `<div class="grid">${metricCard("strategies", strategies.length)}${metricCard("रनबल", runnable)}${metricCard("ब्लॉक्ड", blocked)}${metricCard("सैंपल डेटासेट", synthetic)}</div>` +
+      (synthetic ? `<div class="notice">${syntheticBadge(true)} सैंपल डेटासेट सिंथेटिक रैंडम-वॉक डेटा हैं। वे निष्पादन/वायरिंग साबित करते हैं, बाज़ार बढ़त नहीं।</div>` : "")
+    );
     const strategyRows = strategies.map((s) => ({
       strategy: s.id,
       status: new Raw(readinessBadge(s.status)),
       reason: s.reason || s.data_hint || "-",
-      live: s.live_trading_enabled ? "ENABLED" : "disabled",
-      open: new Raw(`<a href="#strategy/${esc(s.id)}">detail</a>`),
+      live: s.live_trading_enabled ? "सक्षम" : "बंद",
+      open: new Raw(`<a href="#strategy/${esc(s.id)}">विवरण</a>`),
     }));
-    return `<p>API: ${statusBadge(health.status)}</p>${hub}` +
-      `<div class="grid">${metricCard("strategies", strategies.length)}${metricCard("runnable", runnable)}${metricCard("blocked", blocked)}${metricCard("synthetic datasets", synthetic)}</div>` +
-      (synthetic ? `<div class="notice">${syntheticBadge(true)} Sample datasets are synthetic random-walk data. They prove execution/wiring, not market edge.</div>` : "") +
-      `<h3>Strategy readiness</h3>` + renderTable(strategyRows) +
-      `<h3>Latest runs</h3>` + runsTable(runs.slice(-10).reverse());
+    const readiness = card("<h3>रणनीति तत्परता</h3>" + renderTable(strategyRows));
+    const latest = card("<h3>नवीनतम रन</h3>" + runsTable(runs.slice(-10).reverse()));
+    return `<p>API: ${statusBadge(health.status)}</p>${hub}` + metrics + readiness + latest;
   });
 }

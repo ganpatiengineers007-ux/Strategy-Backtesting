@@ -8,6 +8,9 @@ export function onLeave(fn: () => void): void {
   leaveFns.push(fn);
 }
 
+/** Card wrapper for page sections. */
+export const card = (html: string): string => `<div class="card">${html}</div>`;
+
 export function runLeave(): void {
   while (leaveFns.length) (leaveFns.pop() as () => void)();
 }

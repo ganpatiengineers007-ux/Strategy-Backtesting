@@ -1,5 +1,5 @@
 import { listDatasets } from "../api/datasets";
-import { mountPage } from "../components/page";
+import { mountPage, card } from "../components/page";
 import { Raw, renderTable } from "../components/data-table";
 import { syntheticBadge } from "../components/status-badge";
 
@@ -9,11 +9,13 @@ export function render(el: HTMLElement): Promise<void> {
       file: d.file,
       bars: d.bars,
       quality: d.quality_status,
-      data: new Raw(syntheticBadge(d.synthetic) || '<span class="badge unknown">REAL / UNVERIFIED</span>'),
-      range: `${d.start_time ?? "?"} to ${d.end_time ?? "?"}`,
+      data: new Raw(syntheticBadge(d.synthetic) || '<span class="badge unknown">वास्तविक / अप्रमाणित</span>'),
+      range: `${d.start_time ?? "?"} से ${d.end_time ?? "?"}`,
       hash: `${d.content_hash.slice(0, 12)}...`,
     }));
-    return `<div class="notice">${syntheticBadge(true)} Files under <code>data/samples</code> are synthetic random-walk data and are always labelled here.</div>` +
-      renderTable(rows);
+    return card(
+      `<div class="notice">${syntheticBadge(true)} <code>data/samples</code> में फ़ाइलें हमेशा सिंथेटिक लेबल की जाती हैं।</div>` +
+      renderTable(rows)
+    );
   });
 }

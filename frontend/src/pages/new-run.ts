@@ -1,7 +1,7 @@
 import { getRun, startRun } from "../api/backtests";
 import { listDatasets } from "../api/datasets";
 import { listStrategies } from "../api/strategies";
-import { mountPage } from "../components/page";
+import { mountPage, card } from "../components/page";
 import { esc } from "../components/data-table";
 import { errorPanel } from "../components/error-panel";
 
@@ -12,11 +12,11 @@ export function render(el: HTMLElement): Promise<void> {
     const [strategies, datasets] = await Promise.all([listStrategies(), listDatasets()]);
     if (!datasets.length) return "<p>Koi CSV dataset nahi mila. DATA_DIR me CSV rakho (hub se: <code>python -m fyers_hub export SYMBOL TF --out file.csv</code>).</p>";
     const opt = (v: unknown, label: unknown) => `<option value="${esc(v)}">${esc(label ?? v)}</option>`;
-    return `<p>Strategy<br><select id="nr-strat">${strategies.map((s) => opt(s.id, `${s.status === "BLOCKED" ? "[BLOCKED] " : ""}${s.id}`)).join("")}</select></p>` +
+    return card(`<p>रणनीति<br><select id="nr-strat">${strategies.map((s) => opt(s.id, `${s.status === "BLOCKED" ? "[BLOCKED] " : ""}${s.id}`)).join("")}</select></p>` +
       `<div id="nr-warn"></div>` +
-      `<p>Dataset (CSV)<br><select id="nr-data">${datasets.map((d) => opt(d.file, `${d.synthetic ? "[SYNTHETIC] " : ""}${d.file}`)).join("")}</select></p>` +
-      `<p>Symbol<br><input id="nr-sym" value="NIFTY"></p><p>Timeframe<br><input id="nr-tf" value="1m"></p>` +
-      `<p><button id="nr-go">Run backtest</button></p><div id="nr-msg"></div>`;
+      `<p>डेटासेट (CSV)<br><select id="nr-data">${datasets.map((d) => opt(d.file, `${d.synthetic ? "[सिंथेटिक] " : ""}${d.file}`)).join("")}</select></p>` +
+      `<p>प्रतीक<br><input id="nr-sym" value="NIFTY"></p><p>समयावधि<br><input id="nr-tf" value="1m"></p>` +
+      `<p><button id="nr-go">बैकटेस्ट चलाएं</button></p><div id="nr-msg"></div>`);
   }).then(() => {
     const v = (id: string) => (el.querySelector(`#${id}`) as HTMLInputElement | null)?.value ?? "";
     const msg = el.querySelector("#nr-msg") as HTMLElement | null;

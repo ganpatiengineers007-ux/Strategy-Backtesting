@@ -14,7 +14,7 @@ export function renderTable(rows: Record<string, unknown>[]): string {
   const head = cols.map((c) => `<th>${esc(c)}</th>`).join("");
   const cell = (v: unknown): string => (v instanceof Raw ? v.html : esc(v ?? ""));
   const body = rows.map((r) => `<tr>${cols.map((c) => `<td>${cell(r[c])}</td>`).join("")}</tr>`).join("");
-  return `<div class="scroll"><table><tr>${head}</tr>${body}</table></div>`;
+  return `<div class="table-wrap"><table><tr>${head}</tr>${body}</table></div>`;
 }
 
 export function renderKeyValues(obj: Record<string, unknown>): string {

@@ -3,7 +3,7 @@ import { lineChartSvg } from "../components/chart-panel";
 import { esc, renderTable } from "../components/data-table";
 import { errorPanel } from "../components/error-panel";
 import { metricCard } from "../components/metric-card";
-import { onLeave } from "../components/page";
+import { card, onLeave } from "../components/page";
 import { statusBadge } from "../components/status-badge";
 
 const st = { symbol: "NSE:NIFTY50-INDEX", tf: "1", und: "NSE:NIFTY50-INDEX" };
@@ -47,7 +47,7 @@ export async function render(el: HTMLElement): Promise<void> {
     st.tf = val("lv-tf") || st.tf;
     st.und = val("lv-und") || st.und;
     try {
-      body.innerHTML = await build();
+      body.innerHTML = card(await build());
     } catch (e) {
       body.innerHTML = errorPanel(String(e));
     }

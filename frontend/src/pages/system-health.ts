@@ -1,7 +1,7 @@
 import { getHealth } from "../api/health";
 import { hubStatus } from "../api/hub";
 import { listStrategies } from "../api/strategies";
-import { mountPage } from "../components/page";
+import { mountPage, card } from "../components/page";
 import { renderKeyValues } from "../components/data-table";
 
 export function render(el: HTMLElement): Promise<void> {
@@ -19,8 +19,8 @@ export function render(el: HTMLElement): Promise<void> {
       runnable: strategies.filter((s) => s.runnable).length,
       blocked: strategies.filter((s) => !s.runnable).length,
       hub: JSON.stringify(hub),
-      live_trading: "disabled everywhere",
+      live_trading: "सभी जगह बंद",
     };
-    return renderKeyValues(view);
+    return card(renderKeyValues(view));
   });
 }
