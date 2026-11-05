@@ -1,7 +1,10 @@
 .git
 .github
-.env
-.env.*
+# Secrets: exclude .env at any depth (e.g. infra/.env, ~/.fyers_hub copy)
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
 .venv
 venv
 **/__pycache__

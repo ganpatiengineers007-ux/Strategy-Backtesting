@@ -56,8 +56,8 @@ def create_app():
     import logging
     import time
 
-    from backend.api import audit, backtests, comparisons, datasets, health, hub, reports, strategies, validation
-    from backend.middleware.authentication import is_authorized
+    from backend.api import audit, auth, backtests, brokers, comparisons, datasets, health, hub, reports, strategies, validation
+    from backend.auth.session import is_authorized
     from backend.middleware.rate_limit import SlidingWindowLimiter
     from backend.middleware.request_id import new_request_id
     from observability import metrics
@@ -81,12 +81,15 @@ def create_app():
         rid = new_request_id()
         started = time.perf_counter()
         path = request.url.path
-        if request.method != "OPTIONS" and path != "/health" and not limiter.allow(_client_key(request)):
+        # Auth endpoints are public (login/me/logout); health is public
+        is_public = path == "/health" or path.startswith("/auth/")
+        if request.method == "OPTIONS" or is_public:
+            response = await call_next(request)
+        elif not limiter.allow(_client_key(request)):
             metrics.inc("rate_limited")
             response = JSONResponse({"error": "rate_limited", "request_id": rid}, status_code=429,
                                     headers={"Retry-After": str(limiter.retry_after(_client_key(request)))})
-        elif request.method != "OPTIONS" and path != "/health" and not is_authorized(
-                request.headers, os.environ.get("API_KEY", "")):
+        elif not is_authorized(request.headers, os.environ.get("API_KEY", ""), request.cookies):
             response = JSONResponse({"error": "unauthorized", "request_id": rid}, status_code=401)
         else:
             response = await call_next(request)
@@ -97,6 +100,6 @@ def create_app():
         metrics.inc(f"status_{response.status_code}")
         return response
 
-    for module in (health, strategies, datasets, backtests, validation, comparisons, reports, audit, hub):
+    for module in (health, auth, strategies, datasets, backtests, validation, comparisons, reports, audit, brokers, hub):
         app.include_router(module.router)
     return app

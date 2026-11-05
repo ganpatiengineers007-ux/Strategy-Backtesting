@@ -38,8 +38,17 @@ function headers(extra: Record<string, string> = {}): Record<string, string> {
   return h;
 }
 
+const fetchOpts = (init: RequestInit = {}): RequestInit => ({
+  ...init,
+  credentials: "include",
+  headers: {
+    ...headers(init.headers as Record<string, string>),
+    ...init.headers,
+  },
+});
+
 async function handle<T>(r: Response, label: string): Promise<T> {
-  if (r.status === 401) throw new Error(`${label}: unauthorized (Settings me API key daalo)`);
+  if (r.status === 401) throw new Error(`${label}: unauthorized (login karo)`);
   if (!r.ok) {
     let detail = "";
     try {
@@ -55,10 +64,10 @@ async function handle<T>(r: Response, label: string): Promise<T> {
 }
 
 export async function getJson<T>(path: string): Promise<T> {
-  return handle<T>(await fetch(BASE + path, { headers: headers() }), `GET ${path}`);
+  return handle<T>(await fetch(BASE + path, fetchOpts()), `GET ${path}`);
 }
 
 export async function postJson<T>(path: string, body: unknown): Promise<T> {
-  const r = await fetch(BASE + path, { method: "POST", headers: headers({ "Content-Type": "application/json" }), body: JSON.stringify(body) });
+  const r = await fetch(BASE + path, fetchOpts({ method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }));
   return handle<T>(r, `POST ${path}`);
 }

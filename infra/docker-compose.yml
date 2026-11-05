@@ -21,6 +21,11 @@ services:
     environment:
       SVL_ENV: production
       API_KEY: ${API_KEY:?API_KEY set karo (infra/.env me)}
+      ADMIN_USER: ${ADMIN_USER:?ADMIN_USER set karo (infra/.env me)}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?ADMIN_PASSWORD_HASH set karo (infra/.env me)}
+      FYERS_HUB_HOME: /app/runs/fyers_hub
+      FYERS_ENV_FILE: /home/app/.fyers_hub/.env
+      FYERS_TOKEN_PATH: /app/runs/fyers_hub/token.json
       CORS_ORIGINS: ${CORS_ORIGINS:-}
       RUN_ISOLATED: "1"
       DATA_DIR: /app/data/samples
@@ -34,6 +39,8 @@ services:
     volumes:
       - ../runs:/app/runs
       - ../data:/app/data:ro
+      # Secrets read-only; tokens/pending state writable under /app/runs (FYERS_HUB_HOME).
+      - ${FYERS_HUB_HOST_DIR:-${HOME}/.fyers_hub}:/home/app/.fyers_hub:ro
     expose:
       - "8000"
     healthcheck:
